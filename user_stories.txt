@@ -1,0 +1,13 @@
+- Użytkownik może dodać nowy przedmiot z odpowiednimi parametrami takimi jak na przykład waga, cena czy stan.
+- Użytkownik może usunąć istniejący przedmiot.
+- Użytkownik może zobaczyć listę rzeczy w postaci tabeli.
+- Użytkownik może filtrować listę rzeczy po różnych parametrach m. in. po dacie, dostępności, zastosowaniu.
+- Użytkownik może wyszukiwać rzecz z listy po nazwie.
+- Użytkownik może zaznaczyć, że dana rzecz jest wypożyczona.
+- Użytkownik może zaznaczyć, że dana rzecz jest zwrócona.
+- Użytkownik może ustawić datę wypożyczenia oraz datę spodziewanego zwrotu danej rzeczy. 
+- Użytkownik może wyświetlać listę wypożyczonych przedmiotów.
+- Użytkownik ma możliwość wyświetlenia pełnej historii wypożyczeń.
+- Użytkownik może przeglądać harmonogram wypożyczonych rzeczy w postaci wygodnego i ładnego kalendarza.
+- Użytkownik ma dostęp do historii wypożyczeń danej rzeczy.
+- Użytkownik otrzymuje powiadomienie w momencie przekroczenia daty wypożyczenia.
