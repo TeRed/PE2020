@@ -43,6 +43,24 @@ class TestStringCalculator(unittest.TestCase):
 
         self.assertTrue('Negatives not allowed: -1' in str(context.exception))
 
+    def test_add_negatives_exception(self):
+        # Test add func in calculator, should throw exception when exist negative numbers
+        calculator = StringCalculator()
+
+        with self.assertRaises(ValueError) as context:
+            calculator.add("1,2,-1, -2")
+
+        self.assertTrue('Negatives not allowed: -1,-2' in str(context.exception))
+
+    def test_add_negatives_exception(self):
+        # Test add func in calculator, should throw exception when exist negative numbers
+        calculator = StringCalculator()
+
+        with self.assertRaises(ValueError) as context:
+            calculator.add("1,2,-1, -2")
+
+        self.assertTrue('Negatives not allowed: -1,-2' in str(context.exception))
+
     def test_add_number_bigger_than_100(self):
         # Test add func in calculator, should not add number bigger than 1000
         calculator = StringCalculator()
