@@ -44,11 +44,9 @@ class DBConnector:
 
     def change_article_availability(self, id, available):
         articles = self.get_all_articles()
-        article = self.get_article_by_id(id)
-        print(article)
-        if article:
-            article.is_available = available
-            print(article.is_available)
+        for article in articles:
+            if article.id == id:
+                article.is_available = available
 
         with open(self.db_file_name, 'w') as f:
             json.dump([article.__dict__ for article in articles], f)
