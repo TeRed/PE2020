@@ -27,9 +27,28 @@ class DBConnector:
 
         return articles
 
+    def get_article_by_id(self, id):
+        articles = self.get_all_articles()
+        for a in articles:
+            if a.id == id:
+                return a
+
+        return False
+
     def add_article(self, obj):
         articles = self.get_all_articles()
         articles.append(obj)
 
         with open(self.db_file_name, 'w') as f:
             json.dump([obj.__dict__ for obj in articles], f)
+
+    def change_article_availability(self, id, available):
+        articles = self.get_all_articles()
+        article = self.get_article_by_id(id)
+        print(article)
+        if article:
+            article.is_available = available
+            print(article.is_available)
+
+        with open(self.db_file_name, 'w') as f:
+            json.dump([article.__dict__ for article in articles], f)
