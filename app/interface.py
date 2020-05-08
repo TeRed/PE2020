@@ -7,9 +7,14 @@ class Interface:
     def __init__(self):
         pass
 
+    def printInfo(self, text):
+        print("INFO: " + text)
+
     def menu(self):
         base = DBConnector("test_db.json")
         run = True
+        self.printInfo("app started")
+
         while (run):
             print("\n\n\t\t\t\tWypożyczalnia rzeczy\n\t\t\t\tProsze wybrać numer:")
 
