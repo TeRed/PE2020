@@ -15,18 +15,23 @@ class LoggerConnector:
     def get_all_logs(self):
         load = self.read_json_file()
 
+        article_logs = list()
         logs = list()
         for i in load:
             obj = ArticleLogs(i['id'], i['logs'])
             for j in obj.logs:
                 log = Log(j['id'], j['data'], j['text'])
                 logs.append(log)
+            article_logs.append(ArticleLogs(obj.id, logs))
+            logs = []
 
-        return logs
+        return article_logs
 
     def get_logs_by_id(self, id):
         load = self.read_json_file()
+        print(load)
         logs = list()
+        article_logs = list()
 
         for i in load:
             obj = ArticleLogs(i['id'], i['logs'])
@@ -34,8 +39,10 @@ class LoggerConnector:
                 for j in obj.logs:
                     log = Log(j['id'], j['data'], j['text'])
                     logs.append(log)
+                article_logs.append(ArticleLogs(obj.id, logs))
+                logs = []
 
-        return logs
+        return article_logs
 
     def add_log(self, obj):
         articleLogs = self.get_all_logs()
