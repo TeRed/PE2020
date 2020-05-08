@@ -19,7 +19,7 @@ class MyTestCase(unittest.TestCase):
         # Then
         self.assertListEqual(expected, logs)
 
-    def test_get_articles_by_name(self):
+    def test_get_logs_by_id(self):
         # Given
         logger = LoggerConnector('test_logger.json')
         article_id = '1'
