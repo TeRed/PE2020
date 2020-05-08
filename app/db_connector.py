@@ -1,5 +1,5 @@
 import json
-from article import Article
+from app.article import Article
 
 
 class DBConnector:
