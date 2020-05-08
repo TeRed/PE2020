@@ -38,8 +38,7 @@ class MyTestCase(unittest.TestCase):
         expected = Article('2', "Test2", True)
 
         # When
-        article = db.get_article_by_id(id)
-        db.change_article_availability(id, True)
+        article = db.change_article_availability(id, True)
 
         # Then
         self.assertEqual(expected, article)

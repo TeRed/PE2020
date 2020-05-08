@@ -20,7 +20,7 @@ class DBConnector:
             articles.append(obj)
 
         return articles
-    
+
     def get_articles_by_name(self, name):
         articles = self.get_all_articles()
         articles = [it for it in articles if name.lower() in it.name.lower()]
@@ -47,6 +47,4 @@ class DBConnector:
         for article in articles:
             if article.id == id:
                 article.is_available = available
-
-        with open(self.db_file_name, 'w') as f:
-            json.dump([article.__dict__ for article in articles], f)
+                return article
