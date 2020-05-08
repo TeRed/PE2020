@@ -29,7 +29,7 @@ class LoggerConnector:
 
     def get_logs_by_id(self, id):
         load = self.read_json_file()
-        print(load)
+        #print(load)
         logs = list()
         article_logs = list()
 
