@@ -1,5 +1,5 @@
 import json
-from article import Article
+from app.article import Article
 
 
 class DBConnector:
@@ -20,12 +20,20 @@ class DBConnector:
             articles.append(obj)
 
         return articles
-    
+
     def get_articles_by_name(self, name):
         articles = self.get_all_articles()
         articles = [it for it in articles if name.lower() in it.name.lower()]
 
         return articles
+
+    def get_article_by_id(self, id):
+        articles = self.get_all_articles()
+        for a in articles:
+            if a.id == id:
+                return a
+
+        return False
 
     def add_article(self, obj):
         articles = self.get_all_articles()
@@ -33,3 +41,10 @@ class DBConnector:
 
         with open(self.db_file_name, 'w') as f:
             json.dump([obj.__dict__ for obj in articles], f)
+
+    def change_article_availability(self, id, available):
+        articles = self.get_all_articles()
+        for article in articles:
+            if article.id == id:
+                article.is_available = available
+                return article

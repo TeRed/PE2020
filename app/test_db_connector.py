@@ -1,6 +1,6 @@
 import unittest
-from db_connector import DBConnector
-from article import Article
+from app.db_connector import DBConnector
+from app.article import Article
 
 
 class MyTestCase(unittest.TestCase):
@@ -30,6 +30,18 @@ class MyTestCase(unittest.TestCase):
         # Then
         self.assertListEqual(expected, articles)
 
+    def test_change_article_availability(self):
+        # Given
+        db = DBConnector('test_db.json')
+        id = '2'
+        availability = True
+        expected = Article('2', "Test2", True)
+
+        # When
+        article = db.change_article_availability(id, True)
+
+        # Then
+        self.assertEqual(expected, article)
 
 if __name__ == '__main__':
     unittest.main()
