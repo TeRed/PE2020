@@ -1,6 +1,6 @@
 import unittest
-from app.db_connector import DBConnector
-from app.article import Article
+from db_connector import DBConnector
+from article import Article
 
 
 class MyTestCase(unittest.TestCase):

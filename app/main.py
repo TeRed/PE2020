@@ -1,4 +1,4 @@
-from app.interface import Interface
+from interface import Interface
 
 application = Interface()
 application.menu()

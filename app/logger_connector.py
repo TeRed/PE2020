@@ -1,6 +1,6 @@
 import json
-from app.article_logs import ArticleLogs
-from app.log import Log
+from article_logs import ArticleLogs
+from log import Log
 
 
 class LoggerConnector:

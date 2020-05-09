@@ -1,5 +1,5 @@
 import unittest
-from app import log
+import log
 
 
 class MyTestCase(unittest.TestCase):
@@ -18,7 +18,7 @@ class MyTestCase(unittest.TestCase):
         actual = str(obj)
 
         # Then
-        self.assertEqual(
+        self.assertCountEqual(
             ''.join(expected.split()),
             ''.join(actual.split())
         )

@@ -1,5 +1,5 @@
 import json
-from app.article import Article
+from article import Article
 
 
 class DBConnector:
@@ -38,6 +38,13 @@ class DBConnector:
     def add_article(self, obj):
         articles = self.get_all_articles()
         articles.append(obj)
+
+        with open(self.db_file_name, 'w') as f:
+            json.dump([obj.__dict__ for obj in articles], f)
+
+    def remove_article_by_id(self, id):
+        articles = self.get_all_articles()
+        articles = [it for it in articles if it.id != id]
 
         with open(self.db_file_name, 'w') as f:
             json.dump([obj.__dict__ for obj in articles], f)

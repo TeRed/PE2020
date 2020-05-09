@@ -1,7 +1,7 @@
 import unittest
-from app.logger_connector import LoggerConnector
-from app.article_logs import ArticleLogs
-from app.log import Log
+from logger_connector import LoggerConnector
+from article_logs import ArticleLogs
+from log import Log
 
 
 class MyTestCase(unittest.TestCase):
