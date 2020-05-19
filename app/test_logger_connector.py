@@ -2,12 +2,15 @@ import unittest
 from logger_connector import LoggerConnector
 from article_logs import ArticleLogs
 from log import Log
+from config_manager import ConfigManager
 
 
 class MyTestCase(unittest.TestCase):
     def test_get_all_logs(self):
         # Given
-        logger = LoggerConnector('test_logger.json')
+        config_manager = ConfigManager()
+        config_manager.logger_path = 'test_logger.json'
+        logger = LoggerConnector(config_manager)
         expected = [
             ArticleLogs('1', [Log("1", "08-05-2020", "Zapisano")]),
             ArticleLogs('2', [Log("1", "08-05-2020", "Zapisano"), Log("2", "07-05-2020", "Usunięto")])
@@ -21,7 +24,9 @@ class MyTestCase(unittest.TestCase):
 
     def test_get_logs_by_id(self):
         # Given
-        logger = LoggerConnector('test_logger.json')
+        config_manager = ConfigManager()
+        config_manager.logger_path = 'test_logger.json'
+        logger = LoggerConnector(config_manager)
         article_id = '1'
         expected = [ArticleLogs('1', [Log("1", "08-05-2020", "Zapisano")])]
 

@@ -3,11 +3,11 @@ from article import Article
 
 
 class DBConnector:
-    def __init__(self, db_file_name):
-        self.db_file_name = db_file_name
+    def __init__(self, config_manager):
+        self.config_manager = config_manager
 
     def read_json_file(self):
-        with open(self.db_file_name) as f:
+        with open(self.config_manager.db_path) as f:
             load = json.load(f)
         return load
 
@@ -39,14 +39,14 @@ class DBConnector:
         articles = self.get_all_articles()
         articles.append(obj)
 
-        with open(self.db_file_name, 'w') as f:
+        with open(self.config_manager.db_path, 'w') as f:
             json.dump([obj.__dict__ for obj in articles], f)
 
     def remove_article_by_id(self, id):
         articles = self.get_all_articles()
         articles = [it for it in articles if it.id != id]
 
-        with open(self.db_file_name, 'w') as f:
+        with open(self.config_manager.db_path, 'w') as f:
             json.dump([obj.__dict__ for obj in articles], f)
 
     def change_article_availability(self, id, available):

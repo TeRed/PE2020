@@ -1,2 +1,5 @@
 .idea
 venv
+.floo
+.flooignore
+__pycache__

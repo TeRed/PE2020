@@ -4,11 +4,11 @@ from log import Log
 
 
 class LoggerConnector:
-    def __init__(self, logger_file_name):
-        self.logger_file_name = logger_file_name
+    def __init__(self, config_manager):
+        self.config_manager = config_manager
 
     def read_json_file(self):
-        with open(self.logger_file_name) as f:
+        with open(self.config_manager.logger_path) as f:
             load = json.load(f)
         return load
 
@@ -48,5 +48,5 @@ class LoggerConnector:
         articleLogs = self.get_all_logs()
         articleLogs.append(obj)
 
-        with open(self.db_file_name, 'w') as f:
+        with open(self.config_manager.logger_path, 'w') as f:
             json.dump([obj.__dict__ for obj in articleLogs], f)
