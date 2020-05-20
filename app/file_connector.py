@@ -15,7 +15,6 @@ class FileConnector(metaclass=ABCMeta):
     def save_json_file(self, objs):
         with open(self.get_file_path(), 'w') as f:
             json.dump(objs, f, default=lambda o: o.__dict__, sort_keys=True, indent=4)
-            # json.dump([obj.__dict__ for obj in objs], f)
 
     @abc.abstractmethod
     def get_file_path(self):

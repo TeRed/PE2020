@@ -19,6 +19,18 @@ class MyTestCase(unittest.TestCase):
     def tearDown(self):
         remove(self.config_file_name)
 
+    def test_singleton(self):
+        # Given
+        config_manager = ConfigManager()
+        config_manager.logger_path = self.config_file_name
+
+        # When
+        logger = LoggerConnector(LoggerFileConnector(config_manager))
+        logger2 = LoggerConnector(LoggerFileConnector(config_manager))
+
+        # Then
+        self.assertEqual(logger2, logger)
+
     def test_get_all_logs(self):
         # Given
         logs = [
