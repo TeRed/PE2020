@@ -1,5 +1,5 @@
 import json
-from article_logs import ArticleLogs
+from article_logs import ArticleLogs, NullArticleLogs
 from log import Log
 
 
@@ -34,6 +34,8 @@ class LoggerConnector:
                     log = Log(j['data'], j['text'])
                     logs.append(log)
                 return ArticleLogs(obj.id, logs)
+
+        return NullArticleLogs()
 
     def get_borrow_history(self, id):
         article_logs = self.get_logs_by_id(id)

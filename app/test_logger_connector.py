@@ -2,7 +2,7 @@ import unittest
 
 from file_connector import LoggerFileConnector
 from logger_connector import LoggerConnector
-from article_logs import ArticleLogs
+from article_logs import ArticleLogs, NullArticleLogs
 from log import Log
 from config_manager import ConfigManager
 from os import remove
@@ -60,6 +60,28 @@ class MyTestCase(unittest.TestCase):
 
         article_id = '1'
         expected = ArticleLogs('1', [Log("08-05-2020", "Added")])
+
+        # When
+        logs = logger.get_logs_by_id(article_id)
+
+        # Then
+        self.assertEqual(expected, logs)
+
+    def test_get_logs_by_id_2(self):
+        # Given
+        logs = [
+            {'id': '1', 'logs': [{"data": "08-05-2020", "text": "Added"}]}
+        ]
+
+        with open(self.config_file_name, "w") as f:
+            json.dump(logs, f)
+
+        config_manager = ConfigManager()
+        config_manager.logger_path = self.config_file_name
+        logger = LoggerConnector(LoggerFileConnector(config_manager))
+
+        article_id = '2'
+        expected = NullArticleLogs()
 
         # When
         logs = logger.get_logs_by_id(article_id)

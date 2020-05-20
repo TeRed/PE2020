@@ -14,3 +14,9 @@ class ArticleLogs:
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
 
+class NullArticleLogs(ArticleLogs):
+
+    def __init__(self):
+        super().__init__("", list())
+
+
