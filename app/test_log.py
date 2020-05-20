@@ -1,16 +1,15 @@
 import unittest
-import log
+from log import Log
 
 
 class MyTestCase(unittest.TestCase):
     def test_article_serialization(self):
         # Given
-        obj = log.Log("1", "08-05-2020", "Zapisano")
+        obj = Log("08-05-2020", "Added")
         expected = '''
         {
-            "id": "1",
             "data": "08-05-2020",
-            "text": "Zapisano"
+            "text": "Added"
         }
         '''
 

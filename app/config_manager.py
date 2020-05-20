@@ -1,7 +1,20 @@
 import json
+import abc
 
 
-class ConfigManager:
+class DbConfigManagerInterface(metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def get_db_path(self):
+        raise NotImplementedError
+
+
+class LoggerConfigManagerInterface(metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def get_logger_path(self):
+        raise NotImplementedError
+
+
+class ConfigManager(DbConfigManagerInterface, LoggerConfigManagerInterface):
     def __init__(self, config_file_name=None):
         if config_file_name:
             with open(config_file_name) as f:
@@ -12,3 +25,9 @@ class ConfigManager:
         else:
             self.db_path = None
             self.logger_path = None
+
+    def get_db_path(self):
+        return self.db_path
+
+    def get_logger_path(self):
+        return self.logger_path

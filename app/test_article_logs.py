@@ -1,22 +1,21 @@
 import unittest
-import article_logs
+from article_logs import ArticleLogs
 from log import Log
 
 
 class MyTestCase(unittest.TestCase):
     def test_article_serialization(self):
         # Given
-        obj = article_logs.ArticleLogs('1', [ Log("1", "08-05-2020", "Zapisano") ])
+        obj = ArticleLogs('1', [Log("08-05-2020", "Added")])
         expected = '''
             {
-            "id": "1",
-            "logs": [
-              {
                 "id": "1",
-                "data": "08-05-2020",
-                "text": "Zapisano"
-              }
-            ]
+                "logs": [
+                  {
+                    "data": "08-05-2020",
+                    "text": "Added"
+                  }
+                ]
             }
         '''
 

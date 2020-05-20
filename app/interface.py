@@ -1,5 +1,7 @@
 from article import Article
-
+from datetime import date
+from log import Log
+from datetime import datetime
 
 class Interface:
 
@@ -39,12 +41,11 @@ class Interface:
 
             elif choice == '2':
 
-                article_id = input("\t\t\t\tPodaj numer rzeczy by wyświetlić historię :> ")
+                article_id = input("Podaj numer rzeczy by wyświetlić historię :> ")
 
-                logs = self.logger.get_logs_by_id(str(article_id))
+                logs = self.logger.get_borrow_history(article_id)
                 for obj in logs:
-                    for j in obj.logs:
-                        print("id: " + j.id + "\t date: " + j.data + "\tmsg: " + j.text)
+                    print("date: " + obj.data + "\tmsg: " + obj.text)
             
             elif choice == '3':
                 new_id = input("Dodawanie nowego artykułu:\nID?: ")
@@ -52,12 +53,14 @@ class Interface:
                 new_obj = Article(new_id, new_name, True)
 
                 self.base.add_article(new_obj)
+                self.logger.add_log(new_id, Log(str(datetime.date(datetime.now())), "Added"))
                 print("Dodano nowy artykuł")
             
             elif choice == '4':
                 rm_id = input("Podaj ID artykułu do usunięcia:\nID?: ")
 
                 self.base.remove_article_by_id(rm_id)
+                self.logger.add_log(rm_id, Log(str(datetime.date(datetime.now())), "Deleted"))
                 print("Usunięto artykuł o ID =", rm_id)
 
             elif choice == '5':
@@ -77,18 +80,23 @@ class Interface:
 
             elif choice == '7':
                 obj_id = input("Podaj ID elementu do zmiany statusu\ID?: ")
-                status = input("Wybierz status do ustawienia:\n1: Wypożyczone\n2: Dostępne\n?:")
-                
+                obj_article = self.base.get_article_by_id(obj_id)
+
+                state = 'jest' if obj_article.is_available else 'nie jest'
+                print(f'Atrykuł obecnie {state} dostępny. Czy chcesz zmienić jego status?')
+                status = input("1: Tak\n2: Nie\n Wybierz cyfre: ")
+
                 if status == '1':
-                    new_obj = self.base.change_article_availability(obj_id, False)
+                    new_obj = self.base.change_article_availability(obj_id, not obj_article.is_available)
                     if new_obj:
                         self.base.remove_article_by_id(obj_id)
                         self.base.add_article(new_obj)
+                        if obj_article.is_available:
+                            self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Borrowed"))
+                        else:
+                            self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Returned"))
                 elif status == '2':
-                    new_obj = self.base.change_article_availability(obj_id, True)
-                    if new_obj:
-                        self.base.remove_article_by_id(obj_id)
-                        self.base.add_article(new_obj)
+                    continue
                 else:
                     print("Należało wybrać 1 lub 2!")
 

@@ -4,23 +4,18 @@ from log import Log
 
 
 class LoggerConnector:
-    def __init__(self, config_manager):
-        self.config_manager = config_manager
-
-    def read_json_file(self):
-        with open(self.config_manager.logger_path) as f:
-            load = json.load(f)
-        return load
+    def __init__(self, file_connector):
+        self.file_connector = file_connector
 
     def get_all_logs(self):
-        load = self.read_json_file()
+        load = self.file_connector.read_json_file()
 
         article_logs = list()
         logs = list()
         for i in load:
             obj = ArticleLogs(i['id'], i['logs'])
             for j in obj.logs:
-                log = Log(j['id'], j['data'], j['text'])
+                log = Log(j['data'], j['text'])
                 logs.append(log)
             article_logs.append(ArticleLogs(obj.id, logs))
             logs = []
@@ -28,8 +23,7 @@ class LoggerConnector:
         return article_logs
 
     def get_logs_by_id(self, id):
-        load = self.read_json_file()
-        #print(load)
+        load = self.file_connector.read_json_file()
         logs = list()
         article_logs = list()
 
@@ -37,16 +31,24 @@ class LoggerConnector:
             obj = ArticleLogs(i['id'], i['logs'])
             if obj.id == id:
                 for j in obj.logs:
-                    log = Log(j['id'], j['data'], j['text'])
+                    log = Log(j['data'], j['text'])
                     logs.append(log)
-                article_logs.append(ArticleLogs(obj.id, logs))
-                logs = []
+                return ArticleLogs(obj.id, logs)
 
-        return article_logs
+    def get_borrow_history(self, id):
+        article_logs = self.get_logs_by_id(id)
+        return [x for x in article_logs.logs if x.text == 'Borrowed' or x.text == 'Returned']
 
-    def add_log(self, obj):
-        articleLogs = self.get_all_logs()
-        articleLogs.append(obj)
+    def add_log(self, id, log):
+        article_logs = self.get_all_logs()
 
-        with open(self.config_manager.logger_path, 'w') as f:
-            json.dump([obj.__dict__ for obj in articleLogs], f)
+        def add_log_input(article_log):
+            if article_log.id == id:
+                article_log.logs.append(log)
+                return article_log
+            else:
+                return article_log
+
+        article_logs = list(map(add_log_input, article_logs))
+
+        self.file_connector.save_json_file(article_logs)
