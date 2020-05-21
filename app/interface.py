@@ -42,13 +42,6 @@ class Interface:
            ''')
 
             INVOKER.execute(choice)
-            #
-            # if choice == '0':
-            #     run = False
-
-
-        #
-     #   self.app_info_logger.log_end()
 
 
 class AppInfoLogger:
