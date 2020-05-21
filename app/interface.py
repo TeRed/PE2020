@@ -94,7 +94,7 @@ class DisplayHistoryCommand(ICommand):
             print("date: " + obj.data + "\tmsg: " + obj.text)
 
 
-class AddArticle(ICommand):
+class AddArticleCommand(ICommand):
 
     def __init__(self, base, logger):
         self.base = base
@@ -110,7 +110,7 @@ class AddArticle(ICommand):
         print("Dodano nowy artykuł")
 
 
-class DeleteArticle(ICommand):
+class DeleteArticleCommand(ICommand):
 
     def __init__(self, base, logger):
         self.base = base
@@ -124,7 +124,7 @@ class DeleteArticle(ICommand):
         print("Usunięto artykuł o ID =", rm_id)
 
 
-class SearchArticleOnName(ICommand):
+class SearchForAnArticleByNameCommand(ICommand):
 
     def __init__(self, base):
         self.base = base
@@ -136,7 +136,7 @@ class SearchArticleOnName(ICommand):
             print(articles.id, '\t', articles.name, '\t', articles.is_available)
 
 
-class SearchArticleOnId(ICommand):
+class SearchForAnArticleByIdCommand(ICommand):
 
     def __init__(self, base):
         self.base = base
@@ -151,7 +151,7 @@ class SearchArticleOnId(ICommand):
             print("Brak artykułu o takim ID!")
 
 
-class ChangeStatus(ICommand):
+class ChangeStatusCommand(ICommand):
 
     def __init__(self, base):
         self.base = base
@@ -182,7 +182,7 @@ class ChangeStatus(ICommand):
             self.app_info_logger.log_error("Nieprawidłowy id produktu")
 
 
-class DisplayConfig(ICommand):
+class DisplayConfigCommand(ICommand):
 
     def __init__(self, config_manager):
         self.config_manager = config_manager
@@ -195,7 +195,7 @@ class DisplayConfig(ICommand):
             print(f'{key}: "{val}"')
 
 
-class ChangeConfig(ICommand):
+class ChangeConfigCommand(ICommand):
 
     def __init__(self, config_manager):
         self.config_manager = config_manager
@@ -218,7 +218,7 @@ class ChangeConfig(ICommand):
         print("Atrybut został zmieniony!")
 
 
-class SaveConfig(ICommand):
+class SaveConfigCommand(ICommand):
 
     def __init__(self, config_manager):
         self.config_manager = config_manager
@@ -247,14 +247,14 @@ class Invoker:
         self.app_info_logger = app_info_logger
         self._commands = {'1': DisplayAllArticlesCommand(self.base),
                           '2': DisplayHistoryCommand(self.logger),
-                          '3': AddArticle(self.base, self.logger),
-                          '4': DeleteArticle(self.base, self.logger),
-                          '5': SearchArticleOnName(self.base),
-                          '6': SearchArticleOnId(self.base),
-                          '7': ChangeStatus(self.base),
-                          '8': DisplayConfig(self.config_manager),
-                          '9': ChangeConfig(self.config_manager),
-                          '10': SaveConfig(self.config_manager),
+                          '3': AddArticleCommand(self.base, self.logger),
+                          '4': DeleteArticleCommand(self.base, self.logger),
+                          '5': SearchForAnArticleByNameCommand(self.base),
+                          '6': SearchForAnArticleByIdCommand(self.base),
+                          '7': ChangeStatusCommand(self.base),
+                          '8': DisplayConfigCommand(self.config_manager),
+                          '9': ChangeConfigCommand(self.config_manager),
+                          '10': SaveConfigCommand(self.config_manager),
                           '0': StopApp(self.app_info_logger)}
 
     def execute(self, command_name):
