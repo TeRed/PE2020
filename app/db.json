@@ -1,12 +1,1 @@
-[
-  {
-    "id": "1",
-    "name": "Test",
-    "is_available": true
-  },
-  {
-    "id": "2",
-    "name": "Test2",
-    "is_available": false
-  }
-]
+[{"id": "1", "name": "Test", "is_available": true}, {"id": "2", "name": "Test2", "is_available": false}]

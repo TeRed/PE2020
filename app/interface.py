@@ -3,19 +3,21 @@ from datetime import date
 from log import Log
 from datetime import datetime
 
+
 class Interface:
 
     def __init__(self, db_connector, logger_connector, config_manager):
         self.logger = logger_connector
         self.base = db_connector
         self.config_manager = config_manager
+        self.app_info_logger = AppInfoLogger()
 
     def printInfo(self, text):
         print("INFO: " + text)
 
     def menu(self):
         run = True
-        self.printInfo("app started")
+        self.app_info_logger.log_start()
 
         while (run):
             print("\n\n\t\t\t\tWypożyczalnia rzeczy\n\t\t\t\tProsze wybrać numer:")
@@ -46,7 +48,7 @@ class Interface:
                 logs = self.logger.get_borrow_history(article_id)
                 for obj in logs:
                     print("date: " + obj.data + "\tmsg: " + obj.text)
-            
+
             elif choice == '3':
                 new_id = input("Dodawanie nowego artykułu:\nID?: ")
                 new_name = input("Name?: ")
@@ -55,7 +57,7 @@ class Interface:
                 self.base.add_article(new_obj)
                 self.logger.add_log(new_id, Log(str(datetime.date(datetime.now())), "Added"))
                 print("Dodano nowy artykuł")
-            
+
             elif choice == '4':
                 rm_id = input("Podaj ID artykułu do usunięcia:\nID?: ")
 
@@ -71,7 +73,7 @@ class Interface:
 
             elif choice == '6':
                 src_id = input("Podaj ID artykułu:\nID?: ")
-                
+
                 articles = self.base.get_article_by_id(src_id)
                 if articles:
                     print(articles.id, '\t', articles.name, '\t', articles.is_available)
@@ -82,23 +84,26 @@ class Interface:
                 obj_id = input("Podaj ID elementu do zmiany statusu\ID?: ")
                 obj_article = self.base.get_article_by_id(obj_id)
 
-                state = 'jest' if obj_article.is_available else 'nie jest'
-                print(f'Atrykuł obecnie {state} dostępny. Czy chcesz zmienić jego status?')
-                status = input("1: Tak\n2: Nie\n Wybierz cyfre: ")
+                if obj_article:
+                    state = 'jest' if obj_article.is_available else 'nie jest'
+                    print(f'Atrykuł obecnie {state} dostępny. Czy chcesz zmienić jego status?')
+                    status = input("1: Tak\n2: Nie\n Wybierz cyfre: ")
 
-                if status == '1':
-                    new_obj = self.base.change_article_availability(obj_id, not obj_article.is_available)
-                    if new_obj:
-                        self.base.remove_article_by_id(obj_id)
-                        self.base.add_article(new_obj)
-                        if obj_article.is_available:
-                            self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Borrowed"))
-                        else:
-                            self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Returned"))
-                elif status == '2':
-                    continue
+                    if status == '1':
+                        new_obj = self.base.change_article_availability(obj_id, not obj_article.is_available)
+                        if new_obj:
+                            self.base.remove_article_by_id(obj_id)
+                            self.base.add_article(new_obj)
+                            if obj_article.is_available:
+                                self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Borrowed"))
+                            else:
+                                self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Returned"))
+                    elif status == '2':
+                        continue
+                    else:
+                        self.app_info_logger.log_error("Należało wybrać 1 lub 2!")
                 else:
-                    print("Należało wybrać 1 lub 2!")
+                    self.app_info_logger.log_error("Nieprawidłowy id produktu")
 
             elif choice == '8':
                 print("Aktualna konfiguracja:")
@@ -125,9 +130,27 @@ class Interface:
                 print("Atrybut został zmieniony!")
 
             elif choice == '0':
-                print("Aplikacja została zamknieta.")
                 run = False
 
             else:
-                print("Podano nieprawidłowy numer!")
+                self.app_info_logger.log_error("Podano nieprawidłowy numer!")
 
+        self.app_info_logger.log_end()
+
+
+class AppInfoLogger:
+    info_title = ""
+    info_divider = ""
+
+    def __init__(self):
+        self.info_title = "INFO"
+        self.info_divider = ": "
+
+    def log_start(self):
+        print(self.info_title + self.info_divider + 'Aplikacja została uruchomiona.')
+
+    def log_end(self):
+        print(self.info_title + self.info_divider + 'Aplikacja została zatrzymana.')
+
+    def log_error(self, text):
+        print(self.info_title + self.info_divider + 'W aplikacji wystąpił błąd. ERROR: ' + text)
