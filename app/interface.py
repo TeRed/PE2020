@@ -32,6 +32,7 @@ class Interface:
            7: Zmień status wypożyczenia
            8: Aktualna konfiguracja
            9: Zmiana konfiguracji
+           10: Zapisz aktualną konfigurację aplikacji
            0: Wyjdz z aplikacji
            ''')
 
@@ -128,6 +129,9 @@ class Interface:
                 setattr(self.config_manager, config_attributes[int(index) - 1], new_value)
 
                 print("Atrybut został zmieniony!")
+
+            elif choice == '10':
+                self.config_manager.save_configuration()
 
             elif choice == '0':
                 run = False

@@ -1,4 +1,4 @@
 {
-  "db_path": "db.json",
-  "logger_path": "logger.json"
+    "db_path": "db.json",
+    "logger_path": "logger.json"
 }
