@@ -27,13 +27,14 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(config_manager.db_path, "db.json")
         self.assertEqual(config_manager.logger_path, "logger.json")
 
-    def test__init__2(self):
-        # When
+    def test_default_config_parameters(self):
+        # Given
         config_manager = ConfigManager()
 
         # Then
-        self.assertIsNone(config_manager.db_path)
-        self.assertIsNone(config_manager.logger_path)
+        self.assertEqual(config_manager.logger_path, 'logger.json')
+        self.assertEqual(config_manager.db_path, 'db.json')
+
 
     def test_save_config_to_file(self):
         #Given
@@ -55,6 +56,7 @@ class MyTestCase(unittest.TestCase):
             config = json.load(f)
 
         self.assertEqual(config['db_path'], 'db2.json')
+
 
 
 
