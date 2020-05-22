@@ -23,7 +23,15 @@ class DBioFile(DBio):
             json.dump(db_raw, f)
 
 
+_DBConnector_object = None
 class DBConnector:
+    def __new__(cls, *args, **kws):
+        global _DBConnector_object
+        if not _DBConnector_object:
+            _DBConnector_object = super(DBConnector, cls).__new__(cls)
+            _DBConnector_object.__init__(*args, **kws)
+        return _DBConnector_object
+
     def __init__(self, config_manager,  database_io: DBio):
         self.config_manager = config_manager
         self.DBio = database_io
