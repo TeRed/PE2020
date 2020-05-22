@@ -31,3 +31,13 @@ class ConfigManager(DbConfigManagerInterface, LoggerConfigManagerInterface):
 
     def get_logger_path(self):
         return self.logger_path
+
+    def save_configuration(self, config_file_name=None):
+        config = {'db_path': self.db_path, 'logger_path': self.logger_path}
+
+        if config_file_name:
+            with open(config_file_name, 'w') as f:
+                json.dump(config, f, default=lambda o: o.__dict__, sort_keys=True, indent=4)
+        else:
+            with open('config.json', 'w') as f:
+                json.dump(config, f, default=lambda o: o.__dict__, sort_keys=True, indent=4)
