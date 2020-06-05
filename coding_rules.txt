@@ -1,0 +1,4 @@
+- wcięcia ustalamy na 4 spacje
+- język angielski w metodach, zmiennych i komentarzach - czyli wszędzie
+- nazwy zmiennych: snake_case, nazwy klas: PascalCase, nazwy plików: snace_case
+- w ramach dziedziny tematycznej jeden plik

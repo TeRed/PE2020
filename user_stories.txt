@@ -1,0 +1,15 @@
+ilość godzin przeznaczonej na funkcjonalność - historyjka 
+
+6 - Użytkownik może dodać nowy przedmiot z odpowiednimi parametrami takimi jak na przykład waga, cena czy stan.  
+4 - Użytkownik może usunąć istniejący przedmiot. 
+4 - Użytkownik może zobaczyć listę rzeczy w postaci tabeli. 
+12 - Użytkownik może filtrować listę rzeczy po różnych parametrach m. in. po dacie, dostępności, zastosowaniu. 
+4 - Użytkownik może wyszukiwać rzecz z listy po nazwie.
+8 - Użytkownik może zaznaczyć, że dana rzecz jest wypożyczona.
+9 - Użytkownik może zaznaczyć, że dana rzecz jest zwrócona.
+10 - Użytkownik może ustawić datę wypożyczenia oraz datę spodziewanego zwrotu danej rzeczy. 
+9 - Użytkownik może wyświetlać listę wypożyczonych przedmiotów.
+16- Użytkownik ma możliwość wyświetlenia pełnej historii wypożyczeń.
+20 - Użytkownik może przeglądać harmonogram wypożyczonych rzeczy w postaci wygodnego i ładnego kalendarza.
+15 - Użytkownik ma dostęp do historii wypożyczeń danej rzeczy.
+16 - Użytkownik otrzymuje powiadomienie w momencie przekroczenia daty wypożyczenia.
