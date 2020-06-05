@@ -1,7 +1,6 @@
 Feature: Remove article
-  In order to see article
   As a user
-  I want to see articles as a table
+  I want to be able to remove article
 
   Scenario: Remove article
     Given I have the following articles in my database:

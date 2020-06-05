@@ -64,6 +64,34 @@ def i_remove_article(step, number):
     world.articles = db.get_all_articles()
 
 
+@step('I change to available article (\d+)')
+def i_change_to_available_article(step, number):
+    config_manager = ConfigManager()
+    config_manager.db_path = world.path_db
+    db_file_connector = DbFileConnector(config_manager)
+    db = DBConnector(db_file_connector)
+
+    new_obj = db.change_article_availability(number, True)
+    if new_obj:
+        db.remove_article_by_id(number)
+        db.add_article(new_obj)
+    world.articles = db.get_all_articles()
+
+
+@step('I change to not available article (\d+)')
+def i_change_to_not_available_article(step, number):
+    config_manager = ConfigManager()
+    config_manager.db_path = world.path_db
+    db_file_connector = DbFileConnector(config_manager)
+    db = DBConnector(db_file_connector)
+
+    new_obj = db.change_article_availability(number, False)
+    if new_obj:
+        db.remove_article_by_id(number)
+        db.add_article(new_obj)
+    world.articles = db.get_all_articles()
+
+
 @step('I see those listed articles:')
 def i_see_listed_articles(step):
     articles = list()
