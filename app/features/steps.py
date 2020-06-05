@@ -1,10 +1,13 @@
 from lettuce import *
 import json
+
+from article import Article
 from config_manager import ConfigManager
 from db_connector import DBConnector
 from file_connector import DbFileConnector
 from os import remove
 from copy import deepcopy
+
 
 
 @step('I have the following articles in my database:')
@@ -29,6 +32,35 @@ def i_show_articles(step):
     config_manager.db_path = world.path_db
     db_file_connector = DbFileConnector(config_manager)
     db = DBConnector(db_file_connector)
+    world.articles = db.get_all_articles()
+
+
+@step('I add following article')
+def i_add_article(step):
+    article = None
+
+    for article_dict in step.hashes:
+        if article_dict['is_available'] == 'no':
+            article_dict['is_available'] = False
+        else:
+            article_dict['is_available'] = True
+        article = Article(article_dict['id'], article_dict['name'], article_dict['is_available'])
+
+    config_manager = ConfigManager()
+    config_manager.db_path = world.path_db
+    db_file_connector = DbFileConnector(config_manager)
+    db = DBConnector(db_file_connector)
+    db.add_article(article)
+    world.articles = db.get_all_articles()
+
+
+@step('I remove article (\d+)')
+def i_remove_article(step, number):
+    config_manager = ConfigManager()
+    config_manager.db_path = world.path_db
+    db_file_connector = DbFileConnector(config_manager)
+    db = DBConnector(db_file_connector)
+    db.remove_article_by_id(number)
     world.articles = db.get_all_articles()
 
 
