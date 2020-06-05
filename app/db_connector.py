@@ -1,46 +1,13 @@
-import json
+from Singleton import Singleton
 from article import Article
-from abc import ABC, abstractmethod
 
 
-class DBio(ABC):
-    @abstractmethod
-    def read( db_path): ...
-
-    @abstractmethod
-    def write(articles, db_path): ...
-
-
-class DBioFile(DBio):
-    def read(db_path):
-        with open(db_path) as f:
-            load = json.load(f)
-        return load
-
-    def write(articles, db_path):
-        db_raw = [obj.__dict__ for obj in articles]
-        with open(db_path, 'w') as f:
-            json.dump(db_raw, f)
-
-
-_DBConnector_object = None
-class DBConnector:
-    def __new__(cls, *args, **kws):
-        global _DBConnector_object
-        if not _DBConnector_object:
-            _DBConnector_object = super(DBConnector, cls).__new__(cls)
-            _DBConnector_object.__init__(*args, **kws)
-        return _DBConnector_object
-
-    def __init__(self, config_manager,  database_io: DBio):
-        self.config_manager = config_manager
-        self.DBio = database_io
-
-    def read_json_file(self):
-        return self.DBio.read(self.config_manager.db_path)
+class DBConnector(metaclass=Singleton):
+    def __init__(self, file_connector):
+        self.file_connector = file_connector
 
     def get_all_articles(self):
-        load = self.read_json_file()
+        load = self.file_connector.read_json_file()
 
         articles = list()
         for i in load:
@@ -66,13 +33,12 @@ class DBConnector:
     def add_article(self, obj):
         articles = self.get_all_articles()
         articles.append(obj)
-        self.DBio.write(articles, self.config_manager.db_path)
-
+        self.file_connector.save_json_file(articles)
 
     def remove_article_by_id(self, id):
         articles = self.get_all_articles()
         articles = [it for it in articles if it.id != id]
-        self.DBio.write(articles, self.config_manager.db_path)
+        self.file_connector.save_json_file(articles)
 
     def change_article_availability(self, id, available):
         articles = self.get_all_articles()

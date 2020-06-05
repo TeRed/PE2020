@@ -27,3 +27,11 @@ class LoggerFileConnector(FileConnector):
 
     def get_file_path(self):
         return self.config_manager.get_logger_path()
+
+
+class DbFileConnector(FileConnector):
+    def __init__(self, config_manager):
+        super().__init__(config_manager)
+
+    def get_file_path(self):
+        return self.config_manager.get_db_path()
