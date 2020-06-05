@@ -1,34 +1,36 @@
 from lettuce import *
-import json 
+import json
 from config_manager import ConfigManager
 from db_connector import DBConnector
 from file_connector import DbFileConnector
 from os import remove
+from copy import deepcopy
+
 
 @step('I have the following articles in my database:')
 def articles_in_database(step):
     world.path_db = 'test_db.json'
     formated_articles = []
-
-    for article_dict in step.hashes:
+    given_list = deepcopy(step.hashes)
+    for article_dict in given_list:
         if article_dict['is_available'] == 'no':
             article_dict['is_available'] = False
         else:
             article_dict['is_available'] = True
         formated_articles.append(article_dict)
 
-    with open(world.path_db , 'w') as f:
+    with open(world.path_db, 'w') as f:
         json.dump(formated_articles, f, default=lambda o: o.__dict__, sort_keys=True, indent=4)
-    
-    
+
 
 @step('I show articles')
-def i_show_articles(step):   
+def i_show_articles(step):
     config_manager = ConfigManager()
     config_manager.db_path = world.path_db
     db_file_connector = DbFileConnector(config_manager)
     db = DBConnector(db_file_connector)
     world.articles = db.get_all_articles()
+
 
 @step('I see those listed articles:')
 def i_see_listed_articles(step):
@@ -45,6 +47,16 @@ def i_see_listed_articles(step):
     list2 = set(tuple(sorted(d.items())) for d in step.hashes)
 
     assert list1.symmetric_difference(list2) == set()
+
+
+@step('I show borrowed articles')
+def i_show_borrowed_articles(step):
+    config_manager = ConfigManager()
+    config_manager.db_path = world.path_db
+    db_file_connector = DbFileConnector(config_manager)
+    db = DBConnector(db_file_connector)
+    world.articles = db.get_articles_by_availability(False)
+
 
 @after.each_scenario
 def teardown_test_db(scenario):
