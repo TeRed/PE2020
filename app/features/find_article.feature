@@ -12,7 +12,7 @@ Feature: Show article by name
       | 4   | Spade       | no           |
       | 5   | Axe         | yes          |
       | 6   | Compactor   | yes          |
-    When I show article by name Grinder
+    When I show article by name "Grinder"
     Then I see those listed articles:
       | id  | name        | is_available |
       | 3   | Grinder     | yes          |

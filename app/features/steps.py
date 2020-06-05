@@ -34,7 +34,7 @@ def i_show_articles(step):
     db = DBConnector(db_file_connector)
     world.articles = db.get_all_articles()
 
-@step('I show article by name (\s+)')
+@step('I show article by name "(.*?)"')
 def i_show_one_article(step, name):
     config_manager = ConfigManager()
     config_manager.db_path = world.path_db
