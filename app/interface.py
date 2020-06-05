@@ -29,15 +29,17 @@ class Interface:
 
             choice = input('''
            1: Wypisz liste wszystkich artykułów
-           2: Wypisz historię wypożyczeń
-           3: Dodaj artykuł
-           4: Usuń artykuł
-           5: Wyszukaj artykuł po nazwie
-           6: Wyszukaj artykuł po id
-           7: Zmień status wypożyczenia
-           8: Aktualna konfiguracja
-           9: Zmiana konfiguracji
-           10: Zapisz aktualną konfigurację aplikacji
+           2: Wypisz listę wypożyczonych artykułów
+           3: Wyświetl pełną historię wypożyczeń
+           4: Wypisz historię wypożyczeń artykułu
+           5: Dodaj artykuł
+           6: Usuń artykuł
+           7: Wyszukaj artykuł po nazwie
+           8: Wyszukaj artykuł po id
+           9: Zmień status wypożyczenia
+           10: Aktualna konfiguracja
+           11: Zmiana konfiguracji
+           12: Zapisz aktualną konfigurację aplikacji
            0: Wyjdz z aplikacji
            ''')
 
@@ -227,6 +229,35 @@ class SaveConfigCommand(ICommand):
         self.config_manager.save_configuration()
 
 
+class DisplayAllNotAvailableArticlesCommand(ICommand):
+
+    def __init__(self, base):
+        self.base = base
+
+    def execute(self):
+        print("Lista wszystkich wypożyczonych artykułów:")
+        print("ID", '\t', "NAZWA", '\t', "DOSTĘPNOSC")
+        for articles in self.base.get_articles_by_availability(False):
+            print(articles.id, '\t', articles.name, '\t', articles.is_available)
+
+
+class DisplayFullHistoryCommand(ICommand):
+
+    def __init__(self, logger):
+        self.logger = logger
+
+    def execute(self):
+        print("Pełna historia wypożyczeń:")
+
+        article_logs = self.logger.get_all_logs()
+
+        print("ID", '\t', "DATA", '\t\t', "TEXT")
+        for article_log in article_logs:
+            logs = [it for it in article_log.logs if it.text == 'Borrowed' or it.text == 'Returned']
+            for log in logs:
+                print(article_log.id, '\t', log.data, '\t', log.text)
+
+
 class StopApp(ICommand):
 
     def __init__(self, app_info_logger):
@@ -246,15 +277,17 @@ class Invoker:
         self.config_manager = config_manager
         self.app_info_logger = app_info_logger
         self._commands = {'1': DisplayAllArticlesCommand(self.base),
-                          '2': DisplayHistoryCommand(self.logger),
-                          '3': AddArticleCommand(self.base, self.logger),
-                          '4': DeleteArticleCommand(self.base, self.logger),
-                          '5': SearchForAnArticleByNameCommand(self.base),
-                          '6': SearchForAnArticleByIdCommand(self.base),
-                          '7': ChangeStatusCommand(self.base),
-                          '8': DisplayConfigCommand(self.config_manager),
-                          '9': ChangeConfigCommand(self.config_manager),
-                          '10': SaveConfigCommand(self.config_manager),
+                          '2': DisplayAllNotAvailableArticlesCommand(self.base),
+                          '3': DisplayFullHistoryCommand(self.logger),
+                          '4': DisplayHistoryCommand(self.logger),
+                          '5': AddArticleCommand(self.base, self.logger),
+                          '6': DeleteArticleCommand(self.base, self.logger),
+                          '7': SearchForAnArticleByNameCommand(self.base),
+                          '8': SearchForAnArticleByIdCommand(self.base),
+                          '9': ChangeStatusCommand(self.base),
+                          '10': DisplayConfigCommand(self.config_manager),
+                          '11': ChangeConfigCommand(self.config_manager),
+                          '12': SaveConfigCommand(self.config_manager),
                           '0': StopApp(self.app_info_logger)}
 
     def execute(self, command_name):

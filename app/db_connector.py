@@ -22,6 +22,12 @@ class DBConnector(metaclass=Singleton):
 
         return articles
 
+    def get_articles_by_availability(self, available):
+        articles = self.get_all_articles()
+        articles = [it for it in articles if available == it.is_available]
+
+        return articles
+
     def get_article_by_id(self, id):
         articles = self.get_all_articles()
         for a in articles:

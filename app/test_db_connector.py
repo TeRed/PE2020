@@ -121,6 +121,33 @@ class MyTestCase(unittest.TestCase):
         # Then
         self.assertListEqual(expected, articles)
 
+    def test_get_articles_by_availability(self):
+        # Given
+        articles = [
+            {"id": "1", "name": "Test", "is_available": True},
+            {"id": "2", "name": "Test2", "is_available": False},
+            {"id": "3", "name": "Test3", "is_available": False}
+        ]
+
+        with open(self.config_file_name, "w") as f:
+            json.dump(articles, f)
+
+        config_manager = ConfigManager()
+        config_manager.db_path = self.config_file_name
+        db = DBConnector(DbFileConnector(config_manager))
+
+        available = False
+        expected = [
+            Article('2', 'Test2', False),
+            Article('3', 'Test3', False)
+        ]
+
+        # When
+        articles = db.get_articles_by_availability(available)
+
+        # Then
+        self.assertListEqual(expected, articles)
+
     def test_get_article_by_id(self):
         # Given
         articles = [
