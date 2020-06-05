@@ -34,6 +34,14 @@ def i_show_articles(step):
     db = DBConnector(db_file_connector)
     world.articles = db.get_all_articles()
 
+@step('I show article by name (\s+)')
+def i_show_one_article(step, name):
+    config_manager = ConfigManager()
+    config_manager.db_path = world.path_db
+    db_file_connector = DbFileConnector(config_manager)
+    db = DBConnector(db_file_connector)
+    world.articles = db.get_articles_by_name(name)
+
 
 @step('I add following article')
 def i_add_article(step):
