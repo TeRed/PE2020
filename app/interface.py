@@ -3,6 +3,7 @@ from abc import ABCMeta
 from article import Article
 from log import Log
 from datetime import datetime
+import os
 
 
 class Interface:
@@ -17,6 +18,9 @@ class Interface:
     def printInfo(self, text):
         print("INFO: " + text)
 
+    def cls(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
+
     def menu(self):
         global run
         run = True
@@ -25,7 +29,9 @@ class Interface:
         INVOKER = Invoker(self.base, self.logger, self.config_manager, self.app_info_logger)
 
         while (run):
-            print("\n\n\t\t\t\tWypożyczalnia rzeczy\n\t\t\t\tProsze wybrać numer:")
+            input("Naciśnij cokolwiek, aby kontynować")
+            self.cls()
+            print("\tWypożyczalnia rzeczy\n\tProsze wybrać numer:")
 
             choice = input('''
            1: Wypisz liste wszystkich artykułów
@@ -42,7 +48,7 @@ class Interface:
            12: Zapisz aktualną konfigurację aplikacji
            0: Wyjdz z aplikacji
            ''')
-
+            self.cls()
             INVOKER.execute(choice)
 
 
