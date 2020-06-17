@@ -4,6 +4,8 @@ from article import Article
 from log import Log
 from datetime import datetime
 import os
+from prettytable import PrettyTable
+from pydoc import pager
 
 
 class Interface:
@@ -73,6 +75,29 @@ class AppInfoLogger:
         print(self.info_title + self.info_divider + text)
 
 
+class IOWrapper:
+
+    @staticmethod
+    def print_articles(articles):
+        pt = PrettyTable()
+        pt.field_names = ['ID', 'NAZWA', 'DOSTEPNOSC']
+        for article in articles:
+            pt.add_row([article.id, article.name, article.is_available])
+
+        pager(str(pt))
+
+    @staticmethod
+    def print_article_log(article_logs):
+        pt = PrettyTable()
+        pt.field_names = ['ID', 'DATA', 'TEKST']
+        for article_log in article_logs:
+            logs = [it for it in article_log.logs if it.text == 'Borrowed' or it.text == 'Returned']
+            for log in logs:
+                pt.add_row([article_log.id, log.data, log.text])
+
+        pager(str(pt))
+
+
 class ICommand(metaclass=ABCMeta):
 
     @staticmethod
@@ -87,9 +112,7 @@ class DisplayAllArticlesCommand(ICommand):
 
     def execute(self):
         print("Lista wszystkich artykułów:")
-        print("ID", '\t', "NAZWA", '\t', "DOSTĘPNOSC")
-        for articles in self.base.get_all_articles():
-            print(articles.id, '\t', articles.name, '\t', articles.is_available)
+        IOWrapper.print_articles(self.base.get_all_articles())
 
 
 class DisplayHistoryCommand(ICommand):
@@ -146,9 +169,7 @@ class SearchForAnArticleByNameCommand(ICommand):
 
     def execute(self):
         src_name = input("Podaj nazwę artykułu :\nName?: ")
-
-        for articles in self.base.get_articles_by_name(src_name):
-            print(articles.id, '\t', articles.name, '\t', articles.is_available)
+        IOWrapper.print_articles(self.base.get_articles_by_name(src_name))
 
 
 class SearchForAnArticleByIdCommand(ICommand):
@@ -160,9 +181,9 @@ class SearchForAnArticleByIdCommand(ICommand):
     def execute(self):
         src_id = input("Podaj ID artykułu:\nID?: ")
 
-        articles = self.base.get_article_by_id(src_id)
-        if articles:
-            print(articles.id, '\t', articles.name, '\t', articles.is_available)
+        article = self.base.get_article_by_id(src_id)
+        if article:
+            IOWrapper.print_articles([article])
         else:
             self.app_info_logger.log_info("Brak artykułu o takim ID!")
 
@@ -253,9 +274,7 @@ class DisplayAllNotAvailableArticlesCommand(ICommand):
 
     def execute(self):
         print("Lista wszystkich wypożyczonych artykułów:")
-        print("ID", '\t', "NAZWA", '\t', "DOSTĘPNOSC")
-        for articles in self.base.get_articles_by_availability(False):
-            print(articles.id, '\t', articles.name, '\t', articles.is_available)
+        IOWrapper.print_articles(self.base.get_articles_by_availability(False))
 
 
 class DisplayFullHistoryCommand(ICommand):
@@ -265,14 +284,7 @@ class DisplayFullHistoryCommand(ICommand):
 
     def execute(self):
         print("Pełna historia wypożyczeń:")
-
-        article_logs = self.logger.get_all_logs()
-
-        print("ID", '\t', "DATA", '\t\t', "TEXT")
-        for article_log in article_logs:
-            logs = [it for it in article_log.logs if it.text == 'Borrowed' or it.text == 'Returned']
-            for log in logs:
-                print(article_log.id, '\t', log.data, '\t', log.text)
+        IOWrapper.print_article_log(self.logger.get_all_logs())
 
 
 class StopApp(ICommand):
