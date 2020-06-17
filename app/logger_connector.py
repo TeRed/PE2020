@@ -57,3 +57,8 @@ class LoggerConnector(metaclass=Singleton):
             article_logs.append(ArticleLogs(id, [log]))
 
         self.file_connector.save_json_file(article_logs)
+
+    def get_available_id(self):
+        logs = self.get_all_logs()
+        ids = [int(x.id) for x in logs]
+        return str(sorted(ids)[-1] + 1)

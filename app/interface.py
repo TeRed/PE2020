@@ -69,6 +69,9 @@ class AppInfoLogger:
     def log_error(self, text):
         print(self.info_title + self.info_divider + 'W aplikacji wystąpił błąd. ERROR: ' + text)
 
+    def log_info(self, text):
+        print(self.info_title + self.info_divider + text)
+
 
 class ICommand(metaclass=ABCMeta):
 
@@ -104,32 +107,36 @@ class DisplayHistoryCommand(ICommand):
 
 class AddArticleCommand(ICommand):
 
-    def __init__(self, base, logger):
+    def __init__(self, base, logger, app_info_logger):
         self.base = base
         self.logger = logger
+        self.app_info_logger = app_info_logger
 
     def execute(self):
-        new_id = input("Dodawanie nowego artykułu:\nID?: ")
         new_name = input("Name?: ")
+        new_id = self.logger.get_available_id()
         new_obj = Article(new_id, new_name, True)
 
         self.base.add_article(new_obj)
         self.logger.add_log(new_id, Log(str(datetime.date(datetime.now())), "Added"))
-        print("Dodano nowy artykuł")
+        self.app_info_logger.log_info("Dodano nowy artykuł")
 
 
 class DeleteArticleCommand(ICommand):
 
-    def __init__(self, base, logger):
+    def __init__(self, base, logger, app_info_logger):
         self.base = base
         self.logger = logger
+        self.app_info_logger = app_info_logger
 
     def execute(self):
         rm_id = input("Podaj ID artykułu do usunięcia:\nID?: ")
 
-        self.base.remove_article_by_id(rm_id)
-        self.logger.add_log(rm_id, Log(str(datetime.date(datetime.now())), "Deleted"))
-        print("Usunięto artykuł o ID =", rm_id)
+        if self.base.remove_article_by_id(rm_id):
+            self.logger.add_log(rm_id, Log(str(datetime.date(datetime.now())), "Deleted"))
+            self.app_info_logger.log_info(f"Usunięto artykuł o ID = {rm_id}")
+        else:
+            self.app_info_logger.log_info(f"Brak artykułu o ID = {rm_id}")
 
 
 class SearchForAnArticleByNameCommand(ICommand):
@@ -146,8 +153,9 @@ class SearchForAnArticleByNameCommand(ICommand):
 
 class SearchForAnArticleByIdCommand(ICommand):
 
-    def __init__(self, base):
+    def __init__(self, base, app_info_logger):
         self.base = base
+        self.app_info_logger = app_info_logger
 
     def execute(self):
         src_id = input("Podaj ID artykułu:\nID?: ")
@@ -156,14 +164,15 @@ class SearchForAnArticleByIdCommand(ICommand):
         if articles:
             print(articles.id, '\t', articles.name, '\t', articles.is_available)
         else:
-            print("Brak artykułu o takim ID!")
+            self.app_info_logger.log_info("Brak artykułu o takim ID!")
 
 
 class ChangeStatusCommand(ICommand):
 
-    def __init__(self, base, logger):
+    def __init__(self, base, logger, app_info_logger):
         self.base = base
         self.logger = logger
+        self.app_info_logger = app_info_logger
 
     def execute(self):
         obj_id = input("Podaj ID elementu do zmiany statusu\nID?: ")
@@ -186,9 +195,9 @@ class ChangeStatusCommand(ICommand):
             elif status == '2':
                 ""
             else:
-                self.app_info_logger.log_error("Należało wybrać 1 lub 2!")
+                self.app_info_logger.log_info("Należało wybrać 1 lub 2!")
         else:
-            self.app_info_logger.log_error("Nieprawidłowy id produktu")
+            self.app_info_logger.log_info("Nieprawidłowy id produktu")
 
 
 class DisplayConfigCommand(ICommand):
@@ -206,8 +215,9 @@ class DisplayConfigCommand(ICommand):
 
 class ChangeConfigCommand(ICommand):
 
-    def __init__(self, config_manager):
+    def __init__(self, config_manager, app_info_logger):
         self.config_manager = config_manager
+        self.app_info_logger = app_info_logger
 
     def execute(self):
         config_attributes = list()
@@ -224,7 +234,7 @@ class ChangeConfigCommand(ICommand):
 
         setattr(self.config_manager, config_attributes[int(index) - 1], new_value)
 
-        print("Atrybut został zmieniony!")
+        self.app_info_logger.log_info("Atrybut został zmieniony!")
 
 
 class SaveConfigCommand(ICommand):
@@ -287,13 +297,13 @@ class Invoker:
                           '2': DisplayAllNotAvailableArticlesCommand(self.base),
                           '3': DisplayFullHistoryCommand(self.logger),
                           '4': DisplayHistoryCommand(self.logger),
-                          '5': AddArticleCommand(self.base, self.logger),
-                          '6': DeleteArticleCommand(self.base, self.logger),
+                          '5': AddArticleCommand(self.base, self.logger, self.app_info_logger),
+                          '6': DeleteArticleCommand(self.base, self.logger, self.app_info_logger),
                           '7': SearchForAnArticleByNameCommand(self.base),
-                          '8': SearchForAnArticleByIdCommand(self.base),
-                          '9': ChangeStatusCommand(self.base, self.logger),
+                          '8': SearchForAnArticleByIdCommand(self.base, self.app_info_logger),
+                          '9': ChangeStatusCommand(self.base, self.logger, self.app_info_logger),
                           '10': DisplayConfigCommand(self.config_manager),
-                          '11': ChangeConfigCommand(self.config_manager),
+                          '11': ChangeConfigCommand(self.config_manager, app_info_logger),
                           '12': SaveConfigCommand(self.config_manager),
                           '0': StopApp(self.app_info_logger)}
 
