@@ -28,8 +28,8 @@ class Interface:
 
         INVOKER = Invoker(self.base, self.logger, self.config_manager, self.app_info_logger)
 
-        while (run):
-            input("Naciśnij cokolwiek, aby kontynować")
+        while run:
+            input("Naciśnij Enter, aby kontynować")
             self.cls()
             print("\tWypożyczalnia rzeczy\n\tProsze wybrać numer:")
 
@@ -161,11 +161,12 @@ class SearchForAnArticleByIdCommand(ICommand):
 
 class ChangeStatusCommand(ICommand):
 
-    def __init__(self, base):
+    def __init__(self, base, logger):
         self.base = base
+        self.logger = logger
 
     def execute(self):
-        obj_id = input("Podaj ID elementu do zmiany statusu\ID?: ")
+        obj_id = input("Podaj ID elementu do zmiany statusu\nID?: ")
         obj_article = self.base.get_article_by_id(obj_id)
 
         if obj_article:
@@ -277,7 +278,7 @@ class StopApp(ICommand):
 
 class Invoker:
 
-    def __init__(self, base, logger, config_manager,app_info_logger):
+    def __init__(self, base, logger, config_manager, app_info_logger):
         self.base = base
         self.logger = logger
         self.config_manager = config_manager
@@ -290,7 +291,7 @@ class Invoker:
                           '6': DeleteArticleCommand(self.base, self.logger),
                           '7': SearchForAnArticleByNameCommand(self.base),
                           '8': SearchForAnArticleByIdCommand(self.base),
-                          '9': ChangeStatusCommand(self.base),
+                          '9': ChangeStatusCommand(self.base, self.logger),
                           '10': DisplayConfigCommand(self.config_manager),
                           '11': ChangeConfigCommand(self.config_manager),
                           '12': SaveConfigCommand(self.config_manager),

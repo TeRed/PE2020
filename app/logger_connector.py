@@ -51,6 +51,9 @@ class LoggerConnector(metaclass=Singleton):
             else:
                 return article_log
 
-        article_logs = list(map(add_log_input, article_logs))
+        if any(x.id == id for x in article_logs):
+            article_logs = list(map(add_log_input, article_logs))
+        else:
+            article_logs.append(ArticleLogs(id, [log]))
 
         self.file_connector.save_json_file(article_logs)
