@@ -28,7 +28,6 @@ class Interface:
         INVOKER = Invoker(self.base, self.logger, self.config_manager, self.app_info_logger)
 
         while True:
-            input("Naciśnij Enter, aby kontynować")
             self.cls()
             print("\tWypożyczalnia rzeczy\n\tProsze wybrać numer:")
 
@@ -84,13 +83,26 @@ class IOWrapper:
         pager(str(pt))
 
     @staticmethod
-    def print_article_log(article_logs):
+    def print_articles_log(articles_logs):
         pt = PrettyTable()
         pt.field_names = ['ID', 'DATA', 'TEKST']
-        for article_log in article_logs:
+        for article_log in articles_logs:
             logs = [it for it in article_log.logs if it.text == 'Borrowed' or it.text == 'Returned']
             for log in logs:
                 pt.add_row([article_log.id, log.data, log.text])
+
+        pager(str(pt))
+
+    @staticmethod
+    def continue_pause():
+        input("Nacisnij Enter, aby kontynować")
+
+    @staticmethod
+    def print_article_log(logs):
+        pt = PrettyTable()
+        pt.field_names = ['DATA', 'TEKST']
+        for obj in logs:
+            pt.add_row([obj.data, obj.text])
 
         pager(str(pt))
 
@@ -108,7 +120,6 @@ class DisplayAllArticlesCommand(ICommand):
         self.base = base
 
     def execute(self):
-        print("Lista wszystkich artykułów:")
         IOWrapper.print_articles(self.base.get_all_articles())
 
 
@@ -119,10 +130,7 @@ class DisplayHistoryCommand(ICommand):
 
     def execute(self):
         article_id = input("Podaj numer rzeczy by wyświetlić historię :> ")
-
-        logs = self.logger.get_borrow_history(article_id)
-        for obj in logs:
-            print("date: " + obj.data + "\tmsg: " + obj.text)
+        IOWrapper.print_article_log(self.logger.get_borrow_history(article_id))
 
 
 class AddArticleCommand(ICommand):
@@ -140,6 +148,7 @@ class AddArticleCommand(ICommand):
         self.base.add_article(new_obj)
         self.logger.add_log(new_id, Log(str(datetime.date(datetime.now())), "Added"))
         self.app_info_logger.log_info("Dodano nowy artykuł")
+        IOWrapper.continue_pause()
 
 
 class DeleteArticleCommand(ICommand):
@@ -157,6 +166,8 @@ class DeleteArticleCommand(ICommand):
             self.app_info_logger.log_info(f"Usunięto artykuł o ID = {rm_id}")
         else:
             self.app_info_logger.log_info(f"Brak artykułu o ID = {rm_id}")
+
+        IOWrapper.continue_pause()
 
 
 class SearchForAnArticleByNameCommand(ICommand):
@@ -183,6 +194,7 @@ class SearchForAnArticleByIdCommand(ICommand):
             IOWrapper.print_articles([article])
         else:
             self.app_info_logger.log_info("Brak artykułu o takim ID!")
+            IOWrapper.continue_pause()
 
 
 class ChangeStatusCommand(ICommand):
@@ -214,8 +226,10 @@ class ChangeStatusCommand(ICommand):
                 ""
             else:
                 self.app_info_logger.log_info("Należało wybrać 1 lub 2!")
+                IOWrapper.continue_pause()
         else:
             self.app_info_logger.log_info("Nieprawidłowy id produktu")
+            IOWrapper.continue_pause()
 
 
 class DisplayConfigCommand(ICommand):
@@ -229,6 +243,8 @@ class DisplayConfigCommand(ICommand):
 
         for key, val in config_attributes.items():
             print(f'{key}: "{val}"')
+
+        IOWrapper.continue_pause()
 
 
 class ChangeConfigCommand(ICommand):
@@ -248,20 +264,26 @@ class ChangeConfigCommand(ICommand):
             print(f'{index + 1}: "{val}"')
 
         index = input("Wybierz atrybut do zmiany: ")
-        new_value = input("Podaj nową wartość: ")
+        if len(config_attributes) >= int(index) > 0:
+            new_value = input("Podaj nową wartość: ")
+            setattr(self.config_manager, config_attributes[int(index) - 1], new_value)
+            self.app_info_logger.log_info("Atrybut został zmieniony!")
+        else:
+            self.app_info_logger.log_info("Brak takiego atrybutu!")
 
-        setattr(self.config_manager, config_attributes[int(index) - 1], new_value)
-
-        self.app_info_logger.log_info("Atrybut został zmieniony!")
+        IOWrapper.continue_pause()
 
 
 class SaveConfigCommand(ICommand):
 
-    def __init__(self, config_manager):
+    def __init__(self, config_manager, app_info_logger):
         self.config_manager = config_manager
+        self.app_info_logger = app_info_logger
 
     def execute(self):
         self.config_manager.save_configuration()
+        self.app_info_logger.log_info("Zapisano konfiguracje!")
+        IOWrapper.continue_pause()
 
 
 class DisplayAllNotAvailableArticlesCommand(ICommand):
@@ -270,7 +292,6 @@ class DisplayAllNotAvailableArticlesCommand(ICommand):
         self.base = base
 
     def execute(self):
-        print("Lista wszystkich wypożyczonych artykułów:")
         IOWrapper.print_articles(self.base.get_articles_by_availability(False))
 
 
@@ -280,8 +301,7 @@ class DisplayFullHistoryCommand(ICommand):
         self.logger = logger
 
     def execute(self):
-        print("Pełna historia wypożyczeń:")
-        IOWrapper.print_article_log(self.logger.get_all_logs())
+        IOWrapper.print_articles_log(self.logger.get_all_logs())
 
 
 class StopApp(ICommand):
@@ -311,8 +331,8 @@ class Invoker:
                           '8': SearchForAnArticleByIdCommand(self.base, self.app_info_logger),
                           '9': ChangeStatusCommand(self.base, self.logger, self.app_info_logger),
                           '10': DisplayConfigCommand(self.config_manager),
-                          '11': ChangeConfigCommand(self.config_manager, app_info_logger),
-                          '12': SaveConfigCommand(self.config_manager),
+                          '11': ChangeConfigCommand(self.config_manager, self.app_info_logger),
+                          '12': SaveConfigCommand(self.config_manager, self.app_info_logger),
                           '0': StopApp(self.app_info_logger)}
 
     def execute(self, command_name):
@@ -320,3 +340,4 @@ class Invoker:
             self._commands[command_name].execute()
         else:
             self.app_info_logger.log_error("Podano nieprawidłowy numer!")
+            IOWrapper.continue_pause()
