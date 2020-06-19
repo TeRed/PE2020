@@ -9,7 +9,6 @@ from pydoc import pager
 
 
 class Interface:
-    global run
 
     def __init__(self, db_connector, logger_connector, config_manager):
         self.logger = logger_connector
@@ -24,13 +23,11 @@ class Interface:
         os.system('cls' if os.name == 'nt' else 'clear')
 
     def menu(self):
-        global run
-        run = True
         self.app_info_logger.log_start()
 
         INVOKER = Invoker(self.base, self.logger, self.config_manager, self.app_info_logger)
 
-        while run:
+        while True:
             input("Naciśnij Enter, aby kontynować")
             self.cls()
             print("\tWypożyczalnia rzeczy\n\tProsze wybrać numer:")
@@ -293,9 +290,8 @@ class StopApp(ICommand):
         self.app_info_logger = app_info_logger
 
     def execute(self):
-        global run
-        run = False
         self.app_info_logger.log_end()
+        raise SystemExit
 
 
 class Invoker:
