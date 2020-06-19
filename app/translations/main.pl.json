@@ -1,0 +1,35 @@
+{
+  "pl": {
+    "PRESS_ENTER_TO_CONTINUE": "Naciśnij Enter, aby kontynować...",
+    "LIST_ALL_ARTICLES": "Wypisz listę wszystkich artykułów",
+    "LIST_RENTED_ARTICLES": "Wypisz listę wypożyczonych artykułów",
+    "VIEW_FULL_RENTAL_HISTORY": "Wyświetl pełną historię wypożyczeń",
+    "VIEW_RENTAL_HISTORY_OF_THE_ARTICLE": "Wypisz historię wypożyczeń artykułu",
+    "ADD_ARTICLE": "Dodaj artykuł",
+    "DELETE_ARTICLE": "Usuń artykuł",
+    "SEARCH_THE_ARTICLE_BY_NAME": "Wyszukaj artykuł po nazwie",
+    "SEARCH_THE_ARTICLE_BY_ID": "Wyszukaj artykuł po id",
+    "CHANGE_THE_RENTAL_STATUS": "Zmień status wypożyczenia",
+    "VIEW_CURRENT_CONFIGURATION": "Aktualna konfiguracja",
+    "CHANGE_THE_CONFIGURATION": "Zmiana konfiguracji",
+    "SAVE_THE_CURRENT_APPLICATION_CONFIGURATION": "Zapisz aktualną konfigurację aplikacji",
+    "EXIT_APPLICATION": "Wyjdz z aplikacji",
+    "DIAL_THE_NUMBER": "Prosze wybrać numer",
+    "WRONG_NUMBER_GIVEN": "Podano nieprawidłowy numer!",
+
+    "THE_APPLICATION_HAS_BEEN_LAUNCHED": "Aplikacja została uruchomiona",
+    "THE_APPLICATION_HAS_BEEN_STOPPED": "Aplikacja została zatrzymana",
+    "AN_ERROR_OCCURRED": "W aplikacji wystąpił błąd. ERROR: %{error}",
+
+    "LIST_OF_ALL_ARTICLES": "Lista wszystkich artykułów:",
+    "ENTER_THE_NUMBER_OF_THE_ITEM": "Podaj numer rzeczy by wyświetlić historię: ",
+    "ENTER_THE_NAME_OF_THE_ARTICLE": "Podaj nazwę artykułu: ",
+    "ENTER_THE_ID_OF_THE_ARTICLE": "Podaj ID artykułu: ",
+    "CURRENT_CONFIGURATION": "Aktualna konfiguracja:",
+    "COMPLETE_RENTAL_HISTORY": "Pełna historia wypożyczeń:",
+    "LIST_OF_ALL_RENTED_ITEMS": "Lista wszystkich wypożyczonych artykułów:",
+
+    "CONFIGURATION_CHANGE": "Zmiana konfiguracji",
+    "SELECT_AN_ATTRIBUTE_TO_CHANGE": "Wybierz atrybut do zmiany: "
+  }
+}
