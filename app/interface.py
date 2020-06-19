@@ -29,23 +29,23 @@ class Interface:
 
         while True:
             self.cls()
-            print("\tWypożyczalnia rzeczy\n\tProsze wybrać numer:")
+            print('Wypożyczalnia rzeczy\n')
+            print(
+                ('1: Wypisz liste wszystkich artykułów\n'
+                 '2: Wypisz listę wypożyczonych artykułów\n'
+                 '3: Wyświetl pełną historię wypożyczeń\n'
+                 '4: Wypisz historię wypożyczeń artykułu\n'
+                 '5: Dodaj artykuł\n'
+                 '6: Usuń artykuł\n'
+                 '7: Wyszukaj artykuł po nazwie\n'
+                 '8: Wyszukaj artykuł po id\n'
+                 '9: Zmień status wypożyczenia\n'
+                 '10: Aktualna konfiguracja\n'
+                 '11: Zmiana konfiguracji\n'
+                 '12: Zapisz aktualną konfigurację aplikacji\n'
+                 '0: Wyjdz z aplikacji\n'))
 
-            choice = input('''
-           1: Wypisz liste wszystkich artykułów
-           2: Wypisz listę wypożyczonych artykułów
-           3: Wyświetl pełną historię wypożyczeń
-           4: Wypisz historię wypożyczeń artykułu
-           5: Dodaj artykuł
-           6: Usuń artykuł
-           7: Wyszukaj artykuł po nazwie
-           8: Wyszukaj artykuł po id
-           9: Zmień status wypożyczenia
-           10: Aktualna konfiguracja
-           11: Zmiana konfiguracji
-           12: Zapisz aktualną konfigurację aplikacji
-           0: Wyjdz z aplikacji
-           ''')
+            choice = input('Prosze wybrać numer: ')
             self.cls()
             INVOKER.execute(choice)
 
