@@ -10,7 +10,6 @@ import i18n
 
 
 class Interface:
-    global run
 
     def __init__(self, db_connector, logger_connector, config_manager):
         self.logger = logger_connector
@@ -25,33 +24,29 @@ class Interface:
         os.system('cls' if os.name == 'nt' else 'clear')
 
     def menu(self):
-        global run
-        run = True
         self.app_info_logger.log_start()
 
         INVOKER = Invoker(self.base, self.logger, self.config_manager, self.app_info_logger)
 
-        while run:
-            input(i18n.t('PRESS_ENTER_TO_CONTINUE'))
+        while True:
             self.cls()
-            print("\tWypożyczalnia rzeczy")
+            print('Wypożyczalnia rzeczy\n')
+            print(
+                (f' 1: {i18n.t("LIST_ALL_ARTICLES")}\n'
+                 f' 2: {i18n.t("LIST_RENTED_ARTICLES")}\n'
+                 f' 3: {i18n.t("VIEW_FULL_RENTAL_HISTORY")}\n'
+                 f' 4: {i18n.t("VIEW_RENTAL_HISTORY_OF_THE_ARTICLE")}\n'
+                 f' 5: {i18n.t("ADD_ARTICLE")}\n'
+                 f' 6: {i18n.t("DELETE_ARTICLE")}\n'
+                 f' 7: {i18n.t("SEARCH_THE_ARTICLE_BY_NAME")}\n'
+                 f' 8: {i18n.t("SEARCH_THE_ARTICLE_BY_ID")}\n'
+                 f' 9: {i18n.t("CHANGE_THE_RENTAL_STATUS")}\n'
+                 f'10: {i18n.t("VIEW_CURRENT_CONFIGURATION")}\n'
+                 f'11: {i18n.t("CHANGE_THE_CONFIGURATION")}\n'
+                 f'12: {i18n.t("SAVE_THE_CURRENT_APPLICATION_CONFIGURATION")}\n'
+                 f' 0: {i18n.t("EXIT_APPLICATION")}\n'))
 
-            choice = input(
-                f' 1: {i18n.t("LIST_ALL_ARTICLES")}\n'
-                f' 2: {i18n.t("LIST_RENTED_ARTICLES")}\n'
-                f' 3: {i18n.t("VIEW_FULL_RENTAL_HISTORY")}\n'
-                f' 4: {i18n.t("VIEW_RENTAL_HISTORY_OF_THE_ARTICLE")}\n'
-                f' 5: {i18n.t("ADD_ARTICLE")}\n'
-                f' 6: {i18n.t("DELETE_ARTICLE")}\n'
-                f' 7: {i18n.t("SEARCH_THE_ARTICLE_BY_NAME")}\n'
-                f' 8: {i18n.t("SEARCH_THE_ARTICLE_BY_ID")}\n'
-                f' 9: {i18n.t("CHANGE_THE_RENTAL_STATUS")}\n'
-                f'10: {i18n.t("VIEW_CURRENT_CONFIGURATION")}\n'
-                f'11: {i18n.t("CHANGE_THE_CONFIGURATION")}\n'
-                f'12: {i18n.t("SAVE_THE_CURRENT_APPLICATION_CONFIGURATION")}\n'
-                f' 0: {i18n.t("EXIT_APPLICATION")}\n'
-                f'{i18n.t("DIAL_THE_NUMBER")}: '
-            )
+            choice = input(f'{i18n.t("DIAL_THE_NUMBER")}: ')
             self.cls()
             INVOKER.execute(choice)
 
@@ -89,13 +84,26 @@ class IOWrapper:
         pager(str(pt))
 
     @staticmethod
-    def print_article_log(article_logs):
+    def print_articles_log(articles_logs):
         pt = PrettyTable()
         pt.field_names = ['ID', 'DATA', 'TEKST']
-        for article_log in article_logs:
+        for article_log in articles_logs:
             logs = [it for it in article_log.logs if it.text == 'Borrowed' or it.text == 'Returned']
             for log in logs:
                 pt.add_row([article_log.id, log.data, log.text])
+
+        pager(str(pt))
+
+    @staticmethod
+    def continue_pause():
+        input("Nacisnij Enter, aby kontynować")
+
+    @staticmethod
+    def print_article_log(logs):
+        pt = PrettyTable()
+        pt.field_names = ['DATA', 'TEKST']
+        for obj in logs:
+            pt.add_row([obj.data, obj.text])
 
         pager(str(pt))
 
@@ -113,7 +121,6 @@ class DisplayAllArticlesCommand(ICommand):
         self.base = base
 
     def execute(self):
-        print(i18n.t('LIST_OF_ALL_ARTICLES'))
         IOWrapper.print_articles(self.base.get_all_articles())
 
 
@@ -124,10 +131,7 @@ class DisplayHistoryCommand(ICommand):
 
     def execute(self):
         article_id = input(i18n.t('ENTER_THE_NUMBER_OF_THE_ITEM'))
-
-        logs = self.logger.get_borrow_history(article_id)
-        for obj in logs:
-            print("date: " + obj.data + "\tmsg: " + obj.text)
+        IOWrapper.print_article_log(self.logger.get_borrow_history(article_id))
 
 
 class AddArticleCommand(ICommand):
@@ -145,6 +149,7 @@ class AddArticleCommand(ICommand):
         self.base.add_article(new_obj)
         self.logger.add_log(new_id, Log(str(datetime.date(datetime.now())), "Added"))
         self.app_info_logger.log_info("Dodano nowy artykuł")
+        IOWrapper.continue_pause()
 
 
 class DeleteArticleCommand(ICommand):
@@ -162,6 +167,8 @@ class DeleteArticleCommand(ICommand):
             self.app_info_logger.log_info(f"Usunięto artykuł o ID = {rm_id}")
         else:
             self.app_info_logger.log_info(f"Brak artykułu o ID = {rm_id}")
+
+        IOWrapper.continue_pause()
 
 
 class SearchForAnArticleByNameCommand(ICommand):
@@ -188,6 +195,7 @@ class SearchForAnArticleByIdCommand(ICommand):
             IOWrapper.print_articles([article])
         else:
             self.app_info_logger.log_info("Brak artykułu o takim ID!")
+            IOWrapper.continue_pause()
 
 
 class ChangeStatusCommand(ICommand):
@@ -219,8 +227,10 @@ class ChangeStatusCommand(ICommand):
                 ""
             else:
                 self.app_info_logger.log_info("Należało wybrać 1 lub 2!")
+                IOWrapper.continue_pause()
         else:
             self.app_info_logger.log_info("Nieprawidłowy id produktu")
+            IOWrapper.continue_pause()
 
 
 class DisplayConfigCommand(ICommand):
@@ -234,6 +244,8 @@ class DisplayConfigCommand(ICommand):
 
         for key, val in config_attributes.items():
             print(f'{key}: "{val}"')
+
+        IOWrapper.continue_pause()
 
 
 class ChangeConfigCommand(ICommand):
@@ -253,20 +265,26 @@ class ChangeConfigCommand(ICommand):
             print(f'{index + 1}: "{val}"')
 
         index = input(i18n.t('SELECT_AN_ATTRIBUTE_TO_CHANGE'))
-        new_value = input("Podaj nową wartość: ")
+        if len(config_attributes) >= int(index) > 0:
+            new_value = input("Podaj nową wartość: ")
+            setattr(self.config_manager, config_attributes[int(index) - 1], new_value)
+            self.app_info_logger.log_info("Atrybut został zmieniony!")
+        else:
+            self.app_info_logger.log_info("Brak takiego atrybutu!")
 
-        setattr(self.config_manager, config_attributes[int(index) - 1], new_value)
-
-        self.app_info_logger.log_info("Atrybut został zmieniony!")
+        IOWrapper.continue_pause()
 
 
 class SaveConfigCommand(ICommand):
 
-    def __init__(self, config_manager):
+    def __init__(self, config_manager, app_info_logger):
         self.config_manager = config_manager
+        self.app_info_logger = app_info_logger
 
     def execute(self):
         self.config_manager.save_configuration()
+        self.app_info_logger.log_info("Zapisano konfiguracje!")
+        IOWrapper.continue_pause()
 
 
 class DisplayAllNotAvailableArticlesCommand(ICommand):
@@ -275,7 +293,6 @@ class DisplayAllNotAvailableArticlesCommand(ICommand):
         self.base = base
 
     def execute(self):
-        print(i18n.t('LIST_OF_ALL_RENTED_ITEMS'))
         IOWrapper.print_articles(self.base.get_articles_by_availability(False))
 
 
@@ -285,8 +302,7 @@ class DisplayFullHistoryCommand(ICommand):
         self.logger = logger
 
     def execute(self):
-        print(i18n.t('COMPLETE_RENTAL_HISTORY'))
-        IOWrapper.print_article_log(self.logger.get_all_logs())
+        IOWrapper.print_articles_log(self.logger.get_all_logs())
 
 
 class StopApp(ICommand):
@@ -295,9 +311,8 @@ class StopApp(ICommand):
         self.app_info_logger = app_info_logger
 
     def execute(self):
-        global run
-        run = False
         self.app_info_logger.log_end()
+        raise SystemExit
 
 
 class Invoker:
@@ -317,8 +332,8 @@ class Invoker:
                           '8': SearchForAnArticleByIdCommand(self.base, self.app_info_logger),
                           '9': ChangeStatusCommand(self.base, self.logger, self.app_info_logger),
                           '10': DisplayConfigCommand(self.config_manager),
-                          '11': ChangeConfigCommand(self.config_manager, app_info_logger),
-                          '12': SaveConfigCommand(self.config_manager),
+                          '11': ChangeConfigCommand(self.config_manager, self.app_info_logger),
+                          '12': SaveConfigCommand(self.config_manager, self.app_info_logger),
                           '0': StopApp(self.app_info_logger)}
 
     def execute(self, command_name):
@@ -326,3 +341,4 @@ class Invoker:
             self._commands[command_name].execute()
         else:
             self.app_info_logger.log_error(i18n.t('WRONG_NUMBER_GIVEN'))
+            IOWrapper.continue_pause()
