@@ -35,8 +35,8 @@
     "ARTICLE_OF_ID_LACKING": "No article with the given ID",
     "ARTICLE_AVAILABLE": "Article is currently available.",
     "ARTICLE_NOT_AVAILABLE": "Article is currently not available.",
-    "CHANGE_STATUS_QUESTION": "Do you want to change its status?",
-    "YES_OR_NO_QUESTION": "1: Yes\n2: No\n Select the option: ",
+    "CHANGE_QUESTION": "Do you want to change its status?",
+    "YES_OR_NO_QUESTION": "1: Yes\n2: No\nSelect the option: ",
     "ONLY_TWO_OPTIONS": "You should have chosen 1 or 2",
 
     "CURRENT_CONFIGURATION": "Current configuration:",
@@ -46,6 +46,7 @@
     "THE_ATTRIBUTE_HAS_BEEN_CHANGED": "The attribute has been changed",
     "NO_SUCH_ATTRIBUTE": "No such attribute",
     "CONFIGURATION_SAVED": "The configuration has been saved",
-    "CONFIG_FILE_NOT_FOUND": "Configuration file not found"
+    "CONFIG_FILE_NOT_FOUND": "Configuration file not found",
+    "CURRENT_LANGUAGE": "Currently set language: "
   }
 }

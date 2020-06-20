@@ -35,8 +35,8 @@
     "ARTICLE_OF_ID_LACKING": "Brak artykułu o podanym ID",
     "ARTICLE_AVAILABLE": "Atrykuł obecnie jest dostępny.",
     "ARTICLE_NOT_AVAILABLE": "Atrykuł obecnie nie jest dostępny.",
-    "CHANGE_STATUS_QUESTION": "Czy chcesz zmienić jego status?",
-    "YES_OR_NO_QUESTION": "1: Tak\n2: Nie\n Wybierz opcję: ",
+    "CHANGE_QUESTION": "Czy chcesz to zmienić?",
+    "YES_OR_NO_QUESTION": "1: Tak\n2: Nie\nWybierz opcję: ",
     "ONLY_TWO_OPTIONS": "Należało wybrać 1 lub 2",
 
     "CURRENT_CONFIGURATION": "Aktualna konfiguracja:",
@@ -46,6 +46,7 @@
     "THE_ATTRIBUTE_HAS_BEEN_CHANGED": "Atrybut został zmieniony",
     "NO_SUCH_ATTRIBUTE": "Brak takiego atrybutu",
     "CONFIGURATION_SAVED": "Zapisano konfiguracje",
-    "CONFIG_FILE_NOT_FOUND": "Nie znaleziono pliku konfiguracyjnego"
+    "CONFIG_FILE_NOT_FOUND": "Nie znaleziono pliku konfiguracyjnego",
+    "CURRENT_LANGUAGE": "Obecnie ustawiony język: "
   }
 }

@@ -212,7 +212,7 @@ class ChangeStatusCommand(ICommand):
 
         if obj_article:
             state = i18n.t('ARTICLE_AVAILABLE') if obj_article.is_available else i18n.t('ARTICLE_NOT_AVAILABLE')
-            print(f'{state} {i18n.t("CHANGE_STATUS_QUESTION")}')
+            print(f'{state} {i18n.t("CHANGE_QUESTION")}')
             status = input(i18n.t('YES_OR_NO_QUESTION'))
 
             if status == '1':
@@ -254,6 +254,7 @@ class ChangeConfigCommand(ICommand):
     def __init__(self, config_manager, app_info_logger):
         self.config_manager = config_manager
         self.app_info_logger = app_info_logger
+        self.language_attr_key = 0
 
     def execute(self):
         config_attributes = list()
@@ -263,10 +264,24 @@ class ChangeConfigCommand(ICommand):
 
         print(i18n.t('CONFIGURATION_CHANGE'))
         for index, val in enumerate(config_attributes):
+            if val == 'language':
+                self.language_attr_key = index + 1
             print(f'{index + 1}: "{val}"')
 
         index = input(i18n.t('SELECT_AN_ATTRIBUTE_TO_CHANGE'))
-        if len(config_attributes) >= int(index) > 0:
+        if int(index) == self.language_attr_key:
+            current_lang_val = self.config_manager.language
+            print(f"{i18n.t('CURRENT_LANGUAGE')}{current_lang_val}. {i18n.t('CHANGE_QUESTION')}")
+            status = input(i18n.t('YES_OR_NO_QUESTION'))
+
+            if status == '1':
+                self.config_manager.set_language("pl" if current_lang_val == "en" else "en")
+                self.app_info_logger.log_info(i18n.t('THE_ATTRIBUTE_HAS_BEEN_CHANGED'))
+            elif status == '2':
+                ""
+            else:
+                self.app_info_logger.log_info(i18n.t('ONLY_TWO_OPTIONS'))
+        elif len(config_attributes) >= int(index) > 0:
             new_value = input(i18n.t('ENTER_A_NEW_VALUE'))
             setattr(self.config_manager, config_attributes[int(index) - 1], new_value)
             self.app_info_logger.log_info(i18n.t('THE_ATTRIBUTE_HAS_BEEN_CHANGED'))
