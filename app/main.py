@@ -6,9 +6,12 @@ from file_connector import LoggerFileConnector
 from file_connector import DbFileConnector
 import i18n
 
+# TODO
+# i18n setup
 i18n.load_path.append('./translations')
 i18n.set('filename_format', '{locale}.{format}')
-i18n.set('locale', 'pl')
+i18n.set('fallback', 'pl')
+i18n.set('locale', 'en')
 
 config_manager = ConfigManager("config.json")
 logger_file_connector = LoggerFileConnector(config_manager)

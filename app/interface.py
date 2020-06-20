@@ -30,7 +30,8 @@ class Interface:
 
         while True:
             self.cls()
-            print('Wypożyczalnia rzeczy\n')
+            print(i18n.t('RENTAL_COMPANY_NAME'))
+            print('')
             print(
                 (f' 1: {i18n.t("LIST_ALL_ARTICLES")}\n'
                  f' 2: {i18n.t("LIST_RENTED_ARTICLES")}\n'
@@ -43,7 +44,7 @@ class Interface:
                  f' 9: {i18n.t("CHANGE_THE_RENTAL_STATUS")}\n'
                  f'10: {i18n.t("VIEW_CURRENT_CONFIGURATION")}\n'
                  f'11: {i18n.t("CHANGE_THE_CONFIGURATION")}\n'
-                 f'12: {i18n.t("SAVE_THE_CURRENT_APPLICATION_CONFIGURATION")}\n'
+                 f'12: {i18n.t("SAVE_THE_CURRENT_CONFIGURATION")}\n'
                  f' 0: {i18n.t("EXIT_APPLICATION")}\n'))
 
             choice = input(f'{i18n.t("DIAL_THE_NUMBER")}: ')
@@ -66,7 +67,7 @@ class AppInfoLogger:
         print(self.info_title + self.info_divider + i18n.t('THE_APPLICATION_HAS_BEEN_STOPPED'))
 
     def log_error(self, text):
-        print(self.info_title + self.info_divider + i18n.t('AN_ERROR_OCCURRED', error=text))
+        print(self.info_title + self.info_divider + f'{i18n.t("AN_ERROR_OCCURRED")}{text}')
 
     def log_info(self, text):
         print(self.info_title + self.info_divider + text)
@@ -77,7 +78,7 @@ class IOWrapper:
     @staticmethod
     def print_articles(articles):
         pt = PrettyTable()
-        pt.field_names = ['ID', 'NAZWA', 'DOSTEPNOSC']
+        pt.field_names = [i18n.t('ID'), i18n.t('NAME'), i18n.t('AVAILABILITY')]
         for article in articles:
             pt.add_row([article.id, article.name, article.is_available])
 
@@ -86,7 +87,7 @@ class IOWrapper:
     @staticmethod
     def print_articles_log(articles_logs):
         pt = PrettyTable()
-        pt.field_names = ['ID', 'DATA', 'TEKST']
+        pt.field_names = [i18n.t('ID'), i18n.t('DATE'), i18n.t('TEXT')]
         for article_log in articles_logs:
             logs = [it for it in article_log.logs if it.text == 'Borrowed' or it.text == 'Returned']
             for log in logs:
@@ -96,12 +97,12 @@ class IOWrapper:
 
     @staticmethod
     def continue_pause():
-        input("Nacisnij Enter, aby kontynować")
+        input(i18n.t('PRESS_ENTER_TO_CONTINUE'))
 
     @staticmethod
     def print_article_log(logs):
         pt = PrettyTable()
-        pt.field_names = ['DATA', 'TEKST']
+        pt.field_names = [i18n.t('DATE'), i18n.t('TEXT')]
         for obj in logs:
             pt.add_row([obj.data, obj.text])
 
@@ -130,7 +131,7 @@ class DisplayHistoryCommand(ICommand):
         self.logger = logger
 
     def execute(self):
-        article_id = input(i18n.t('ENTER_THE_NUMBER_OF_THE_ITEM'))
+        article_id = input(i18n.t('ENTER_THE_ID_OF_THE_ARTICLE'))
         IOWrapper.print_article_log(self.logger.get_borrow_history(article_id))
 
 
@@ -148,7 +149,7 @@ class AddArticleCommand(ICommand):
 
         self.base.add_article(new_obj)
         self.logger.add_log(new_id, Log(str(datetime.date(datetime.now())), "Added"))
-        self.app_info_logger.log_info("Dodano nowy artykuł")
+        self.app_info_logger.log_info(i18n.t('ARTICLE_ADDED'))
         IOWrapper.continue_pause()
 
 
@@ -160,13 +161,13 @@ class DeleteArticleCommand(ICommand):
         self.app_info_logger = app_info_logger
 
     def execute(self):
-        rm_id = input("Podaj ID artykułu do usunięcia:\nID?: ")
+        rm_id = input(i18n.t('ENTER_THE_ID_OF_THE_ARTICLE'))
 
         if self.base.remove_article_by_id(rm_id):
             self.logger.add_log(rm_id, Log(str(datetime.date(datetime.now())), "Deleted"))
-            self.app_info_logger.log_info(f"Usunięto artykuł o ID = {rm_id}")
+            self.app_info_logger.log_info(i18n.t('ARTICLE_DELETED'))
         else:
-            self.app_info_logger.log_info(f"Brak artykułu o ID = {rm_id}")
+            self.app_info_logger.log_info(i18n.t('ARTICLE_OF_ID_LACKING'))
 
         IOWrapper.continue_pause()
 
@@ -194,7 +195,7 @@ class SearchForAnArticleByIdCommand(ICommand):
         if article:
             IOWrapper.print_articles([article])
         else:
-            self.app_info_logger.log_info("Brak artykułu o takim ID!")
+            self.app_info_logger.log_info(i18n.t('ARTICLE_OF_ID_LACKING'))
             IOWrapper.continue_pause()
 
 
@@ -210,9 +211,9 @@ class ChangeStatusCommand(ICommand):
         obj_article = self.base.get_article_by_id(obj_id)
 
         if obj_article:
-            state = 'jest' if obj_article.is_available else 'nie jest'
-            print(f'Atrykuł obecnie {state} dostępny. Czy chcesz zmienić jego status?')
-            status = input("1: Tak\n2: Nie\n Wybierz cyfre: ")
+            state = i18n.t('ARTICLE_AVAILABLE') if obj_article.is_available else i18n.t('ARTICLE_NOT_AVAILABLE')
+            print(f'{state} {i18n.t("CHANGE_STATUS_QUESTION")}')
+            status = input(i18n.t('YES_OR_NO_QUESTION'))
 
             if status == '1':
                 new_obj = self.base.change_article_availability(obj_id, not obj_article.is_available)
@@ -226,10 +227,10 @@ class ChangeStatusCommand(ICommand):
             elif status == '2':
                 ""
             else:
-                self.app_info_logger.log_info("Należało wybrać 1 lub 2!")
+                self.app_info_logger.log_info(i18n.t('ONLY_TWO_OPTIONS'))
                 IOWrapper.continue_pause()
         else:
-            self.app_info_logger.log_info("Nieprawidłowy id produktu")
+            self.app_info_logger.log_info(i18n.t('ARTICLE_OF_ID_LACKING'))
             IOWrapper.continue_pause()
 
 
@@ -266,11 +267,11 @@ class ChangeConfigCommand(ICommand):
 
         index = input(i18n.t('SELECT_AN_ATTRIBUTE_TO_CHANGE'))
         if len(config_attributes) >= int(index) > 0:
-            new_value = input("Podaj nową wartość: ")
+            new_value = input(i18n.t('ENTER_A_NEW_VALUE'))
             setattr(self.config_manager, config_attributes[int(index) - 1], new_value)
-            self.app_info_logger.log_info("Atrybut został zmieniony!")
+            self.app_info_logger.log_info(i18n.t('THE_ATTRIBUTE_HAS_BEEN_CHANGED'))
         else:
-            self.app_info_logger.log_info("Brak takiego atrybutu!")
+            self.app_info_logger.log_info(i18n.t('NO_SUCH_ATTRIBUTE'))
 
         IOWrapper.continue_pause()
 
@@ -283,7 +284,7 @@ class SaveConfigCommand(ICommand):
 
     def execute(self):
         self.config_manager.save_configuration()
-        self.app_info_logger.log_info("Zapisano konfiguracje!")
+        self.app_info_logger.log_info(i18n.t('CONFIGURATION_SAVED'))
         IOWrapper.continue_pause()
 
 
