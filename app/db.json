@@ -1,1 +1,17 @@
-[{"id": "1", "name": "Test", "is_available": true}, {"id": "2", "name": "Test2", "is_available": false}]
+[
+    {
+        "id": "2",
+        "is_available": true,
+        "name": "Wiertarka"
+    },
+    {
+        "id": "1",
+        "is_available": false,
+        "name": "Szpadel"
+    },
+    {
+        "id": "10",
+        "is_available": false,
+        "name": "Breszka"
+    }
+]

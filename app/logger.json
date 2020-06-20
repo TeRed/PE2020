@@ -3,8 +3,24 @@
         "id": "1",
         "logs": [
             {
-                "data": "08-05-2020",
+                "data": "2020-05-08",
                 "text": "Added"
+            },
+            {
+                "data": "2020-06-17",
+                "text": "Returned"
+            },
+            {
+                "data": "2020-06-17",
+                "text": "Deleted"
+            },
+            {
+                "data": "2020-06-17",
+                "text": "Added"
+            },
+            {
+                "data": "2020-06-17",
+                "text": "Borrowed"
             }
         ]
     },
@@ -12,19 +28,44 @@
         "id": "2",
         "logs": [
             {
-                "data": "08-05-2020",
+                "data": "2020-05-08",
                 "text": "Added"
             },
             {
-                "data": "08-05-2020",
+                "data": "2020-05-08",
                 "text": "Borrowed"
             },
             {
-                "data": "08-05-2020",
+                "data": "2020-05-10",
                 "text": "Returned"
             },
             {
-                "data": "10-05-2020",
+                "data": "2020-05-15",
+                "text": "Borrowed"
+            },
+            {
+                "data": "2020-06-17",
+                "text": "Returned"
+            },
+            {
+                "data": "2020-06-17",
+                "text": "Borrowed"
+            },
+            {
+                "data": "2020-06-17",
+                "text": "Returned"
+            }
+        ]
+    },
+    {
+        "id": "10",
+        "logs": [
+            {
+                "data": "2020-06-17",
+                "text": "Added"
+            },
+            {
+                "data": "2020-06-17",
                 "text": "Borrowed"
             }
         ]

@@ -214,6 +214,52 @@ class MyTestCase(unittest.TestCase):
         # Then
         self.assertListEqual(expected, db.get_all_articles())
 
+    def test_add_article_2(self):
+        # Given
+        articles = []
+
+        with open(self.config_file_name, "w") as f:
+            json.dump(articles, f)
+
+        config_manager = ConfigManager()
+        config_manager.db_path = self.config_file_name
+        db = DBConnector(DbFileConnector(config_manager))
+
+        article = Article('1', "Test", False)
+        article2 = Article('1', "Test2", False)
+        expected = [Article('1', "Test", False)]
+
+        # When
+        db.add_article(article)
+        db.add_article(article)
+        db.add_article(article2)
+
+        # Then
+        self.assertListEqual(expected, db.get_all_articles())
+
+    def test_add_article_3(self):
+        # Given
+        articles = []
+
+        with open(self.config_file_name, "w") as f:
+            json.dump(articles, f)
+
+        config_manager = ConfigManager()
+        config_manager.db_path = self.config_file_name
+        db = DBConnector(DbFileConnector(config_manager))
+
+        article = Article('1', "Test", False)
+        article2 = Article('2', "Test2", False)
+        expected = [Article('1', "Test", False), Article('2', "Test2", False)]
+
+        # When
+        db.add_article(article)
+        db.add_article(article)
+        db.add_article(article2)
+
+        # Then
+        self.assertListEqual(expected, db.get_all_articles())
+
     def test_remove_article_by_id(self):
         # Given
         articles = [{"id": "1", "name": "Test", "is_available": False}]
@@ -227,6 +273,26 @@ class MyTestCase(unittest.TestCase):
 
         article_id = '1'
         expected = []
+
+        # When
+        db.remove_article_by_id(article_id)
+
+        # Then
+        self.assertListEqual(expected, db.get_all_articles())
+
+    def test_remove_article_by_id_2(self):
+        # Given
+        articles = [{"id": "1", "name": "Test", "is_available": False}]
+
+        with open(self.config_file_name, "w") as f:
+            json.dump(articles, f)
+
+        config_manager = ConfigManager()
+        config_manager.db_path = self.config_file_name
+        db = DBConnector(DbFileConnector(config_manager))
+
+        article_id = '2'
+        expected = [Article('1', "Test", False)]
 
         # When
         db.remove_article_by_id(article_id)
