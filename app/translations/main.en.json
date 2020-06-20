@@ -1,0 +1,52 @@
+{
+  "en": {
+    "RENTAL_COMPANY_NAME": "Rental of articles",
+    "LIST_ALL_ARTICLES": "List all articles",
+    "LIST_RENTED_ARTICLES": "List rented articles",
+    "VIEW_FULL_RENTAL_HISTORY": "View full rental history",
+    "VIEW_RENTAL_HISTORY_OF_THE_ARTICLE": "View rental history of the article",
+    "ADD_ARTICLE": "Add article",
+    "DELETE_ARTICLE": "Delete article",
+    "SEARCH_THE_ARTICLE_BY_NAME": "Search the article by name",
+    "SEARCH_THE_ARTICLE_BY_ID": "Search the article by ID",
+    "CHANGE_THE_RENTAL_STATUS": "Change the rental status",
+    "VIEW_CURRENT_CONFIGURATION": "View current configuration",
+    "CHANGE_THE_CONFIGURATION": "Change the configuration",
+    "SAVE_THE_CURRENT_CONFIGURATION": "Save the current configuration",
+    "EXIT_APPLICATION": "Exit application",
+    "DIAL_THE_NUMBER": "Dial the number",
+    "PRESS_ENTER_TO_CONTINUE": "Press Enter to continue...",
+    "WRONG_NUMBER_GIVEN": "Wrong number given",
+
+    "THE_APPLICATION_HAS_BEEN_LAUNCHED": "The application has been launched",
+    "THE_APPLICATION_HAS_BEEN_STOPPED": "The application has been stopped",
+    "AN_ERROR_OCCURRED": "An error occurred: ",
+
+    "ID": "ID",
+    "NAME": "NAME",
+    "AVAILABILITY": "AVAILABILITY",
+    "DATE": "DATE",
+    "TEXT": "TEXT",
+
+    "ENTER_THE_ID_OF_THE_ARTICLE": "Enter the id of the article: ",
+    "ENTER_THE_NAME_OF_THE_ARTICLE": "Enter the name of the article: ",
+    "ARTICLE_ADDED": "Article has been added",
+    "ARTICLE_DELETED": "Article has been deleted",
+    "ARTICLE_OF_ID_LACKING": "No article with the given ID",
+    "ARTICLE_AVAILABLE": "Article is currently available.",
+    "ARTICLE_NOT_AVAILABLE": "Article is currently not available.",
+    "CHANGE_QUESTION": "Do you want to change its status?",
+    "YES_OR_NO_QUESTION": "1: Yes\n2: No\nSelect the option: ",
+    "ONLY_TWO_OPTIONS": "You should have chosen 1 or 2",
+
+    "CURRENT_CONFIGURATION": "Current configuration:",
+    "CONFIGURATION_CHANGE": "Configuration change",
+    "SELECT_AN_ATTRIBUTE_TO_CHANGE": "Select an attribute to change: ",
+    "ENTER_A_NEW_VALUE": "Enter the new value: ",
+    "THE_ATTRIBUTE_HAS_BEEN_CHANGED": "The attribute has been changed",
+    "NO_SUCH_ATTRIBUTE": "No such attribute",
+    "CONFIGURATION_SAVED": "The configuration has been saved",
+    "CONFIG_FILE_NOT_FOUND": "Configuration file not found",
+    "CURRENT_LANGUAGE": "Currently set language: "
+  }
+}

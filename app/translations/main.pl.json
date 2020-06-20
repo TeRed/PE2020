@@ -1,0 +1,52 @@
+{
+  "pl": {
+    "RENTAL_COMPANY_NAME": "Wypożyczalnia rzeczy",
+    "LIST_ALL_ARTICLES": "Wypisz listę wszystkich artykułów",
+    "LIST_RENTED_ARTICLES": "Wypisz listę wypożyczonych artykułów",
+    "VIEW_FULL_RENTAL_HISTORY": "Wyświetl pełną historię wypożyczeń",
+    "VIEW_RENTAL_HISTORY_OF_THE_ARTICLE": "Wypisz historię wypożyczeń artykułu",
+    "ADD_ARTICLE": "Dodaj artykuł",
+    "DELETE_ARTICLE": "Usuń artykuł",
+    "SEARCH_THE_ARTICLE_BY_NAME": "Wyszukaj artykuł po nazwie",
+    "SEARCH_THE_ARTICLE_BY_ID": "Wyszukaj artykuł po ID",
+    "CHANGE_THE_RENTAL_STATUS": "Zmień status wypożyczenia",
+    "VIEW_CURRENT_CONFIGURATION": "Aktualna konfiguracja",
+    "CHANGE_THE_CONFIGURATION": "Zmiana konfiguracji",
+    "SAVE_THE_CURRENT_CONFIGURATION": "Zapisz aktualną konfigurację aplikacji",
+    "EXIT_APPLICATION": "Wyjdz z aplikacji",
+    "DIAL_THE_NUMBER": "Prosze wybrać numer",
+    "PRESS_ENTER_TO_CONTINUE": "Naciśnij Enter, aby kontynować...",
+    "WRONG_NUMBER_GIVEN": "Podano nieprawidłowy numer",
+
+    "THE_APPLICATION_HAS_BEEN_LAUNCHED": "Aplikacja została uruchomiona",
+    "THE_APPLICATION_HAS_BEEN_STOPPED": "Aplikacja została zatrzymana",
+    "AN_ERROR_OCCURRED": "W aplikacji wystąpił błąd: ",
+
+    "ID": "ID",
+    "NAME": "NAZWA",
+    "AVAILABILITY": "DOSTĘPNOŚĆ",
+    "DATE": "DATA",
+    "TEXT": "TEKST",
+
+    "ENTER_THE_ID_OF_THE_ARTICLE": "Podaj ID artykułu: ",
+    "ENTER_THE_NAME_OF_THE_ARTICLE": "Podaj nazwę artykułu: ",
+    "ARTICLE_ADDED": "Dodano nowy artykuł",
+    "ARTICLE_DELETED": "Dodano nowy artykuł",
+    "ARTICLE_OF_ID_LACKING": "Brak artykułu o podanym ID",
+    "ARTICLE_AVAILABLE": "Atrykuł obecnie jest dostępny.",
+    "ARTICLE_NOT_AVAILABLE": "Atrykuł obecnie nie jest dostępny.",
+    "CHANGE_QUESTION": "Czy chcesz to zmienić?",
+    "YES_OR_NO_QUESTION": "1: Tak\n2: Nie\nWybierz opcję: ",
+    "ONLY_TWO_OPTIONS": "Należało wybrać 1 lub 2",
+
+    "CURRENT_CONFIGURATION": "Aktualna konfiguracja:",
+    "CONFIGURATION_CHANGE": "Zmiana konfiguracji",
+    "SELECT_AN_ATTRIBUTE_TO_CHANGE": "Wybierz atrybut do zmiany: ",
+    "ENTER_A_NEW_VALUE": "Podaj nową wartość: ",
+    "THE_ATTRIBUTE_HAS_BEEN_CHANGED": "Atrybut został zmieniony",
+    "NO_SUCH_ATTRIBUTE": "Brak takiego atrybutu",
+    "CONFIGURATION_SAVED": "Zapisano konfiguracje",
+    "CONFIG_FILE_NOT_FOUND": "Nie znaleziono pliku konfiguracyjnego",
+    "CURRENT_LANGUAGE": "Obecnie ustawiony język: "
+  }
+}
