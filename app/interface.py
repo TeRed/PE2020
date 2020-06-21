@@ -45,6 +45,7 @@ class Interface:
                  f'10: {i18n.t("VIEW_CURRENT_CONFIGURATION")}\n'
                  f'11: {i18n.t("CHANGE_THE_CONFIGURATION")}\n'
                  f'12: {i18n.t("SAVE_THE_CURRENT_CONFIGURATION")}\n'
+                 f'13: {i18n.t("BORROW_ARTICLE")}\n'
                  f' 0: {i18n.t("EXIT_APPLICATION")}\n'))
 
             choice = input(f'{i18n.t("DIAL_THE_NUMBER")}: ')
@@ -144,8 +145,9 @@ class AddArticleCommand(ICommand):
 
     def execute(self):
         new_name = input(i18n.t('ENTER_THE_NAME_OF_THE_ARTICLE'))
+        new_quantity = input(i18n.t('ENTER_THE_QUANTITY_OF_THE_ARTICLE'))
         new_id = self.logger.get_available_id()
-        new_obj = Article(new_id, new_name, True)
+        new_obj = Article(new_id, new_name, new_quantity, True)
 
         self.base.add_article(new_obj)
         self.logger.add_log(new_id, Log(str(datetime.date(datetime.now())), "Added"))
@@ -229,6 +231,89 @@ class ChangeStatusCommand(ICommand):
             else:
                 self.app_info_logger.log_info(i18n.t('ONLY_TWO_OPTIONS'))
                 IOWrapper.continue_pause()
+        else:
+            self.app_info_logger.log_info(i18n.t('ARTICLE_OF_ID_LACKING'))
+            IOWrapper.continue_pause()
+
+class BorrowArticleCommand(ICommand):
+
+    def __init__(self, base, logger, app_info_logger):
+        self.base = base
+        self.logger = logger
+        self.app_info_logger = app_info_logger
+
+    def execute(self):
+        obj_id = input(i18n.t('ENTER_THE_ID_OF_THE_ARTICLE'))
+        obj_article = self.base.get_article_by_id(obj_id)
+
+        if obj_article:
+            state = i18n.t('ARTICLE_AVAILABLE') if obj_article.is_available else i18n.t('ARTICLE_NOT_AVAILABLE')
+            print(f'{state}')
+            if obj_article.is_available:
+                quantity = int(input(i18n.t('HOW_MANY_TO_BORROW')))
+                print(quantity)
+                print(obj_article)
+                print(obj_article.quantity > quantity)
+                if obj_article.quantity > quantity:
+                    new_obj = self.base.add_article_quantity(obj_id, (-1*quantity), True)
+                    if new_obj:
+                        self.base.remove_article_by_id(obj_id)
+                        self.base.add_article(new_obj)
+                        self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Borrowed " + quantity))
+                    self.app_info_logger.log_info(i18n.t('ARTICLES_BORROWED'))
+                    IOWrapper.continue_pause()
+                elif obj_article.quantity == quantity:
+                    new_obj = self.base.add_article_quantity(obj_id, (-1*quantity), False)
+                    if new_obj:
+                        self.base.remove_article_by_id(obj_id)
+                        self.base.add_article(new_obj)
+                        self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Borrowed " + quantity))
+                    self.app_info_logger.log_info(i18n.t('ARTICLES_BORROWED'))
+                    IOWrapper.continue_pause()
+                elif obj_article.quantity < quantity:
+                    self.app_info_logger.log_info(i18n.t('NOT ENOUGH ARTICLE AVAILABLE'))
+                    IOWrapper.continue_pause()
+
+        else:
+            self.app_info_logger.log_info(i18n.t('ARTICLE_OF_ID_LACKING'))
+            IOWrapper.continue_pause()
+
+class ReturnArticleCommand(ICommand):
+
+    def __init__(self, base, logger, app_info_logger):
+        self.base = base
+        self.logger = logger
+        self.app_info_logger = app_info_logger
+
+    def execute(self):
+        obj_id = input(i18n.t('ENTER_THE_ID_OF_THE_ARTICLE'))
+        obj_article = self.base.get_article_by_id(obj_id)
+
+        if obj_article:
+            quantity = int(input(i18n.t('HOW_MANY_TO_BORROW')))
+            print(quantity)
+            print(obj_article)
+            print(obj_article.quantity > quantity)
+            if obj_article.quantity > quantity:
+                new_obj = self.base.add_article_quantity(obj_id, (-1*quantity), True)
+                if new_obj:
+                    self.base.remove_article_by_id(obj_id)
+                    self.base.add_article(new_obj)
+                    self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Borrowed " + quantity))
+                self.app_info_logger.log_info(i18n.t('ARTICLES_BORROWED'))
+                IOWrapper.continue_pause()
+            elif obj_article.quantity == quantity:
+                new_obj = self.base.add_article_quantity(obj_id, (-1*quantity), False)
+                if new_obj:
+                    self.base.remove_article_by_id(obj_id)
+                    self.base.add_article(new_obj)
+                    self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Borrowed " + quantity))
+                self.app_info_logger.log_info(i18n.t('ARTICLES_BORROWED'))
+                IOWrapper.continue_pause()
+            elif obj_article.quantity < quantity:
+                self.app_info_logger.log_info(i18n.t('NOT ENOUGH ARTICLE AVAILABLE'))
+                IOWrapper.continue_pause()
+
         else:
             self.app_info_logger.log_info(i18n.t('ARTICLE_OF_ID_LACKING'))
             IOWrapper.continue_pause()
@@ -350,6 +435,7 @@ class Invoker:
                           '10': DisplayConfigCommand(self.config_manager),
                           '11': ChangeConfigCommand(self.config_manager, self.app_info_logger),
                           '12': SaveConfigCommand(self.config_manager, self.app_info_logger),
+                          '13': BorrowArticleCommand(self.base, self.logger, self.app_info_logger),
                           '0': StopApp(self.app_info_logger)}
 
     def execute(self, command_name):

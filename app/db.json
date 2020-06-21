@@ -2,16 +2,25 @@
     {
         "id": "2",
         "is_available": true,
-        "name": "Wiertarka"
+        "name": "Wiertarka",
+        "quantity": 5
     },
     {
         "id": "1",
         "is_available": false,
-        "name": "Szpadel"
+        "name": "Szpadel",
+        "quantity": 2
     },
     {
         "id": "10",
         "is_available": false,
-        "name": "Breszka"
+        "name": "Breszka",
+        "quantity": 3
+    },
+    {
+        "id": "11",
+        "is_available": true,
+        "name": "1",
+        "quantity": 8
     }
 ]

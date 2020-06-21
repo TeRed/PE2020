@@ -13,6 +13,7 @@
     "VIEW_CURRENT_CONFIGURATION": "Aktualna konfiguracja",
     "CHANGE_THE_CONFIGURATION": "Zmiana konfiguracji",
     "SAVE_THE_CURRENT_CONFIGURATION": "Zapisz aktualną konfigurację aplikacji",
+    "BORROW_ARTICLE": "Wypożycz artykuł",
     "EXIT_APPLICATION": "Wyjdz z aplikacji",
     "DIAL_THE_NUMBER": "Prosze wybrać numer",
     "PRESS_ENTER_TO_CONTINUE": "Naciśnij Enter, aby kontynować...",
@@ -42,6 +43,8 @@
     "CHANGE_QUESTION": "Czy chcesz to zmienić?",
     "YES_OR_NO_QUESTION": "1: Tak\n2: Nie\nWybierz opcję: ",
     "ONLY_TWO_OPTIONS": "Należało wybrać 1 lub 2",
+    "NOT ENOUGH ARTICLE AVAILABLE": "Nie mamy takiej ilości artykułu",
+    "ARTICLES BORROWED": "Artykuł został wypożyczony",
 
     "CURRENT_CONFIGURATION": "Aktualna konfiguracja:",
     "CONFIGURATION_CHANGE": "Zmiana konfiguracji",
