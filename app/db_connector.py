@@ -11,7 +11,7 @@ class DBConnector(metaclass=Singleton):
 
         articles = list()
         for i in load:
-            obj = Article(i['id'], i['name'], i['is_available'], i['quantity'])
+            obj = Article(i['id'], i['name'], i['quantity'], i['is_available'])
             articles.append(obj)
 
         return articles

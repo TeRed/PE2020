@@ -21,6 +21,18 @@
             {
                 "data": "2020-06-17",
                 "text": "Borrowed"
+            },
+            {
+                "data": "2020-06-21",
+                "text": "Returned 1"
+            },
+            {
+                "data": "2020-06-21",
+                "text": "Borrowed 1"
+            },
+            {
+                "data": "2020-06-21",
+                "text": "Returned 5"
             }
         ]
     },
@@ -54,6 +66,22 @@
             {
                 "data": "2020-06-17",
                 "text": "Returned"
+            },
+            {
+                "data": "2020-06-21",
+                "text": "Borrowed 3"
+            },
+            {
+                "data": "2020-06-21",
+                "text": "Borrowed 1"
+            },
+            {
+                "data": "2020-06-21",
+                "text": "Borrowed 1"
+            },
+            {
+                "data": "2020-06-21",
+                "text": "Returned 10"
             }
         ]
     },
@@ -76,6 +104,14 @@
             {
                 "data": "2020-06-21",
                 "text": "Added"
+            },
+            {
+                "data": "2020-06-21",
+                "text": "Borrowed 3"
+            },
+            {
+                "data": "2020-06-21",
+                "text": "Borrowed 2"
             }
         ]
     }
