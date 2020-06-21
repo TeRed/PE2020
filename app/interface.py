@@ -80,7 +80,7 @@ class IOWrapper:
         pt = PrettyTable()
         pt.field_names = [i18n.t('ID'), i18n.t('NAME'), i18n.t('AVAILABILITY')]
         for article in articles:
-            pt.add_row([article.id, article.name, article.is_available])
+            pt.add_row([article.id, article.name, i18n.t('YES') if article.is_available else i18n.t('NO')])
 
         pager(str(pt))
 
@@ -91,7 +91,7 @@ class IOWrapper:
         for article_log in articles_logs:
             logs = [it for it in article_log.logs if it.text == 'Borrowed' or it.text == 'Returned']
             for log in logs:
-                pt.add_row([article_log.id, log.data, log.text])
+                pt.add_row([article_log.id, log.data, i18n.t('RETURNED') if log.text == 'Returned' else i18n.t('BORROWED')])
 
         pager(str(pt))
 
@@ -104,7 +104,7 @@ class IOWrapper:
         pt = PrettyTable()
         pt.field_names = [i18n.t('DATE'), i18n.t('TEXT')]
         for obj in logs:
-            pt.add_row([obj.data, obj.text])
+            pt.add_row([obj.data, i18n.t('RETURNED') if obj.text == 'Returned' else i18n.t('BORROWED')])
 
         pager(str(pt))
 

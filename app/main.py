@@ -12,6 +12,7 @@ config_manager = ConfigManager("config.json")
 i18n.load_path.append('./translations')
 i18n.set('filename_format', '{locale}.{format}')
 i18n.set('fallback', 'en')
+i18n.set('file_format', 'json')
 i18n.set('locale', config_manager.language)
 
 logger_file_connector = LoggerFileConnector(config_manager)

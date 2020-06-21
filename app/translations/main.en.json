@@ -27,6 +27,10 @@
     "AVAILABILITY": "AVAILABILITY",
     "DATE": "DATE",
     "TEXT": "TEXT",
+    "YES": "Yes",
+    "NO": "No",
+    "RETURNED": "Returned",
+    "BORROWED": "Borrowed",
 
     "ENTER_THE_ID_OF_THE_ARTICLE": "Enter the id of the article: ",
     "ENTER_THE_NAME_OF_THE_ARTICLE": "Enter the name of the article: ",

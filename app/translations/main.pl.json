@@ -27,6 +27,10 @@
     "AVAILABILITY": "DOSTĘPNOŚĆ",
     "DATE": "DATA",
     "TEXT": "TEKST",
+    "YES": "Tak",
+    "NO": "Nie",
+    "RETURNED": "Zwrócone",
+    "BORROWED": "Wypożyczone",
 
     "ENTER_THE_ID_OF_THE_ARTICLE": "Podaj ID artykułu: ",
     "ENTER_THE_NAME_OF_THE_ARTICLE": "Podaj nazwę artykułu: ",
