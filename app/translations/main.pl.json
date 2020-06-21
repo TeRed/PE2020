@@ -9,7 +9,7 @@
     "DELETE_ARTICLE": "Usuń artykuł",
     "SEARCH_THE_ARTICLE_BY_NAME": "Wyszukaj artykuł po nazwie",
     "SEARCH_THE_ARTICLE_BY_ID": "Wyszukaj artykuł po ID",
-    "CHANGE_THE_RENTAL_STATUS": "Zmień status wypożyczenia",
+    "CHANGE_THE_RENTAL_STATUS": "Zmień status mozliwości wypożyczenia",
     "VIEW_CURRENT_CONFIGURATION": "Aktualna konfiguracja",
     "CHANGE_THE_CONFIGURATION": "Zmiana konfiguracji",
     "SAVE_THE_CURRENT_CONFIGURATION": "Zapisz aktualną konfigurację aplikacji",
@@ -49,6 +49,7 @@
     "HOW_MANY_TO_BORROW": "Jak wiele sztuk chcesz wypozyczyć?",
     "ARTICLES_RETURNED": "Artykuł został oddany",
     "HOW_MANY_TO_RETURN": "Jak wiele sztuk chcesz oddać?",
+    "CANT_BE_AVAILABLE_QUANTITY": "Artykuł nie może być dostepny ponieważ ilość jego sztuk wynosi 0",
 
     "CURRENT_CONFIGURATION": "Aktualna konfiguracja:",
     "CONFIGURATION_CHANGE": "Zmiana konfiguracji",

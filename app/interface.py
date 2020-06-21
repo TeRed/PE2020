@@ -224,9 +224,13 @@ class ChangeStatusCommand(ICommand):
                     self.base.remove_article_by_id(obj_id)
                     self.base.add_article(new_obj)
                     if obj_article.is_available:
-                        self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Borrowed"))
+                        self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Made article unavailable"))
                     else:
-                        self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Returned"))
+                        if obj_article.quantity == 0:
+                            self.app_info_logger.log_info(i18n.t('CANT_BE_AVAILABLE_QUANTITY'))
+                            IOWrapper.continue_pause()
+                        else:
+                            self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Made article available"))
             elif status == '2':
                 ""
             else:
@@ -252,6 +256,8 @@ class ReturnArticleCommand(ICommand):
             if(quantity > 0):
                 new_obj = self.base.add_article_quantity(obj_id, quantity, True)
                 if new_obj:
+                    if obj_article.is_available == False:
+                        self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Made article available"))
                     self.base.remove_article_by_id(obj_id)
                     self.base.add_article(new_obj)
                     self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Returned " + str(quantity)))
@@ -290,6 +296,7 @@ class BorrowArticleCommand(ICommand):
                         self.base.remove_article_by_id(obj_id)
                         self.base.add_article(new_obj)
                         self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Borrowed " + str(quantity)))
+                        self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Made article unavailable"))
                     self.app_info_logger.log_info(i18n.t('ARTICLES_BORROWED'))
                     IOWrapper.continue_pause()
                 elif obj_article.quantity < quantity:

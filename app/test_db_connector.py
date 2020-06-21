@@ -339,12 +339,17 @@ class MyTestCase(unittest.TestCase):
 
         search_id = '2'
         expected = Article('2', "Test2", 22, True)
+        search_id_2 = '1'
+        expected_2 = Article('1', "Test", 12, True)
 
         # When
         article = db.add_article_quantity(search_id, 20, True)
+        article_2 = db.add_article_quantity(search_id_2, 10, True)
 
         # Then
         self.assertEqual(expected, article)
+        self.assertEqual(expected_2, article_2)
+
 
 
 if __name__ == '__main__':

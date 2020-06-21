@@ -15,12 +15,12 @@
         "id": "2",
         "is_available": true,
         "name": "Wiertarka",
-        "quantity": 10
+        "quantity": 0
     },
     {
         "id": "1",
         "is_available": true,
         "name": "Szpadel",
-        "quantity": 5
+        "quantity": 25
     }
 ]
