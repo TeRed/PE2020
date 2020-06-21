@@ -29,23 +29,23 @@ class Interface:
 
         while True:
             self.cls()
-            print('Wypożyczalnia rzeczy\n')
+            print('Wypozyczalnia rzeczy\n')
             print(
-                ('1: Wypisz liste wszystkich artykułów\n'
-                 '2: Wypisz listę wypożyczonych artykułów\n'
-                 '3: Wyświetl pełną historię wypożyczeń\n'
-                 '4: Wypisz historię wypożyczeń artykułu\n'
-                 '5: Dodaj artykuł\n'
-                 '6: Usuń artykuł\n'
-                 '7: Wyszukaj artykuł po nazwie\n'
-                 '8: Wyszukaj artykuł po id\n'
-                 '9: Zmień status wypożyczenia\n'
+                ('1: Wypisz liste wszystkich artykulow\n'
+                 '2: Wypisz liste wypozyczonych artykulow\n'
+                 '3: Wyswietl pelna historie wypozyczen\n'
+                 '4: Wypisz historie wypozyczen artykulu\n'
+                 '5: Dodaj artykul\n'
+                 '6: Usun artykul\n'
+                 '7: Wyszukaj artykul po nazwie\n'
+                 '8: Wyszukaj artykul po id\n'
+                 '9: Zmien status wypozyczenia\n'
                  '10: Aktualna konfiguracja\n'
                  '11: Zmiana konfiguracji\n'
-                 '12: Zapisz aktualną konfigurację aplikacji\n'
+                 '12: Zapisz aktualna konfiguracje aplikacji\n'
                  '0: Wyjdz z aplikacji\n'))
 
-            choice = input('Prosze wybrać numer: ')
+            choice = input('Prosze wybrac numer: ')
             self.cls()
             INVOKER.execute(choice)
 
@@ -59,13 +59,13 @@ class AppInfoLogger:
         self.info_divider = ": "
 
     def log_start(self):
-        print(self.info_title + self.info_divider + 'Aplikacja została uruchomiona.')
+        print(self.info_title + self.info_divider + 'Aplikacja zostala uruchomiona.')
 
     def log_end(self):
-        print(self.info_title + self.info_divider + 'Aplikacja została zatrzymana.')
+        print(self.info_title + self.info_divider + 'Aplikacja zostala zatrzymana.')
 
     def log_error(self, text):
-        print(self.info_title + self.info_divider + 'W aplikacji wystąpił błąd. ERROR: ' + text)
+        print(self.info_title + self.info_divider + 'W aplikacji wystapil blad. ERROR: ' + text)
 
     def log_info(self, text):
         print(self.info_title + self.info_divider + text)
@@ -76,9 +76,9 @@ class IOWrapper:
     @staticmethod
     def print_articles(articles):
         pt = PrettyTable()
-        pt.field_names = ['ID', 'NAZWA', 'DOSTEPNOSC']
+        pt.field_names = ['ID', 'NAZWA', 'NAME', 'DOSTEPNOSC']
         for article in articles:
-            pt.add_row([article.id, article.name, article.is_available])
+            pt.add_row([article.id, article.name[0], article.name[1], 'tak' if article.is_available else 'nie'])
 
         pager(str(pt))
 
@@ -95,7 +95,7 @@ class IOWrapper:
 
     @staticmethod
     def continue_pause():
-        input("Nacisnij Enter, aby kontynować")
+        input("Nacisnij Enter, aby kontynowac")
 
     @staticmethod
     def print_article_log(logs):
@@ -129,7 +129,7 @@ class DisplayHistoryCommand(ICommand):
         self.logger = logger
 
     def execute(self):
-        article_id = input("Podaj numer rzeczy by wyświetlić historię :> ")
+        article_id = input("Podaj numer rzeczy by wyswietlic historie :> ")
         IOWrapper.print_article_log(self.logger.get_borrow_history(article_id))
 
 
@@ -141,13 +141,14 @@ class AddArticleCommand(ICommand):
         self.app_info_logger = app_info_logger
 
     def execute(self):
-        new_name = input("Name?: ")
+        new_name = input("Nazwa?: ")
+        new_name2 = input("Name?: ")
         new_id = self.logger.get_available_id()
-        new_obj = Article(new_id, new_name, True)
+        new_obj = Article(new_id, [new_name, new_name2], True)
 
         self.base.add_article(new_obj)
         self.logger.add_log(new_id, Log(str(datetime.date(datetime.now())), "Added"))
-        self.app_info_logger.log_info("Dodano nowy artykuł")
+        self.app_info_logger.log_info("Dodano nowy artykul")
         IOWrapper.continue_pause()
 
 
@@ -159,13 +160,13 @@ class DeleteArticleCommand(ICommand):
         self.app_info_logger = app_info_logger
 
     def execute(self):
-        rm_id = input("Podaj ID artykułu do usunięcia:\nID?: ")
+        rm_id = input("Podaj ID artykulu do usuniecia:\nID?: ")
 
         if self.base.remove_article_by_id(rm_id):
             self.logger.add_log(rm_id, Log(str(datetime.date(datetime.now())), "Deleted"))
-            self.app_info_logger.log_info(f"Usunięto artykuł o ID = {rm_id}")
+            self.app_info_logger.log_info(f"Usunieto artykul o ID = {rm_id}")
         else:
-            self.app_info_logger.log_info(f"Brak artykułu o ID = {rm_id}")
+            self.app_info_logger.log_info(f"Brak artykulu o ID = {rm_id}")
 
         IOWrapper.continue_pause()
 
@@ -176,7 +177,7 @@ class SearchForAnArticleByNameCommand(ICommand):
         self.base = base
 
     def execute(self):
-        src_name = input("Podaj nazwę artykułu :\nName?: ")
+        src_name = input("Podaj nazwe artykulu :\nName?: ")
         IOWrapper.print_articles(self.base.get_articles_by_name(src_name))
 
 
@@ -187,13 +188,13 @@ class SearchForAnArticleByIdCommand(ICommand):
         self.app_info_logger = app_info_logger
 
     def execute(self):
-        src_id = input("Podaj ID artykułu:\nID?: ")
+        src_id = input("Podaj ID artykulu:\nID?: ")
 
         article = self.base.get_article_by_id(src_id)
         if article:
             IOWrapper.print_articles([article])
         else:
-            self.app_info_logger.log_info("Brak artykułu o takim ID!")
+            self.app_info_logger.log_info("Brak artykulu o takim ID!")
             IOWrapper.continue_pause()
 
 
@@ -210,7 +211,7 @@ class ChangeStatusCommand(ICommand):
 
         if obj_article:
             state = 'jest' if obj_article.is_available else 'nie jest'
-            print(f'Atrykuł obecnie {state} dostępny. Czy chcesz zmienić jego status?')
+            print(f'Atrykul obecnie {state} dostepny. Czy chcesz zmienic jego status?')
             status = input("1: Tak\n2: Nie\n Wybierz cyfre: ")
 
             if status == '1':
@@ -225,10 +226,10 @@ class ChangeStatusCommand(ICommand):
             elif status == '2':
                 ""
             else:
-                self.app_info_logger.log_info("Należało wybrać 1 lub 2!")
+                self.app_info_logger.log_info("Nalezalo wybrac 1 lub 2!")
                 IOWrapper.continue_pause()
         else:
-            self.app_info_logger.log_info("Nieprawidłowy id produktu")
+            self.app_info_logger.log_info("Nieprawidlowy id produktu")
             IOWrapper.continue_pause()
 
 
@@ -265,9 +266,9 @@ class ChangeConfigCommand(ICommand):
 
         index = input("Wybierz atrybut do zmiany: ")
         if len(config_attributes) >= int(index) > 0:
-            new_value = input("Podaj nową wartość: ")
+            new_value = input("Podaj nowa wartosc: ")
             setattr(self.config_manager, config_attributes[int(index) - 1], new_value)
-            self.app_info_logger.log_info("Atrybut został zmieniony!")
+            self.app_info_logger.log_info("Atrybut zostal zmieniony!")
         else:
             self.app_info_logger.log_info("Brak takiego atrybutu!")
 
@@ -339,5 +340,5 @@ class Invoker:
         if command_name in self._commands.keys():
             self._commands[command_name].execute()
         else:
-            self.app_info_logger.log_error("Podano nieprawidłowy numer!")
+            self.app_info_logger.log_error("Podano nieprawidlowy numer!")
             IOWrapper.continue_pause()
