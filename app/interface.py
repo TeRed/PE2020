@@ -80,9 +80,9 @@ class IOWrapper:
     @staticmethod
     def print_articles(articles):
         pt = PrettyTable()
-        pt.field_names = [i18n.t('ID'), i18n.t('NAME'), i18n.t('AVAILABILITY')]
+        pt.field_names = [i18n.t('ID'), i18n.t('NAME'), i18n.t('QUANTITY'), i18n.t('AVAILABILITY')]
         for article in articles:
-            pt.add_row([article.id, article.name, i18n.t('YES') if article.is_available else i18n.t('NO')])
+            pt.add_row([article.id, article.name, article.quantity, i18n.t('YES') if article.is_available else i18n.t('NO')])
 
         pager(str(pt))
 
@@ -91,9 +91,10 @@ class IOWrapper:
         pt = PrettyTable()
         pt.field_names = [i18n.t('ID'), i18n.t('DATE'), i18n.t('TEXT')]
         for article_log in articles_logs:
-            logs = [it for it in article_log.logs if it.text == 'Borrowed' or it.text == 'Returned']
+            logs = [it for it in article_log.logs if 'Borrowed' in it.text or 'Returned' in it.text]
             for log in logs:
-                pt.add_row([article_log.id, log.data, i18n.t('RETURNED') if log.text == 'Returned' else i18n.t('BORROWED')])
+                state = log.text.split(" ")
+                pt.add_row([article_log.id, log.data, str(state[1]) + " " + i18n.t('RETURNED') if 'Returned' in log.text else str(state[1]) + " " + i18n.t('BORROWED')])
 
         pager(str(pt))
 
@@ -106,7 +107,8 @@ class IOWrapper:
         pt = PrettyTable()
         pt.field_names = [i18n.t('DATE'), i18n.t('TEXT')]
         for obj in logs:
-            pt.add_row([obj.data, i18n.t('RETURNED') if obj.text == 'Returned' else i18n.t('BORROWED')])
+            state = obj.text.split(" ")
+            pt.add_row([obj.data, str(state[1]) + " " + i18n.t('RETURNED') if 'Returned' in obj.text else str(state[1]) + " " + i18n.t('BORROWED')])
 
         pager(str(pt))
 
@@ -125,6 +127,7 @@ class DisplayAllArticlesCommand(ICommand):
 
     def execute(self):
         IOWrapper.print_articles(self.base.get_all_articles())
+        IOWrapper.continue_pause()
 
 
 class DisplayHistoryCommand(ICommand):
@@ -135,6 +138,7 @@ class DisplayHistoryCommand(ICommand):
     def execute(self):
         article_id = input(i18n.t('ENTER_THE_ID_OF_THE_ARTICLE'))
         IOWrapper.print_article_log(self.logger.get_borrow_history(article_id))
+        IOWrapper.continue_pause()
 
 
 class AddArticleCommand(ICommand):
@@ -146,7 +150,7 @@ class AddArticleCommand(ICommand):
 
     def execute(self):
         new_name = input(i18n.t('ENTER_THE_NAME_OF_THE_ARTICLE'))
-        new_quantity = input(i18n.t('ENTER_THE_QUANTITY_OF_THE_ARTICLE'))
+        new_quantity = int(input(i18n.t('ENTER_THE_QUANTITY_OF_THE_ARTICLE')))
         new_id = self.logger.get_available_id()
         new_obj = Article(new_id, new_name, new_quantity, True)
 
@@ -183,6 +187,7 @@ class SearchForAnArticleByNameCommand(ICommand):
     def execute(self):
         src_name = input(i18n.t('ENTER_THE_NAME_OF_THE_ARTICLE'))
         IOWrapper.print_articles(self.base.get_articles_by_name(src_name))
+        IOWrapper.continue_pause()
 
 
 class SearchForAnArticleByIdCommand(ICommand):
@@ -197,6 +202,7 @@ class SearchForAnArticleByIdCommand(ICommand):
         article = self.base.get_article_by_id(src_id)
         if article:
             IOWrapper.print_articles([article])
+            IOWrapper.continue_pause()
         else:
             self.app_info_logger.log_info(i18n.t('ARTICLE_OF_ID_LACKING'))
             IOWrapper.continue_pause()
@@ -387,6 +393,7 @@ class DisplayAllNotAvailableArticlesCommand(ICommand):
 
     def execute(self):
         IOWrapper.print_articles(self.base.get_articles_by_availability(False))
+        IOWrapper.continue_pause()
 
 
 class DisplayFullHistoryCommand(ICommand):
@@ -396,6 +403,7 @@ class DisplayFullHistoryCommand(ICommand):
 
     def execute(self):
         IOWrapper.print_articles_log(self.logger.get_all_logs())
+        IOWrapper.continue_pause()
 
 
 class StopApp(ICommand):
