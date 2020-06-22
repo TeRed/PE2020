@@ -19,10 +19,6 @@
                 "text": "Added"
             },
             {
-                "data": "2020-06-17",
-                "text": "Borrowed 2"
-            },
-            {
                 "data": "2020-06-21",
                 "text": "Returned 1"
             },
@@ -69,10 +65,6 @@
             {
                 "data": "2020-06-21",
                 "text": "Returned 25"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Deleted"
             }
         ]
     },
@@ -103,61 +95,6 @@
                 "data": "2020-06-17",
                 "text": "Borrowed 2"
             },
-            {
-                "data": "2020-06-17",
-                "text": "Returned 2"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Borrowed 3"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Borrowed 1"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Borrowed 1"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Returned 10"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Borrowed 10"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Made article unavailable"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Deleted"
-            }
-        ]
-    },
-    {
-        "id": "10",
-        "logs": [
-            {
-                "data": "2020-06-17",
-                "text": "Added"
-            },
-            {
-                "data": "2020-06-17",
-                "text": "Borrowed 2"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Made article available"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Borrowed 2"
-            }
-        ]
-    },
     {
         "id": "11",
         "logs": [
@@ -176,7 +113,7 @@
             {
                 "data": "2020-06-21",
                 "text": "Made article unavailable"
-            }
+            },
         ]
     },
     {
@@ -204,8 +141,12 @@
                 "text": "Borrowed 12"
             },
             {
-                "data": "2020-06-21",
-                "text": "Returned 13"
+                "data": "2020-06-20",
+                "text": "Added"
+            },
+            {
+                "data": "2020-06-22",
+                "text": "Borrowed 2"
             }
         ]
     },
@@ -213,7 +154,7 @@
         "id": "14",
         "logs": [
             {
-                "data": "2020-06-22",
+                "data": "2020-06-20",
                 "text": "Added"
             },
             {

@@ -18,7 +18,7 @@ class DBConnector(metaclass=Singleton):
 
     def get_articles_by_name(self, name):
         articles = self.get_all_articles()
-        articles = [it for it in articles if name.lower() in it.name.lower()]
+        articles = [it for it in articles if ((name.lower() in it.name[0].lower() )or(name.lower() in it.name[1].lower()))]
 
         return articles
 
