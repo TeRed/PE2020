@@ -33,5 +33,26 @@
         "name": "Biurko",
         "quantity": 10,
         "total_quantity": 12
+    },
+    {
+        "id": "15",
+        "is_available": true,
+        "name": "Kartka",
+        "quantity": 25,
+        "total_quantity": 25
+    },
+    {
+        "id": "17",
+        "is_available": true,
+        "name": "Kosz",
+        "quantity": 12,
+        "total_quantity": 12
+    },
+    {
+        "id": "16",
+        "is_available": true,
+        "name": "Kawa",
+        "quantity": 240,
+        "total_quantity": 250
     }
 ]

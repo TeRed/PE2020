@@ -28,6 +28,7 @@
     "NAME": "NAZWA",
     "AVAILABILITY": "DOSTĘPNOŚĆ",
     "QUANTITY": "ILOŚĆ",
+    "TOTAL_QUANTITY": "CAŁKOWITA ILOŚĆ SZTUK",
     "DATE": "DATA",
     "TEXT": "TEKST",
     "YES": "Tak",
@@ -37,7 +38,7 @@
 
     "ENTER_THE_ID_OF_THE_ARTICLE": "Podaj ID artykułu: ",
     "ENTER_THE_NAME_OF_THE_ARTICLE": "Podaj nazwę artykułu: ",
-    "ENTER_THE_QUANTITY_OF_THE_ARTICLE": "Podaj ilość sztuk artykułu",
+    "ENTER_THE_QUANTITY_OF_THE_ARTICLE": "Podaj ilość sztuk artykułu: ",
     "ARTICLE_ADDED": "Dodano nowy artykuł",
     "ARTICLE_DELETED": "Usunięto artykuł",
     "ARTICLE_OF_ID_LACKING": "Brak artykułu o podanym ID",
