@@ -68,7 +68,7 @@ def i_show_full_history_of_rentals(step):
     all_logs = list()
 
     for article_log in logger.get_all_logs():
-        logs = [it for it in article_log.logs if it.text == 'Borrowed' or it.text == 'Returned']
+        logs = [it for it in article_log.logs if 'Borrowed' in it.text or 'Returned' in it.text]
         logs = [vars(it) for it in logs]
         for log in logs:
             log['id'] = article_log.id
