@@ -90,7 +90,7 @@ class MyTestCase(unittest.TestCase):
         db = DBConnector(DbFileConnector(config_manager))
 
         search_string = 'rka'
-        expected = [Article('2', ["wiertarka", "driller"], False)]
+        expected = [Article('2', ["wiertarka", "driller"], 2, 2, False)]
 
         # When
         articles = db.get_articles_by_name(search_string)
@@ -339,7 +339,7 @@ class MyTestCase(unittest.TestCase):
         db = DBConnector(DbFileConnector(config_manager))
 
         search_id = '2'
-        expected = Article('2', "Test2", 22, 22, True)
+        expected = Article('2', ["wiertarka", "driller"], 22, 22, True)
         search_id_2 = '1'
         expected_2 = Article('1', ["mlotek", "hammer"], 22, 12, True)
 

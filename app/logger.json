@@ -19,52 +19,12 @@
                 "text": "Added"
             },
             {
-                "data": "2020-06-21",
-                "text": "Returned 1"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Borrowed 1"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Returned 5"
-            },
-            {
-                "data": "2020-06-21",
+                "data": "2020-06-17",
                 "text": "Borrowed 2"
             },
             {
-                "data": "2020-06-21",
-                "text": "Borrowed 3"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Made article unavailable"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Made article available"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Returned 5"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Borrowed 5"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Made article unavailable"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Made article available"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Returned 25"
+                "data": "2020-06-20",
+                "text": "Deleted"
             }
         ]
     },
@@ -85,6 +45,14 @@
             },
             {
                 "data": "2020-05-15",
+                "text": "Borrowed 12"
+            },
+            {
+                "data": "2020-06-17",
+                "text": "Returned 12"
+            },
+            {
+                "data": "2020-06-17",
                 "text": "Borrowed 2"
             },
             {
@@ -92,40 +60,47 @@
                 "text": "Returned 2"
             },
             {
+                "data": "2020-06-20",
+                "text": "Deleted"
+            }
+        ]
+    },
+    {
+        "id": "10",
+        "logs": [
+            {
                 "data": "2020-06-17",
-                "text": "Borrowed 2"
+                "text": "Added"
             },
+            {
+                "data": "2020-06-17",
+                "text": "Borrowed 1"
+            },
+            {
+                "data": "2020-06-20",
+                "text": "Deleted"
+            }
+        ]
+    },
     {
         "id": "11",
         "logs": [
             {
-                "data": "2020-06-21",
+                "data": "2020-06-20",
                 "text": "Added"
             },
             {
-                "data": "2020-06-21",
-                "text": "Borrowed 3"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Borrowed 2"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Made article unavailable"
-            },
+                "data": "2020-06-22",
+                "text": "Borrowed 12"
+            }
         ]
     },
     {
         "id": "12",
         "logs": [
             {
-                "data": "2020-06-21",
+                "data": "2020-06-20",
                 "text": "Added"
-            },
-            {
-                "data": "2020-06-22",
-                "text": "Returned 27"
             }
         ]
     },
@@ -133,20 +108,12 @@
         "id": "13",
         "logs": [
             {
-                "data": "2020-06-21",
-                "text": "Added"
-            },
-            {
-                "data": "2020-06-21",
-                "text": "Borrowed 12"
-            },
-            {
                 "data": "2020-06-20",
                 "text": "Added"
             },
             {
                 "data": "2020-06-22",
-                "text": "Borrowed 2"
+                "text": "Borrowed 12"
             }
         ]
     },
@@ -159,19 +126,7 @@
             },
             {
                 "data": "2020-06-22",
-                "text": "Borrowed 12"
-            },
-            {
-                "data": "2020-06-22",
-                "text": "Made article unavailable"
-            },
-            {
-                "data": "2020-06-22",
-                "text": "Made article available"
-            },
-            {
-                "data": "2020-06-22",
-                "text": "Returned 10"
+                "text": "Deleted"
             }
         ]
     },
@@ -179,7 +134,7 @@
         "id": "15",
         "logs": [
             {
-                "data": "2020-06-22",
+                "data": "2020-06-20",
                 "text": "Added"
             }
         ]
@@ -193,7 +148,7 @@
             },
             {
                 "data": "2020-06-22",
-                "text": "Borrowed 10"
+                "text": "Deleted"
             }
         ]
     },
@@ -203,6 +158,19 @@
             {
                 "data": "2020-06-22",
                 "text": "Added"
+            }
+        ]
+    },
+    {
+        "id": "18",
+        "logs": [
+            {
+                "data": "2020-06-22",
+                "text": "Added"
+            },
+            {
+                "data": "2020-06-22",
+                "text": "Borrowed 100"
             }
         ]
     }

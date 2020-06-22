@@ -47,6 +47,16 @@
             "driller"
         ],
         "quantity": 50,
-        "total_quantity": 50,
+        "total_quantity": 50
+    },
+    {
+        "id": "18",
+        "is_available": true,
+        "name": [
+            "Paczka",
+            "Package"
+        ],
+        "quantity": 150,
+        "total_quantity": 250
     }
 ]

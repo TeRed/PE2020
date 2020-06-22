@@ -113,7 +113,6 @@ class IOWrapper:
         for obj in logs:
             state = obj.text.split(" ")
             pt.add_row([obj.data, str(state[1]) + " " + i18n.t('RETURNED') if 'Returned' in obj.text else str(state[1]) + " " + i18n.t('BORROWED')])
-
         pager(str(pt))
 
 
