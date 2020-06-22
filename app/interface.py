@@ -78,17 +78,20 @@ class AppInfoLogger:
 class IOWrapper:
 
     @staticmethod
-    def print_articles(articles, current_lang_val ):
+    def print_articles(articles, current_lang_val):
         pt = PrettyTable()
-        pt.field_names = [i18n.t('ID'), i18n.t('NAME'), i18n.t('NAME_SECOND_LANG'), i18n.t('TOTAL_QUANTITY'), i18n.t('QUANTITY'), i18n.t('AVAILABILITY')]
+        pt.field_names = [i18n.t('ID'), i18n.t('NAME'), i18n.t('NAME_SECOND_LANG'), i18n.t('TOTAL_QUANTITY'),
+                          i18n.t('QUANTITY'), i18n.t('AVAILABILITY')]
         if current_lang_val == "en":
             for article in articles:
-                pt.add_row([article.id, article.name[1], article.name[0], article.total_quantity, article.quantity, i18n.t('YES') if article.is_available else i18n.t('NO')])
+                pt.add_row([int(article.id), article.name[1], article.name[0], article.total_quantity, article.quantity,
+                            i18n.t('YES') if article.is_available else i18n.t('NO')])
         else:
             for article in articles:
-                pt.add_row([article.id, article.name[0], article.name[1], article.total_quantity, article.quantity, i18n.t('YES') if article.is_available else i18n.t('NO')])
+                pt.add_row([int(article.id), article.name[0], article.name[1], article.total_quantity, article.quantity,
+                            i18n.t('YES') if article.is_available else i18n.t('NO')])
+        pt.sortby = i18n.t('ID')
         pager(str(pt))
-
 
     @staticmethod
     def print_articles_log(articles_logs):
@@ -98,8 +101,10 @@ class IOWrapper:
             logs = [it for it in article_log.logs if 'Borrowed' in it.text or 'Returned' in it.text]
             for log in logs:
                 state = log.text.split(" ")
-                pt.add_row([article_log.id, log.data, str(state[1]) + " " + i18n.t('RETURNED') if 'Returned' in log.text else str(state[1]) + " " + i18n.t('BORROWED')])
-
+                pt.add_row([int(article_log.id), log.data,
+                            str(state[1]) + " " + i18n.t('RETURNED') if 'Returned' in log.text else str(
+                                state[1]) + " " + i18n.t('BORROWED')])
+        pt.sortby = i18n.t('ID')
         pager(str(pt))
 
     @staticmethod
@@ -112,7 +117,9 @@ class IOWrapper:
         pt.field_names = [i18n.t('DATE'), i18n.t('TEXT')]
         for obj in logs:
             state = obj.text.split(" ")
-            pt.add_row([obj.data, str(state[1]) + " " + i18n.t('RETURNED') if 'Returned' in obj.text else str(state[1]) + " " + i18n.t('BORROWED')])
+            pt.add_row([obj.data, str(state[1]) + " " + i18n.t('RETURNED') if 'Returned' in obj.text else str(
+                state[1]) + " " + i18n.t('BORROWED')])
+        pt.sortby = i18n.t('DATE')
         pager(str(pt))
 
 
@@ -127,7 +134,7 @@ class DisplayAllArticlesCommand(ICommand):
 
     def __init__(self, base, config_manager):
         self.base = base
-        self.config_manager=config_manager
+        self.config_manager = config_manager
 
     def execute(self):
         current_lang_val = self.config_manager.language
@@ -148,7 +155,7 @@ class DisplayHistoryCommand(ICommand):
 
 class AddArticleCommand(ICommand):
 
-    def __init__(self, base, logger,config_manager, app_info_logger):
+    def __init__(self, base, logger, config_manager, app_info_logger):
         self.base = base
         self.logger = logger
         self.config_manager = config_manager
@@ -206,7 +213,7 @@ class SearchForAnArticleByNameCommand(ICommand):
 
 class SearchForAnArticleByIdCommand(ICommand):
 
-    def __init__(self, base,config_manager, app_info_logger):
+    def __init__(self, base, config_manager, app_info_logger):
         self.base = base
         self.config_manager = config_manager
         self.app_info_logger = app_info_logger
@@ -251,7 +258,8 @@ class ChangeStatusCommand(ICommand):
                             self.app_info_logger.log_info(i18n.t('CANT_BE_AVAILABLE_QUANTITY'))
                             IOWrapper.continue_pause()
                         else:
-                            self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Made article available"))
+                            self.logger.add_log(obj_id,
+                                                Log(str(datetime.date(datetime.now())), "Made article available"))
             elif status == '2':
                 ""
             else:
@@ -260,6 +268,7 @@ class ChangeStatusCommand(ICommand):
         else:
             self.app_info_logger.log_info(i18n.t('ARTICLE_OF_ID_LACKING'))
             IOWrapper.continue_pause()
+
 
 class ReturnArticleCommand(ICommand):
 
@@ -274,7 +283,7 @@ class ReturnArticleCommand(ICommand):
 
         if obj_article:
             quantity = int(input(i18n.t('HOW_MANY_TO_RETURN')))
-            if(quantity > 0 and quantity + obj_article.quantity < obj_article.total_quantity):
+            if (quantity > 0 and quantity + obj_article.quantity < obj_article.total_quantity):
                 new_obj = self.base.add_article_quantity(obj_id, quantity, True)
                 if new_obj:
                     if obj_article.is_available == False:
@@ -290,6 +299,7 @@ class ReturnArticleCommand(ICommand):
         else:
             self.app_info_logger.log_info(i18n.t('ARTICLE_OF_ID_LACKING'))
             IOWrapper.continue_pause()
+
 
 class BorrowArticleCommand(ICommand):
 
@@ -307,19 +317,21 @@ class BorrowArticleCommand(ICommand):
             if obj_article.is_available:
                 quantity = int(input(i18n.t('HOW_MANY_TO_BORROW')))
                 if obj_article.quantity > quantity:
-                    new_obj = self.base.add_article_quantity(obj_id, (-1*quantity), True)
+                    new_obj = self.base.add_article_quantity(obj_id, (-1 * quantity), True)
                     if new_obj:
                         self.base.remove_article_by_id(obj_id)
                         self.base.add_article(new_obj)
-                        self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Borrowed " + str(quantity)))
+                        self.logger.add_log(obj_id,
+                                            Log(str(datetime.date(datetime.now())), "Borrowed " + str(quantity)))
                     self.app_info_logger.log_info(i18n.t('ARTICLES_BORROWED'))
                     IOWrapper.continue_pause()
                 elif obj_article.quantity == quantity:
-                    new_obj = self.base.add_article_quantity(obj_id, (-1*quantity), False)
+                    new_obj = self.base.add_article_quantity(obj_id, (-1 * quantity), False)
                     if new_obj:
                         self.base.remove_article_by_id(obj_id)
                         self.base.add_article(new_obj)
-                        self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Borrowed " + str(quantity)))
+                        self.logger.add_log(obj_id,
+                                            Log(str(datetime.date(datetime.now())), "Borrowed " + str(quantity)))
                         self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Made article unavailable"))
                     self.app_info_logger.log_info(i18n.t('ARTICLES_BORROWED'))
                     IOWrapper.continue_pause()
@@ -415,6 +427,7 @@ class DisplayAllNotAvailableArticlesCommand(ICommand):
         IOWrapper.print_articles(self.base.get_articles_by_availability(False), current_lang_val)
         IOWrapper.continue_pause()
 
+
 class DisplayAllAvailableArticlesCommand(ICommand):
 
     def __init__(self, base, config_manager):
@@ -425,6 +438,7 @@ class DisplayAllAvailableArticlesCommand(ICommand):
         current_lang_val = self.config_manager.language
         IOWrapper.print_articles(self.base.get_articles_by_availability(True), current_lang_val)
         IOWrapper.continue_pause()
+
 
 class DisplayAllBorrowedArticlesCommand(ICommand):
     def __init__(self, base, config_manager):
@@ -464,13 +478,13 @@ class Invoker:
         self.logger = logger
         self.config_manager = config_manager
         self.app_info_logger = app_info_logger
-        self._commands = {'1': DisplayAllArticlesCommand(self.base,self.config_manager),
-                          '2': DisplayAllBorrowedArticlesCommand(self.base,self.config_manager),
+        self._commands = {'1': DisplayAllArticlesCommand(self.base, self.config_manager),
+                          '2': DisplayAllBorrowedArticlesCommand(self.base, self.config_manager),
                           '3': DisplayFullHistoryCommand(self.logger),
                           '4': DisplayHistoryCommand(self.logger),
-                          '5': AddArticleCommand(self.base, self.logger,self.config_manager, self.app_info_logger),
+                          '5': AddArticleCommand(self.base, self.logger, self.config_manager, self.app_info_logger),
                           '6': DeleteArticleCommand(self.base, self.logger, self.app_info_logger),
-                          '7': SearchForAnArticleByNameCommand(self.base,self.config_manager),
+                          '7': SearchForAnArticleByNameCommand(self.base, self.config_manager),
                           '8': SearchForAnArticleByIdCommand(self.base, self.config_manager, self.app_info_logger),
                           '9': ChangeStatusCommand(self.base, self.logger, self.app_info_logger),
                           '10': DisplayConfigCommand(self.config_manager),
