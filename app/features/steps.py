@@ -20,6 +20,12 @@ def articles_in_database(step):
             article_dict['is_available'] = False
         else:
             article_dict['is_available'] = True
+
+        article_dict['name'] = [article_dict['name_pl'], article_dict['name_en']]
+        article_dict.pop('name_pl', None)
+        article_dict.pop('name_en', None)
+        article_dict['total_quantity'] = int(article_dict['total_quantity'])
+        article_dict['quantity'] = int(article_dict['quantity'])
         formatted_articles.append(article_dict)
 
     with open(world.path_db, 'w') as f:
@@ -99,12 +105,15 @@ def i_show_one_article(step, name):
 def i_add_article(step):
     article = None
 
-    for article_dict in step.hashes:
+    for article_dict in deepcopy(step.hashes):
         if article_dict['is_available'] == 'no':
             article_dict['is_available'] = False
         else:
             article_dict['is_available'] = True
-        article = Article(article_dict['id'], article_dict['name'], article_dict['is_available'])
+
+        name = [article_dict['name_pl'], article_dict['name_en']]
+        article = Article('3', name, int(article_dict['total_quantity']),
+                          int(article_dict['quantity']), article_dict['is_available'])
 
     config_manager = ConfigManager()
     config_manager.db_path = world.path_db
@@ -154,20 +163,29 @@ def i_change_to_not_available_article(step, number):
 
 @step('I see those listed articles:')
 def i_see_listed_articles(step):
-    articles = list()
+    actual_articles = list()
     for article in world.articles:
         obj = vars(article)
-        if obj['is_available']:
-            obj['is_available'] = 'yes'
+        obj['name_pl'] = obj['name'][0]
+        obj['name_en'] = obj['name'][1]
+        obj.pop('name', None)
+        actual_articles.append(obj)
+
+    expected_articles = list()
+    for article_dict in deepcopy(step.hashes):
+        if article_dict['is_available'] == 'no':
+            article_dict['is_available'] = False
         else:
-            obj['is_available'] = 'no'
-        articles.append(obj)
+            article_dict['is_available'] = True
 
-    list1 = set(tuple(sorted(d.items())) for d in articles)
-    list2 = set(tuple(sorted(d.items())) for d in step.hashes)
+        article_dict['total_quantity'] = int(article_dict['total_quantity'])
+        article_dict['quantity'] = int(article_dict['quantity'])
+        expected_articles.append(article_dict)
 
-    assert list1.symmetric_difference(list2) == set()
+    actual = set(tuple(sorted(d.items())) for d in actual_articles)
+    expected = set(tuple(sorted(d.items())) for d in expected_articles)
 
+    assert actual.symmetric_difference(expected) == set()
 
 @step('I see those listed logs:')
 def i_see_listed_logs(step):
