@@ -1,7 +1,7 @@
 Feature: Show borrowed articles
   In order to see borrow article
   As a user
-  I want to see articles with status 'no'
+  I want to see articles with total_quantity > quantity
 
   Scenario: Show borrowed articles
     Given I have the following articles in my database:

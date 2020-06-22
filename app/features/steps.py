@@ -120,6 +120,33 @@ def i_get_article_by_id(step, id):
     world.articles = [db.get_article_by_id(id)] if article else list()
 
 
+@step('I borrow "(.*?)" articles with ID "(.*?)"')
+def i_borrow_article(step, qty, id):
+    config_manager = ConfigManager()
+    config_manager.db_path = world.path_db
+    db_file_connector = DbFileConnector(config_manager)
+    db = DBConnector(db_file_connector)
+    if db.get_article_by_id(id).is_available and db.get_article_by_id(id).quantity >= int(qty):
+        if db.get_article_by_id(id).quantity == int(qty):
+            article = db.add_article_quantity(id, -int(qty), False)
+        else:
+            article = db.add_article_quantity(id, -int(qty), True)
+        db.remove_article_by_id(id)
+        db.add_article(article)
+    world.articles = db.get_all_articles()
+
+@step('I return "(.*?)" articles with ID "(.*?)"')
+def i_borrow_article(step, qty, id):
+    config_manager = ConfigManager()
+    config_manager.db_path = world.path_db
+    db_file_connector = DbFileConnector(config_manager)
+    db = DBConnector(db_file_connector)
+    if db.get_article_by_id(id).quantity + int(qty) <= db.get_article_by_id(id).total_quantity:
+        article = db.add_article_quantity(id, int(qty), True)
+        db.remove_article_by_id(id)
+        db.add_article(article)
+    world.articles = db.get_all_articles()
+
 @step('I add following article')
 def i_add_article(step):
     article = None
