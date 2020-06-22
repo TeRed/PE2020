@@ -47,6 +47,7 @@ class Interface:
                  f'12: {i18n.t("SAVE_THE_CURRENT_CONFIGURATION")}\n'
                  f'13: {i18n.t("BORROW_ARTICLE")}\n'
                  f'14: {i18n.t("RETURN_ARTICLE")}\n'
+                 f'15: {i18n.t("LIST_AVAILABLE_ARTICLES")}\n'
                  f' 0: {i18n.t("EXIT_APPLICATION")}\n'))
 
             choice = input(f'{i18n.t("DIAL_THE_NUMBER")}: ')
@@ -80,9 +81,9 @@ class IOWrapper:
     @staticmethod
     def print_articles(articles):
         pt = PrettyTable()
-        pt.field_names = [i18n.t('ID'), i18n.t('NAME'), i18n.t('QUANTITY'), i18n.t('AVAILABILITY')]
+        pt.field_names = [i18n.t('ID'), i18n.t('NAME'), i18n.t('TOTAL_QUANTITY'), i18n.t('QUANTITY'), i18n.t('AVAILABILITY')]
         for article in articles:
-            pt.add_row([article.id, article.name, article.quantity, i18n.t('YES') if article.is_available else i18n.t('NO')])
+            pt.add_row([article.id, article.name, article.total_quantity, article.quantity, i18n.t('YES') if article.is_available else i18n.t('NO')])
 
         pager(str(pt))
 
@@ -152,7 +153,7 @@ class AddArticleCommand(ICommand):
         new_name = input(i18n.t('ENTER_THE_NAME_OF_THE_ARTICLE'))
         new_quantity = int(input(i18n.t('ENTER_THE_QUANTITY_OF_THE_ARTICLE')))
         new_id = self.logger.get_available_id()
-        new_obj = Article(new_id, new_name, new_quantity, True)
+        new_obj = Article(new_id, new_name, new_quantity, new_quantity, True)
 
         self.base.add_article(new_obj)
         self.logger.add_log(new_id, Log(str(datetime.date(datetime.now())), "Added"))
@@ -259,7 +260,7 @@ class ReturnArticleCommand(ICommand):
 
         if obj_article:
             quantity = int(input(i18n.t('HOW_MANY_TO_RETURN')))
-            if(quantity > 0):
+            if(quantity > 0 and quantity + obj_article.quantity < obj_article.total_quantity):
                 new_obj = self.base.add_article_quantity(obj_id, quantity, True)
                 if new_obj:
                     if obj_article.is_available == False:
@@ -267,8 +268,11 @@ class ReturnArticleCommand(ICommand):
                     self.base.remove_article_by_id(obj_id)
                     self.base.add_article(new_obj)
                     self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Returned " + str(quantity)))
-            self.app_info_logger.log_info(i18n.t('ARTICLES_RETURNED'))
-            IOWrapper.continue_pause()
+                self.app_info_logger.log_info(i18n.t('ARTICLES_RETURNED'))
+                IOWrapper.continue_pause()
+            else:
+                self.app_info_logger.log_info(i18n.t('CANT_RETURN_ARTICLE'))
+                IOWrapper.continue_pause()
         else:
             self.app_info_logger.log_info(i18n.t('ARTICLE_OF_ID_LACKING'))
             IOWrapper.continue_pause()
@@ -395,6 +399,23 @@ class DisplayAllNotAvailableArticlesCommand(ICommand):
         IOWrapper.print_articles(self.base.get_articles_by_availability(False))
         IOWrapper.continue_pause()
 
+class DisplayAllAvailableArticlesCommand(ICommand):
+
+    def __init__(self, base):
+        self.base = base
+
+    def execute(self):
+        IOWrapper.print_articles(self.base.get_articles_by_availability(True))
+        IOWrapper.continue_pause()
+
+class DisplayAllBorrowedArticlesCommand(ICommand):
+    def __init__(self, base):
+        self.base = base
+
+    def execute(self):
+        IOWrapper.print_articles(self.base.get_articles_by_borrowed())
+        IOWrapper.continue_pause()
+
 
 class DisplayFullHistoryCommand(ICommand):
 
@@ -424,7 +445,7 @@ class Invoker:
         self.config_manager = config_manager
         self.app_info_logger = app_info_logger
         self._commands = {'1': DisplayAllArticlesCommand(self.base),
-                          '2': DisplayAllNotAvailableArticlesCommand(self.base),
+                          '2': DisplayAllBorrowedArticlesCommand(self.base),
                           '3': DisplayFullHistoryCommand(self.logger),
                           '4': DisplayHistoryCommand(self.logger),
                           '5': AddArticleCommand(self.base, self.logger, self.app_info_logger),
@@ -437,6 +458,7 @@ class Invoker:
                           '12': SaveConfigCommand(self.config_manager, self.app_info_logger),
                           '13': BorrowArticleCommand(self.base, self.logger, self.app_info_logger),
                           '14': ReturnArticleCommand(self.base, self.logger, self.app_info_logger),
+                          '15': DisplayAllAvailableArticlesCommand(self.base),
                           '0': StopApp(self.app_info_logger)}
 
     def execute(self, command_name):

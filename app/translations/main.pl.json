@@ -52,6 +52,8 @@
     "ARTICLES_RETURNED": "Artykuł został oddany",
     "HOW_MANY_TO_RETURN": "Jak wiele sztuk chcesz oddać?",
     "CANT_BE_AVAILABLE_QUANTITY": "Artykuł nie może być dostepny ponieważ ilość jego sztuk wynosi 0",
+    "CANT_RETURN_ARTICLE": "Nie mozna zwrócić takiej ilosci artykułu",
+    "LIST_AVAILABLE_ARTICLES": "Wypisz listę dostępnych artykułów",
 
     "CURRENT_CONFIGURATION": "Aktualna konfiguracja:",
     "CONFIGURATION_CHANGE": "Zmiana konfiguracji",

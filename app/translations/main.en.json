@@ -52,6 +52,8 @@
     "ARTICLES_RETURNED": "Articles have been returned",
     "HOW_MANY_TO_RETURN": "How many articles you want to return?",
     "CANT_BE_AVAILABLE_QUANTITY": "Article can't be made available because its quantity is 0",
+    "CANT_RETURN_ARTICLE": "Can't return this amount of article",
+    "LIST_AVAILABLE_ARTICLES": "List available articles",
 
     "CURRENT_CONFIGURATION": "Current configuration:",
     "CONFIGURATION_CHANGE": "Configuration change",

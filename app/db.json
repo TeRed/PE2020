@@ -1,26 +1,37 @@
 [
     {
-        "id": "12",
-        "is_available": true,
-        "name": "Kubek",
-        "quantity": "23"
-    },
-    {
         "id": "11",
         "is_available": false,
         "name": "Kilof",
-        "quantity": 3
+        "quantity": 3,
+        "total_quantity": 50
     },
     {
         "id": "10",
         "is_available": true,
         "name": "Breszka",
-        "quantity": 1
+        "quantity": 1,
+        "total_quantity": 50
     },
     {
         "id": "13",
         "is_available": true,
         "name": "Chochla",
-        "quantity": 14
+        "quantity": 14,
+        "total_quantity": 50
+    },
+    {
+        "id": "12",
+        "is_available": true,
+        "name": "Kubek",
+        "quantity": 50,
+        "total_quantity": 50
+    },
+    {
+        "id": "14",
+        "is_available": true,
+        "name": "Biurko",
+        "quantity": 10,
+        "total_quantity": 12
     }
 ]
