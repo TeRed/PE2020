@@ -39,7 +39,7 @@ class LoggerConnector(metaclass=Singleton):
 
     def get_borrow_history(self, id):
         article_logs = self.get_logs_by_id(id)
-        return [x for x in article_logs.logs if x.text == 'Borrowed' or x.text == 'Returned']
+        return [x for x in article_logs.logs if 'Returned' in x.text or 'Borrowed' in x.text]
 
     def add_log(self, id, log):
         article_logs = self.get_all_logs()

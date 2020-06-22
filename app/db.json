@@ -5,7 +5,9 @@
         "name": [
             "mlotek",
             "hammer"
-        ]
+        ],
+        "quantity": 240,
+        "total_quantity": 250
     },
     {
         "id": "15",
@@ -13,7 +15,9 @@
         "name": [
             "klucz",
             "wrench"
-        ]
+        ],
+        "quantity": 50,
+        "total_quantity": 50
     },
     {
         "id": "13",
@@ -21,7 +25,9 @@
         "name": [
             "",
             "yoyo"
-        ]
+        ],
+        "quantity": 25,
+        "total_quantity": 25
     },
     {
         "id": "17",
@@ -29,7 +35,9 @@
         "name": [
             "wkretak",
             "screwdriver"
-        ]
+        ],
+        "quantity": 50,
+        "total_quantity": 50
     },
     {
         "id": "11",
@@ -37,6 +45,18 @@
         "name": [
             "wiertarka",
             "driller"
-        ]
+        ],
+        "quantity": 50,
+        "total_quantity": 50
+    },
+    {
+        "id": "18",
+        "is_available": true,
+        "name": [
+            "Paczka",
+            "Package"
+        ],
+        "quantity": 150,
+        "total_quantity": 250
     }
 ]

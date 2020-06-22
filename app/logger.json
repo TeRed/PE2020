@@ -8,7 +8,7 @@
             },
             {
                 "data": "2020-06-17",
-                "text": "Returned"
+                "text": "Returned 2"
             },
             {
                 "data": "2020-06-17",
@@ -20,7 +20,7 @@
             },
             {
                 "data": "2020-06-17",
-                "text": "Borrowed"
+                "text": "Borrowed 2"
             },
             {
                 "data": "2020-06-20",
@@ -37,27 +37,27 @@
             },
             {
                 "data": "2020-05-08",
-                "text": "Borrowed"
+                "text": "Borrowed 2"
             },
             {
                 "data": "2020-05-10",
-                "text": "Returned"
+                "text": "Returned 2"
             },
             {
                 "data": "2020-05-15",
-                "text": "Borrowed"
+                "text": "Borrowed 12"
             },
             {
                 "data": "2020-06-17",
-                "text": "Returned"
+                "text": "Returned 12"
             },
             {
                 "data": "2020-06-17",
-                "text": "Borrowed"
+                "text": "Borrowed 2"
             },
             {
                 "data": "2020-06-17",
-                "text": "Returned"
+                "text": "Returned 2"
             },
             {
                 "data": "2020-06-20",
@@ -74,7 +74,7 @@
             },
             {
                 "data": "2020-06-17",
-                "text": "Borrowed"
+                "text": "Borrowed 1"
             },
             {
                 "data": "2020-06-20",
@@ -91,7 +91,7 @@
             },
             {
                 "data": "2020-06-22",
-                "text": "Borrowed"
+                "text": "Borrowed 12"
             }
         ]
     },
@@ -113,7 +113,7 @@
             },
             {
                 "data": "2020-06-22",
-                "text": "Borrowed"
+                "text": "Borrowed 12"
             }
         ]
     },
@@ -158,6 +158,19 @@
             {
                 "data": "2020-06-22",
                 "text": "Added"
+            }
+        ]
+    },
+    {
+        "id": "18",
+        "logs": [
+            {
+                "data": "2020-06-22",
+                "text": "Added"
+            },
+            {
+                "data": "2020-06-22",
+                "text": "Borrowed 100"
             }
         ]
     }

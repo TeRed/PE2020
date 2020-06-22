@@ -11,7 +11,7 @@ class DBConnector(metaclass=Singleton):
 
         articles = list()
         for i in load:
-            obj = Article(i['id'], i['name'], i['is_available'])
+            obj = Article(i['id'], i['name'], i['total_quantity'], i['quantity'], i['is_available'])
             articles.append(obj)
 
         return articles
@@ -25,6 +25,12 @@ class DBConnector(metaclass=Singleton):
     def get_articles_by_availability(self, available):
         articles = self.get_all_articles()
         articles = [it for it in articles if available == it.is_available]
+
+        return articles
+
+    def get_articles_by_borrowed(self):
+        articles = self.get_all_articles()
+        articles = [it for it in articles if int(it.total_quantity) > int(it.quantity)]
 
         return articles
 
@@ -59,4 +65,12 @@ class DBConnector(metaclass=Singleton):
         for article in articles:
             if article.id == id:
                 article.is_available = available
+                return article
+
+    def add_article_quantity(self, id, quantity, available):
+        articles = self.get_all_articles()
+        for article in articles:
+            if article.id == id:
+                article.is_available = available
+                article.quantity = article.quantity + quantity
                 return article
