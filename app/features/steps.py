@@ -201,7 +201,7 @@ def i_show_borrowed_articles(step):
     config_manager.db_path = world.path_db
     db_file_connector = DbFileConnector(config_manager)
     db = DBConnector(db_file_connector)
-    world.articles = db.get_articles_by_availability(False)
+    world.articles = db.get_articles_by_borrowed()
 
 
 @after.each_scenario
