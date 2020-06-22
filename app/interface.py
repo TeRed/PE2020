@@ -143,9 +143,12 @@ class AddArticleCommand(ICommand):
         self.app_info_logger = app_info_logger
 
     def execute(self):
-        new_name = input(i18n.t('ENTER_THE_NAME_OF_THE_ARTICLE'))
+        #choose variable based on language?
+        #new_name = input(i18n.t('ENTER_THE_NAME_OF_THE_ARTICLE'))
+        new_name_pl = input(i18n.t('ENTER_THE_NAME_OF_THE_ARTICLE_PL'))
+        new_name_en = input(i18n.t('ENTER_THE_NAME_OF_THE_ARTICLE_EN'))
         new_id = self.logger.get_available_id()
-        new_obj = Article(new_id, new_name, True)
+        new_obj = Article(new_id, [new_name_pl, new_name_en], True)
 
         self.base.add_article(new_obj)
         self.logger.add_log(new_id, Log(str(datetime.date(datetime.now())), "Added"))

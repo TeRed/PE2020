@@ -1,17 +1,42 @@
 [
     {
-        "id": "2",
+        "id": "11",
         "is_available": true,
-        "name": "Wiertarka"
+        "name": [
+            "wiertarka",
+            "driller"
+        ]
     },
     {
-        "id": "1",
-        "is_available": false,
-        "name": "Szpadel"
+        "id": "12",
+        "is_available": true,
+        "name": [
+            "mlotek",
+            "hammer"
+        ]
     },
     {
-        "id": "10",
-        "is_available": false,
-        "name": "Breszka"
+        "id": "13",
+        "is_available": true,
+        "name": [
+            "",
+            "yoyo"
+        ]
+    },
+    {
+        "id": "14",
+        "is_available": true,
+        "name": [
+            "yoyo",
+            ""
+        ]
+    },
+    {
+        "id": "15",
+        "is_available": true,
+        "name": [
+            "klucz",
+            "wrench"
+        ]
     }
 ]
