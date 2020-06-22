@@ -101,13 +101,23 @@ def i_show_history_of_rentals_of_article(step, number):
     world.logs = logs
 
 
-@step('I show article by name "(.*?)"')
+@step('I get article by name "(.*?)"')
 def i_show_one_article(step, name):
     config_manager = ConfigManager()
     config_manager.db_path = world.path_db
     db_file_connector = DbFileConnector(config_manager)
     db = DBConnector(db_file_connector)
     world.articles = db.get_articles_by_name(name)
+
+
+@step('I get article by ID "(.*?)"')
+def i_show_one_article(step, id):
+    config_manager = ConfigManager()
+    config_manager.db_path = world.path_db
+    db_file_connector = DbFileConnector(config_manager)
+    db = DBConnector(db_file_connector)
+    article = db.get_article_by_id(id)
+    world.articles = [db.get_article_by_id(id)] if article else list()
 
 
 @step('I add following article')
@@ -195,6 +205,11 @@ def i_see_listed_articles(step):
     expected = set(tuple(sorted(d.items())) for d in expected_articles)
 
     assert actual.symmetric_difference(expected) == set()
+
+
+@step('I see no listed articles')
+def i_see_listed_articles(step):
+    assert len(world.articles) == 0
 
 
 @step('I see those listed logs:')

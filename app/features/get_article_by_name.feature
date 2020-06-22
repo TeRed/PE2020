@@ -1,36 +1,34 @@
-Feature: Show article by name
-  In order to see article
+Feature: Get article by name
   As a user
-  I want to see article as a table
+  I want to be able to get article by name
 
-  Scenario: Show one article
+  Scenario: Get one article
     Given I have the following articles in my database:
       | id  | name_pl    | name_en     | total_quantity | quantity | is_available |
       | 1   | Wiertarka  | Drill       | 50             | 50       | no           |
       | 2   |            | Drill Press | 50             | 50       | no           |
       | 3   | Szlifierka | Grinder     | 50             | 50       | yes          |
-    When I show article by name "Grinder"
+    When I get article by name "Grinder"
     Then I see those listed articles:
       | id  | name_pl    | name_en     | total_quantity | quantity | is_available |
       | 3   | Szlifierka | Grinder     | 50             | 50       | yes          |
 
-  Scenario: Show empty article
+  Scenario: Get nonexistent article
     Given I have the following articles in my database:
       | id  | name_pl    | name_en     | total_quantity | quantity | is_available |
       | 1   | Wiertarka  | Drill       | 50             | 50       | no           |
       | 2   |            | Drill Press | 50             | 50       | no           |
       | 3   | Szlifierka | Grinder     | 50             | 50       | yes          |
-    When I show article by name "Drip"
-    Then I see those listed articles:
-      | id  | name_pl    | name_en     | total_quantity | quantity | is_available |
+    When I get article by name "Drip"
+    Then I see no listed articles
 
-  Scenario: Show two article
+  Scenario: Get two articles
     Given I have the following articles in my database:
       | id  | name_pl    | name_en     | total_quantity | quantity | is_available |
       | 1   | Wiertarka  | Drill       | 50             | 50       | no           |
       | 2   |            | Drill Press | 50             | 50       | no           |
       | 3   | Szlifierka | Grinder     | 50             | 50       | yes          |
-    When I show article by name "Drill"
+    When I get article by name "Drill"
     Then I see those listed articles:
       | id  | name_pl    | name_en     | total_quantity | quantity | is_available |
       | 1   | Wiertarka  | Drill       | 50             | 50       | no           |
