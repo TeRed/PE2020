@@ -58,6 +58,15 @@ def i_show_articles(step):
     world.articles = db.get_all_articles()
 
 
+@step('I show available articles')
+def i_show_available_articles(step):
+    config_manager = ConfigManager()
+    config_manager.db_path = world.path_db
+    db_file_connector = DbFileConnector(config_manager)
+    db = DBConnector(db_file_connector)
+    world.articles = db.get_articles_by_availability(True)
+
+
 @step('I show full history of rentals')
 def i_show_full_history_of_rentals(step):
     config_manager = ConfigManager()
@@ -186,6 +195,7 @@ def i_see_listed_articles(step):
     expected = set(tuple(sorted(d.items())) for d in expected_articles)
 
     assert actual.symmetric_difference(expected) == set()
+
 
 @step('I see those listed logs:')
 def i_see_listed_logs(step):
