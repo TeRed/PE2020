@@ -102,7 +102,7 @@ def i_show_history_of_rentals_of_article(step, number):
 
 
 @step('I get article by name "(.*?)"')
-def i_show_one_article(step, name):
+def i_get_article_by_name(step, name):
     config_manager = ConfigManager()
     config_manager.db_path = world.path_db
     db_file_connector = DbFileConnector(config_manager)
@@ -111,7 +111,7 @@ def i_show_one_article(step, name):
 
 
 @step('I get article by ID "(.*?)"')
-def i_show_one_article(step, id):
+def i_get_article_by_id(step, id):
     config_manager = ConfigManager()
     config_manager.db_path = world.path_db
     db_file_connector = DbFileConnector(config_manager)
@@ -208,7 +208,7 @@ def i_see_listed_articles(step):
 
 
 @step('I see no listed articles')
-def i_see_listed_articles(step):
+def i_see_no_listed_articles(step):
     assert len(world.articles) == 0
 
 
@@ -229,6 +229,63 @@ def i_show_borrowed_articles(step):
     world.articles = db.get_articles_by_borrowed()
 
 
+@step('I have the following parameters in my configuration file:')
+def i_have_the_following_parameters_in_my_configuration_file(step):
+    world.path_config = 'test_config.json'
+
+    config = {}
+    for parameter in step.hashes:
+        config[parameter['key']] = parameter['value']
+
+    with open(world.path_config, 'w') as f:
+        json.dump(config, f, default=lambda o: o.__dict__, sort_keys=True, indent=4)
+
+    world.config = ConfigManager(world.path_config)
+
+
+@step('I have no configuration file')
+def i_have_no_configuration_file(step):
+    world.path_config = 'test_config.json'
+
+    world.config = ConfigManager()
+
+
+@step('I view current configuration')
+def i_view_current_configuration(step):
+    pass
+
+
+@step('I change parameter "(.*?)" to value "(.*?)"')
+def i_change_parameter_xxx_to_value_yyy(step, parameter, value):
+    setattr(world.config, parameter, value)
+
+
+@step('I save current configuration')
+def i_save_current_configuration(step):
+    world.config.save_configuration(world.path_config)
+
+
+@step('I see those listed parameters:')
+def i_see_those_listed_parameters(step):
+    expected_config = {}
+
+    for parameter in step.hashes:
+        expected_config[parameter['key']] = parameter['value']
+
+    assert vars(world.config) == expected_config
+
+
+@step('I see those listed parameters when application is reloaded:')
+def i_see_those_listed_parameters_when_application_is_reloaded(step):
+    actual_config = vars(ConfigManager(world.path_config))
+    expected_config = {}
+
+    for parameter in step.hashes:
+        expected_config[parameter['key']] = parameter['value']
+
+    assert actual_config == expected_config
+
+
 @after.each_scenario
 def teardown_test_db(scenario):
     try:
@@ -238,5 +295,10 @@ def teardown_test_db(scenario):
 
     try:
         remove(world.path_logger)
+    except:
+        pass
+
+    try:
+        remove(world.path_config)
     except:
         pass
