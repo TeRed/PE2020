@@ -1,5 +1,6 @@
 import json
 import abc
+import i18n
 
 
 class DbConfigManagerInterface(metaclass=abc.ABCMeta):
@@ -16,6 +17,7 @@ class LoggerConfigManagerInterface(metaclass=abc.ABCMeta):
 
 class ConfigManager(DbConfigManagerInterface, LoggerConfigManagerInterface):
     def __init__(self, config_file_name=None):
+        self.language = ''
         self.db_path = ''
         self.logger_path = ''
         if config_file_name:
@@ -23,13 +25,16 @@ class ConfigManager(DbConfigManagerInterface, LoggerConfigManagerInterface):
                 with open(config_file_name) as f:
                     config = json.load(f)
                 self.db_path = config['db_path']
+                self.language = config['language']
                 self.logger_path = config['logger_path']
             except IOError:
-                print("WARNING: Config file not found")
+                print(f"WARNING: {i18n.t('CONFIG_FILE_NOT_FOUND')}")
         if not self.db_path.endswith(".json"):
             self.db_path = 'db.json'
         if not self.logger_path.endswith(".json"):
             self.logger_path = 'logger.json'
+        if not self.language:
+            self.language = 'en'
 
     def get_db_path(self):
         return self.db_path
@@ -37,8 +42,12 @@ class ConfigManager(DbConfigManagerInterface, LoggerConfigManagerInterface):
     def get_logger_path(self):
         return self.logger_path
 
+    def set_language(self, language):
+        self.language = language
+        i18n.set('locale', self.language)
+
     def save_configuration(self, config_file_name=None):
-        config = {'db_path': self.db_path, 'logger_path': self.logger_path}
+        config = {'db_path': self.db_path, 'language': self.language, 'logger_path': self.logger_path}
 
         if config_file_name:
             with open(config_file_name, 'w') as f:
