@@ -24,6 +24,7 @@
 
     "ID": "ID",
     "NAME": "NAME",
+     "NAME_SECOND_LANG": "NAME PL",
     "AVAILABILITY": "AVAILABILITY",
     "DATE": "DATE",
     "TEXT": "TEXT",
@@ -34,6 +35,8 @@
 
     "ENTER_THE_ID_OF_THE_ARTICLE": "Enter the id of the article: ",
     "ENTER_THE_NAME_OF_THE_ARTICLE": "Enter the name of the article: ",
+    "ENTER_THE_NAME_OF_THE_ARTICLE_PL": "Enter the Polish name of the article or leave empty: ",
+    "ENTER_THE_NAME_OF_THE_ARTICLE_EN": "Enter the English name of the article or leave empty: ",
     "ARTICLE_ADDED": "Article has been added",
     "ARTICLE_DELETED": "Article has been deleted",
     "ARTICLE_OF_ID_LACKING": "No article with the given ID",

@@ -1,5 +1,4 @@
 from abc import ABCMeta
-
 from article import Article
 from log import Log
 from datetime import datetime
@@ -76,13 +75,17 @@ class AppInfoLogger:
 class IOWrapper:
 
     @staticmethod
-    def print_articles(articles):
+    def print_articles(articles, current_lang_val ):
         pt = PrettyTable()
-        pt.field_names = [i18n.t('ID'), i18n.t('NAME'), i18n.t('AVAILABILITY')]
-        for article in articles:
-            pt.add_row([article.id, article.name, i18n.t('YES') if article.is_available else i18n.t('NO')])
-
+        pt.field_names = [i18n.t('ID'), i18n.t('NAME'), i18n.t('NAME_SECOND_LANG'), i18n.t('AVAILABILITY')]
+        if current_lang_val == "en":
+            for article in articles:
+                pt.add_row([article.id, article.name[1], article.name[0], i18n.t('YES') if article.is_available else i18n.t('NO')])
+        else:
+            for article in articles:
+                pt.add_row([article.id, article.name[0], article.name[1], i18n.t('YES') if article.is_available else i18n.t('NO')])
         pager(str(pt))
+
 
     @staticmethod
     def print_articles_log(articles_logs):
@@ -118,11 +121,13 @@ class ICommand(metaclass=ABCMeta):
 
 class DisplayAllArticlesCommand(ICommand):
 
-    def __init__(self, base):
+    def __init__(self, base, config_manager):
         self.base = base
+        self.config_manager=config_manager
 
     def execute(self):
-        IOWrapper.print_articles(self.base.get_all_articles())
+        current_lang_val = self.config_manager.language
+        IOWrapper.print_articles(self.base.get_all_articles(), current_lang_val)
 
 
 class DisplayHistoryCommand(ICommand):
@@ -137,16 +142,20 @@ class DisplayHistoryCommand(ICommand):
 
 class AddArticleCommand(ICommand):
 
-    def __init__(self, base, logger, app_info_logger):
+    def __init__(self, base, logger,config_manager, app_info_logger):
         self.base = base
         self.logger = logger
+        self.config_manager = config_manager
         self.app_info_logger = app_info_logger
 
     def execute(self):
-        #choose variable based on language?
-        #new_name = input(i18n.t('ENTER_THE_NAME_OF_THE_ARTICLE'))
-        new_name_pl = input(i18n.t('ENTER_THE_NAME_OF_THE_ARTICLE_PL'))
-        new_name_en = input(i18n.t('ENTER_THE_NAME_OF_THE_ARTICLE_EN'))
+        current_lang_val = self.config_manager.language
+        if current_lang_val == "en":
+            new_name_en = input(i18n.t('ENTER_THE_NAME_OF_THE_ARTICLE_EN'))
+            new_name_pl = input(i18n.t('ENTER_THE_NAME_OF_THE_ARTICLE_PL'))
+        else:
+            new_name_pl = input(i18n.t('ENTER_THE_NAME_OF_THE_ARTICLE_PL'))
+            new_name_en = input(i18n.t('ENTER_THE_NAME_OF_THE_ARTICLE_EN'))
         new_id = self.logger.get_available_id()
         new_obj = Article(new_id, [new_name_pl, new_name_en], True)
 
@@ -177,26 +186,29 @@ class DeleteArticleCommand(ICommand):
 
 class SearchForAnArticleByNameCommand(ICommand):
 
-    def __init__(self, base):
+    def __init__(self, base, config_manager):
         self.base = base
+        self.config_manager = config_manager
 
     def execute(self):
+        current_lang_val = self.config_manager.language
         src_name = input(i18n.t('ENTER_THE_NAME_OF_THE_ARTICLE'))
-        IOWrapper.print_articles(self.base.get_articles_by_name(src_name))
+        IOWrapper.print_articles(self.base.get_articles_by_name(src_name), current_lang_val)
 
 
 class SearchForAnArticleByIdCommand(ICommand):
 
-    def __init__(self, base, app_info_logger):
+    def __init__(self, base,config_manager, app_info_logger):
         self.base = base
+        self.config_manager = config_manager
         self.app_info_logger = app_info_logger
 
     def execute(self):
         src_id = input(i18n.t('ENTER_THE_ID_OF_THE_ARTICLE'))
-
+        current_lang_val = self.config_manager.language
         article = self.base.get_article_by_id(src_id)
         if article:
-            IOWrapper.print_articles([article])
+            IOWrapper.print_articles([article], current_lang_val)
         else:
             self.app_info_logger.log_info(i18n.t('ARTICLE_OF_ID_LACKING'))
             IOWrapper.continue_pause()
@@ -308,11 +320,13 @@ class SaveConfigCommand(ICommand):
 
 class DisplayAllNotAvailableArticlesCommand(ICommand):
 
-    def __init__(self, base):
+    def __init__(self, base, config_manager):
         self.base = base
+        self.config_manager = config_manager
 
     def execute(self):
-        IOWrapper.print_articles(self.base.get_articles_by_availability(False))
+        current_lang_val = self.config_manager.language
+        IOWrapper.print_articles(self.base.get_articles_by_availability(False), current_lang_val)
 
 
 class DisplayFullHistoryCommand(ICommand):
@@ -341,14 +355,14 @@ class Invoker:
         self.logger = logger
         self.config_manager = config_manager
         self.app_info_logger = app_info_logger
-        self._commands = {'1': DisplayAllArticlesCommand(self.base),
-                          '2': DisplayAllNotAvailableArticlesCommand(self.base),
+        self._commands = {'1': DisplayAllArticlesCommand(self.base,self.config_manager),
+                          '2': DisplayAllNotAvailableArticlesCommand(self.base,self.config_manager),
                           '3': DisplayFullHistoryCommand(self.logger),
                           '4': DisplayHistoryCommand(self.logger),
-                          '5': AddArticleCommand(self.base, self.logger, self.app_info_logger),
+                          '5': AddArticleCommand(self.base, self.logger,self.config_manager, self.app_info_logger),
                           '6': DeleteArticleCommand(self.base, self.logger, self.app_info_logger),
-                          '7': SearchForAnArticleByNameCommand(self.base),
-                          '8': SearchForAnArticleByIdCommand(self.base, self.app_info_logger),
+                          '7': SearchForAnArticleByNameCommand(self.base,self.config_manager),
+                          '8': SearchForAnArticleByIdCommand(self.base, self.config_manager, self.app_info_logger),
                           '9': ChangeStatusCommand(self.base, self.logger, self.app_info_logger),
                           '10': DisplayConfigCommand(self.config_manager),
                           '11': ChangeConfigCommand(self.config_manager, self.app_info_logger),

@@ -24,6 +24,7 @@
 
     "ID": "ID",
     "NAME": "NAZWA",
+    "NAME_SECOND_LANG": "NAZWA ANG",
     "AVAILABILITY": "DOSTĘPNOŚĆ",
     "DATE": "DATA",
     "TEXT": "TEKST",
@@ -34,8 +35,10 @@
 
     "ENTER_THE_ID_OF_THE_ARTICLE": "Podaj ID artykułu: ",
     "ENTER_THE_NAME_OF_THE_ARTICLE": "Podaj nazwę artykułu: ",
+    "ENTER_THE_NAME_OF_THE_ARTICLE_PL": "Podaj polską nazwę artykułu lub zostaw puste: ",
+    "ENTER_THE_NAME_OF_THE_ARTICLE_EN": "Podaj angielską nazwę artykułu lub zostaw puste: ",
     "ARTICLE_ADDED": "Dodano nowy artykuł",
-    "ARTICLE_DELETED": "Dodano nowy artykuł",
+    "ARTICLE_DELETED": "Usunięto artykuł",
     "ARTICLE_OF_ID_LACKING": "Brak artykułu o podanym ID",
     "ARTICLE_AVAILABLE": "Atrykuł obecnie jest dostępny.",
     "ARTICLE_NOT_AVAILABLE": "Atrykuł obecnie nie jest dostępny.",
