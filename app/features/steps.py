@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, 'lib')
+
 from lettuce import *
 import json
 
@@ -20,6 +23,12 @@ def articles_in_database(step):
             article_dict['is_available'] = False
         else:
             article_dict['is_available'] = True
+
+        article_dict['name'] = [article_dict['name_pl'], article_dict['name_en']]
+        article_dict.pop('name_pl', None)
+        article_dict.pop('name_en', None)
+        article_dict['total_quantity'] = int(article_dict['total_quantity'])
+        article_dict['quantity'] = int(article_dict['quantity'])
         formatted_articles.append(article_dict)
 
     with open(world.path_db, 'w') as f:
@@ -52,6 +61,15 @@ def i_show_articles(step):
     world.articles = db.get_all_articles()
 
 
+@step('I show available articles')
+def i_show_available_articles(step):
+    config_manager = ConfigManager()
+    config_manager.db_path = world.path_db
+    db_file_connector = DbFileConnector(config_manager)
+    db = DBConnector(db_file_connector)
+    world.articles = db.get_articles_by_availability(True)
+
+
 @step('I show full history of rentals')
 def i_show_full_history_of_rentals(step):
     config_manager = ConfigManager()
@@ -62,7 +80,7 @@ def i_show_full_history_of_rentals(step):
     all_logs = list()
 
     for article_log in logger.get_all_logs():
-        logs = [it for it in article_log.logs if it.text == 'Borrowed' or it.text == 'Returned']
+        logs = [it for it in article_log.logs if 'Borrowed' in it.text or 'Returned' in it.text]
         logs = [vars(it) for it in logs]
         for log in logs:
             log['id'] = article_log.id
@@ -86,8 +104,8 @@ def i_show_history_of_rentals_of_article(step, number):
     world.logs = logs
 
 
-@step('I show article by name "(.*?)"')
-def i_show_one_article(step, name):
+@step('I get article by name "(.*?)"')
+def i_get_article_by_name(step, name):
     config_manager = ConfigManager()
     config_manager.db_path = world.path_db
     db_file_connector = DbFileConnector(config_manager)
@@ -95,16 +113,56 @@ def i_show_one_article(step, name):
     world.articles = db.get_articles_by_name(name)
 
 
+@step('I get article by ID "(.*?)"')
+def i_get_article_by_id(step, id):
+    config_manager = ConfigManager()
+    config_manager.db_path = world.path_db
+    db_file_connector = DbFileConnector(config_manager)
+    db = DBConnector(db_file_connector)
+    article = db.get_article_by_id(id)
+    world.articles = [db.get_article_by_id(id)] if article else list()
+
+
+@step('I borrow "(.*?)" articles with ID "(.*?)"')
+def i_borrow_article(step, qty, id):
+    config_manager = ConfigManager()
+    config_manager.db_path = world.path_db
+    db_file_connector = DbFileConnector(config_manager)
+    db = DBConnector(db_file_connector)
+    if db.get_article_by_id(id).is_available and db.get_article_by_id(id).quantity >= int(qty):
+        if db.get_article_by_id(id).quantity == int(qty):
+            article = db.add_article_quantity(id, -int(qty), False)
+        else:
+            article = db.add_article_quantity(id, -int(qty), True)
+        db.remove_article_by_id(id)
+        db.add_article(article)
+    world.articles = db.get_all_articles()
+
+@step('I return "(.*?)" articles with ID "(.*?)"')
+def i_borrow_article(step, qty, id):
+    config_manager = ConfigManager()
+    config_manager.db_path = world.path_db
+    db_file_connector = DbFileConnector(config_manager)
+    db = DBConnector(db_file_connector)
+    if db.get_article_by_id(id).quantity + int(qty) <= db.get_article_by_id(id).total_quantity:
+        article = db.add_article_quantity(id, int(qty), True)
+        db.remove_article_by_id(id)
+        db.add_article(article)
+    world.articles = db.get_all_articles()
+
 @step('I add following article')
 def i_add_article(step):
     article = None
 
-    for article_dict in step.hashes:
+    for article_dict in deepcopy(step.hashes):
         if article_dict['is_available'] == 'no':
             article_dict['is_available'] = False
         else:
             article_dict['is_available'] = True
-        article = Article(article_dict['id'], article_dict['name'], article_dict['is_available'])
+
+        name = [article_dict['name_pl'], article_dict['name_en']]
+        article = Article('3', name, int(article_dict['total_quantity']),
+                          int(article_dict['quantity']), article_dict['is_available'])
 
     config_manager = ConfigManager()
     config_manager.db_path = world.path_db
@@ -154,19 +212,34 @@ def i_change_to_not_available_article(step, number):
 
 @step('I see those listed articles:')
 def i_see_listed_articles(step):
-    articles = list()
+    actual_articles = list()
     for article in world.articles:
         obj = vars(article)
-        if obj['is_available']:
-            obj['is_available'] = 'yes'
+        obj['name_pl'] = obj['name'][0]
+        obj['name_en'] = obj['name'][1]
+        obj.pop('name', None)
+        actual_articles.append(obj)
+
+    expected_articles = list()
+    for article_dict in deepcopy(step.hashes):
+        if article_dict['is_available'] == 'no':
+            article_dict['is_available'] = False
         else:
-            obj['is_available'] = 'no'
-        articles.append(obj)
+            article_dict['is_available'] = True
 
-    list1 = set(tuple(sorted(d.items())) for d in articles)
-    list2 = set(tuple(sorted(d.items())) for d in step.hashes)
+        article_dict['total_quantity'] = int(article_dict['total_quantity'])
+        article_dict['quantity'] = int(article_dict['quantity'])
+        expected_articles.append(article_dict)
 
-    assert list1.symmetric_difference(list2) == set()
+    actual = set(tuple(sorted(d.items())) for d in actual_articles)
+    expected = set(tuple(sorted(d.items())) for d in expected_articles)
+
+    assert actual.symmetric_difference(expected) == set()
+
+
+@step('I see no listed articles')
+def i_see_no_listed_articles(step):
+    assert len(world.articles) == 0
 
 
 @step('I see those listed logs:')
@@ -183,7 +256,64 @@ def i_show_borrowed_articles(step):
     config_manager.db_path = world.path_db
     db_file_connector = DbFileConnector(config_manager)
     db = DBConnector(db_file_connector)
-    world.articles = db.get_articles_by_availability(False)
+    world.articles = db.get_articles_by_borrowed()
+
+
+@step('I have the following parameters in my configuration file:')
+def i_have_the_following_parameters_in_my_configuration_file(step):
+    world.path_config = 'test_config.json'
+
+    config = {}
+    for parameter in step.hashes:
+        config[parameter['key']] = parameter['value']
+
+    with open(world.path_config, 'w') as f:
+        json.dump(config, f, default=lambda o: o.__dict__, sort_keys=True, indent=4)
+
+    world.config = ConfigManager(world.path_config)
+
+
+@step('I have no configuration file')
+def i_have_no_configuration_file(step):
+    world.path_config = 'test_config.json'
+
+    world.config = ConfigManager()
+
+
+@step('I view current configuration')
+def i_view_current_configuration(step):
+    pass
+
+
+@step('I change parameter "(.*?)" to value "(.*?)"')
+def i_change_parameter_xxx_to_value_yyy(step, parameter, value):
+    setattr(world.config, parameter, value)
+
+
+@step('I save current configuration')
+def i_save_current_configuration(step):
+    world.config.save_configuration(world.path_config)
+
+
+@step('I see those listed parameters:')
+def i_see_those_listed_parameters(step):
+    expected_config = {}
+
+    for parameter in step.hashes:
+        expected_config[parameter['key']] = parameter['value']
+
+    assert vars(world.config) == expected_config
+
+
+@step('I see those listed parameters when application is reloaded:')
+def i_see_those_listed_parameters_when_application_is_reloaded(step):
+    actual_config = vars(ConfigManager(world.path_config))
+    expected_config = {}
+
+    for parameter in step.hashes:
+        expected_config[parameter['key']] = parameter['value']
+
+    assert actual_config == expected_config
 
 
 @after.each_scenario
@@ -195,5 +325,10 @@ def teardown_test_db(scenario):
 
     try:
         remove(world.path_logger)
+    except:
+        pass
+
+    try:
+        remove(world.path_config)
     except:
         pass
