@@ -3,6 +3,8 @@ from article import Article
 from log import Log
 from datetime import datetime
 import os
+import sys
+sys.path.insert(0, 'lib')
 from prettytable import PrettyTable
 from pydoc import pager
 import i18n
