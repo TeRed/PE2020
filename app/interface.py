@@ -98,7 +98,7 @@ class IOWrapper:
             logs = [it for it in article_log.logs if 'Borrowed' in it.text or 'Returned' in it.text]
             for log in logs:
                 state = log.text.split(" ")
-                pt.add_row([article_log.id, log.data, str(state[1]) + " " + i18n.t('RETURNED') if 'Returned' in log.text else str(state[1]) + " " + i18n.t('BORROWED')])
+                pt.add_row([article_log.id, log.data, str(state[0]) + " " + i18n.t('RETURNED') if 'Returned' in log.text else str(state[0]) + " " + i18n.t('BORROWED')])
 
         pager(str(pt))
 
@@ -112,7 +112,7 @@ class IOWrapper:
         pt.field_names = [i18n.t('DATE'), i18n.t('TEXT')]
         for obj in logs:
             state = obj.text.split(" ")
-            pt.add_row([obj.data, str(state[1]) + " " + i18n.t('RETURNED') if 'Returned' in obj.text else str(state[1]) + " " + i18n.t('BORROWED')])
+            pt.add_row([obj.data, str(state[0]) + " " + i18n.t('RETURNED') if 'Returned' in obj.text else str(state[10]) + " " + i18n.t('BORROWED')])
         pager(str(pt))
 
 
