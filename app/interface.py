@@ -99,7 +99,6 @@ class IOWrapper:
             for log in logs:
                 state = log.text.split(" ")
                 pt.add_row([article_log.id, log.data, str(state[1]) + " " + i18n.t('RETURNED') if 'Returned' in log.text else str(state[1]) + " " + i18n.t('BORROWED')])
-                #pt.add_row([article_log.id, log.data, str(state[0]) + " " + i18n.t('RETURNED') if 'Returned' in log.text else str(state[0]) + " " + i18n.t('BORROWED')])
 
         pager(str(pt))
 
