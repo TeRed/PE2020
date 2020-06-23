@@ -98,22 +98,25 @@ class MyTestCase(unittest.TestCase):
 
     def test_display_full_history_command(self):
         # Given
-        logs = [
-            {'id': '1', 'logs': [{"data": "08-05-2020", "text": "Returned"}]},
-            {'id': '2', 'logs': [{"data": "08-05-2020", "text": "Borrowed"}, {"data": "07-05-2020", "text": "Deleted"}]}
+        articles = [
+            {"id": "1", "name": ["mlotek", "hammer"], "total_quantity": 2, "quantity": 2, "is_available": True},
+            {"id": "2", "name": ["wiertarka", "driller"], "total_quantity": 2, "quantity": 2, "is_available": False}
         ]
+
+        with open(self.database_file_name, "w") as f:
+            json.dump(articles, f)
+        logs = [{'id': '1', 'logs': [{"data": "08-05-2020","text": "Returned 1"}]}]
 
         with open(self.logger_file_name, "w") as f:
             json.dump(logs, f)
 
         INVOKER = Invoker(self.db, self.logger, self.config_manager, self.app_info_logger)
 
-        expected = "+----+------------+-------------------+" + "\n" \
-                   + "| ID |    DATE    |        TEXT       |" + "\n" \
-                   + "+----+------------+-------------------+" + "\n" \
-                   + "| 1  | 08-05-2020 | Returned RETURNED |" + "\n" \
-                   + "| 2  | 08-05-2020 | Borrowed BORROWED |" + "\n" \
-                   + "+----+------------+-------------------+"
+        expected = "+----+------------+------------+" + "\n" \
+                   + "| ID |    DATE    |    TEXT    |" + "\n" \
+                   + "+----+------------+------------+" + "\n" \
+                   + "| 1  | 08-05-2020 | 1 RETURNED |" + "\n" \
+                   + "+----+------------+------------+"
 
         # When
         with patch('sys.stdout', new=StringIO()) as result:
@@ -125,18 +128,18 @@ class MyTestCase(unittest.TestCase):
 
     def test_display_history_command(self):
         # Given
-        logs = [{'id': '1', 'logs': [{"data": "08-05-2020", "text": "Returned"}]}]
+        logs = [{'id': '1', 'logs': [{"data": "08-05-2020", "text": "Returned 1"}]}]
 
         with open(self.logger_file_name, "w") as f:
             json.dump(logs, f)
 
         INVOKER = Invoker(self.db, self.logger, self.config_manager, self.app_info_logger)
 
-        expected = "+------------+-------------------+" + "\n" \
-                   + "|    DATE    |        TEXT       |" + "\n" \
-                   + "+------------+-------------------+" + "\n" \
-                   + "| 08-05-2020 | Returned RETURNED |" + "\n" \
-                   + "+------------+-------------------+"
+        expected = "+------------+------------+" + "\n" \
+                   + "|    DATE    |    TEXT    |" + "\n" \
+                   + "+------------+------------+" + "\n" \
+                   + "| 08-05-2020 | 1 RETURNED |" + "\n" \
+                   + "+------------+------------+"
 
         # When
         with mock.patch('builtins.input', return_value="1"):
@@ -150,8 +153,8 @@ class MyTestCase(unittest.TestCase):
         # Given
 
         logs = [
-            {'id': '1', 'logs': [{"data": "08-05-2020", "text": "Returned"}]},
-            {'id': '2', 'logs': [{"data": "08-05-2020", "text": "Borrowed"}, {"data": "07-05-2020", "text": "Deleted"}]}
+            {'id': '1', 'logs': [{"data": "08-05-2020", "text": "Returned 1"}]},
+            {'id': '2', 'logs': [{"data": "08-05-2020", "text": "Borrowed 1"}, {"data": "07-05-2020", "text": "Deleted"}]}
         ]
 
         with open(self.database_file_name, "w") as f:
