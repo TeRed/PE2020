@@ -292,7 +292,7 @@ def i_change_parameter_xxx_to_value_yyy(step, parameter, value):
 
 @step('I save current configuration')
 def i_save_current_configuration(step):
-    world.config.save_configuration(world.path_config)
+    world.config.save_configuration()
 
 
 @step('I see those listed parameters:')
@@ -302,12 +302,12 @@ def i_see_those_listed_parameters(step):
     for parameter in step.hashes:
         expected_config[parameter['key']] = parameter['value']
 
-    assert vars(world.config) == expected_config
+    assert world.config.get_dict() == expected_config
 
 
 @step('I see those listed parameters when application is reloaded:')
 def i_see_those_listed_parameters_when_application_is_reloaded(step):
-    actual_config = vars(ConfigManager(world.path_config))
+    actual_config = ConfigManager(world.path_config).get_dict()
     expected_config = {}
 
     for parameter in step.hashes:

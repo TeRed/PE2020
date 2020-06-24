@@ -356,9 +356,9 @@ class DisplayConfigCommand(ICommand):
 
     def execute(self):
         print(i18n.t('CURRENT_CONFIGURATION'))
-        config_attributes = self.config_manager.__dict__
+        config_attributes = self.config_manager.get_dict().items()
 
-        for key, val in config_attributes.items():
+        for key, val in config_attributes:
             print(f'{key}: "{val}"')
 
         IOWrapper.continue_pause()
@@ -374,7 +374,7 @@ class ChangeConfigCommand(ICommand):
     def execute(self):
         config_attributes = list()
 
-        for key, val in self.config_manager.__dict__.items():
+        for key, val in self.config_manager.get_dict().items():
             config_attributes.append(key)
 
         print(i18n.t('CONFIGURATION_CHANGE'))
