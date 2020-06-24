@@ -251,10 +251,10 @@ class ChangeStatusCommand(ICommand):
             if status == '1':
                 new_obj = self.base.change_article_availability(obj_id, not obj_article.is_available)
                 if new_obj:
-                    self.base.remove_article_by_id(obj_id)
-                    self.base.add_article(new_obj)
                     if obj_article.is_available:
                         self.logger.add_log(obj_id, Log(str(datetime.date(datetime.now())), "Made article unavailable"))
+                        self.base.remove_article_by_id(obj_id)
+                        self.base.add_article(new_obj)
                     else:
                         if obj_article.quantity == 0:
                             self.app_info_logger.log_info(i18n.t('CANT_BE_AVAILABLE_QUANTITY'))
@@ -262,6 +262,8 @@ class ChangeStatusCommand(ICommand):
                         else:
                             self.logger.add_log(obj_id,
                                                 Log(str(datetime.date(datetime.now())), "Made article available"))
+                            self.base.remove_article_by_id(obj_id)
+                            self.base.add_article(new_obj)
             elif status == '2':
                 ""
             else:
