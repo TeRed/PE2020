@@ -5,7 +5,6 @@ from config_manager import ConfigManager
 
 
 class MyTestCase(unittest.TestCase):
-    
     config_file_name = "test_config.json"
 
     def setUp(self):
@@ -16,7 +15,7 @@ class MyTestCase(unittest.TestCase):
 
     def test__init__(self):
         # Given
-        config = {'db_path': 'db.json', 'logger_path': 'logger.json'}
+        config = {'db_path': 'db.json', 'language': 'en', 'logger_path': 'logger.json'}
         with open(self.config_file_name, "w") as f:
             json.dump(config, f)
 
@@ -25,6 +24,7 @@ class MyTestCase(unittest.TestCase):
 
         # Then
         self.assertEqual(config_manager.db_path, "db.json")
+        self.assertEqual(config_manager.language, "en")
         self.assertEqual(config_manager.logger_path, "logger.json")
 
     def test_default_config_parameters(self):
@@ -32,32 +32,26 @@ class MyTestCase(unittest.TestCase):
         config_manager = ConfigManager()
 
         # Then
-        self.assertEqual(config_manager.logger_path, 'logger.json')
         self.assertEqual(config_manager.db_path, 'db.json')
-
+        self.assertEqual(config_manager.language, 'en')
+        self.assertEqual(config_manager.logger_path, 'logger.json')
 
     def test_save_config_to_file(self):
-        #Given
-        config = {'db_path': 'db.json', 'logger_path': 'logger.json'}
+        # Given
+        config = {'db_path': 'db.json', 'language': 'en', 'logger_path': 'logger.json'}
         with open(self.config_file_name, "w") as f:
             json.dump(config, f)
+        config_manager = ConfigManager(self.config_file_name)
+        setattr(config_manager, 'db_path', 'db2.json')
 
         # When
-        config_manager = ConfigManager(self.config_file_name)
-        config_attributes = list()
+        config_manager.save_configuration()
 
-        for key, val in config_manager.__dict__.items():
-            config_attributes.append(key)
-        setattr(config_manager, config_attributes[0], 'db2.json')
-        config_manager.save_configuration(self.config_file_name)
-
-        #Then
+        # Then
         with open(self.config_file_name) as f:
             config = json.load(f)
 
         self.assertEqual(config['db_path'], 'db2.json')
-
-
 
 
 if __name__ == '__main__':

@@ -11,20 +11,26 @@ class DBConnector(metaclass=Singleton):
 
         articles = list()
         for i in load:
-            obj = Article(i['id'], i['name'], i['is_available'])
+            obj = Article(i['id'], i['name'], i['total_quantity'], i['quantity'], i['is_available'])
             articles.append(obj)
 
         return articles
 
     def get_articles_by_name(self, name):
         articles = self.get_all_articles()
-        articles = [it for it in articles if name.lower() in it.name.lower()]
+        articles = [it for it in articles if ((name.lower() in it.name[0].lower() )or(name.lower() in it.name[1].lower()))]
 
         return articles
 
     def get_articles_by_availability(self, available):
         articles = self.get_all_articles()
         articles = [it for it in articles if available == it.is_available]
+
+        return articles
+
+    def get_articles_by_borrowed(self):
+        articles = self.get_all_articles()
+        articles = [it for it in articles if int(it.total_quantity) > int(it.quantity)]
 
         return articles
 
@@ -38,17 +44,33 @@ class DBConnector(metaclass=Singleton):
 
     def add_article(self, obj):
         articles = self.get_all_articles()
-        articles.append(obj)
-        self.file_connector.save_json_file(articles)
+        if not any(x.id == obj.id for x in articles):
+            articles.append(obj)
+            self.file_connector.save_json_file(articles)
+            return True
+        else:
+            return False
 
     def remove_article_by_id(self, id):
         articles = self.get_all_articles()
-        articles = [it for it in articles if it.id != id]
-        self.file_connector.save_json_file(articles)
+        if any(x.id == id for x in articles):
+            articles = [it for it in articles if it.id != id]
+            self.file_connector.save_json_file(articles)
+            return True
+        else:
+            return False
 
     def change_article_availability(self, id, available):
         articles = self.get_all_articles()
         for article in articles:
             if article.id == id:
                 article.is_available = available
+                return article
+
+    def add_article_quantity(self, id, quantity, available):
+        articles = self.get_all_articles()
+        for article in articles:
+            if article.id == id:
+                article.is_available = available
+                article.quantity = article.quantity + quantity
                 return article

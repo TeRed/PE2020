@@ -10,7 +10,6 @@ import json
 
 
 class MyTestCase(unittest.TestCase):
-
     config_file_name = 'test_logger.json'
 
     def setUp(self):
@@ -152,6 +151,27 @@ class MyTestCase(unittest.TestCase):
 
         # When
         logger.add_log('1', Log("20-05-2020", "Deleted"))
+
+        # Then
+        self.assertListEqual(expected, logger.get_all_logs())
+
+    def test_add_log_2(self):
+        # Given
+        logs = [
+            {'id': '1', 'logs': [{"data": "08-05-2020", "text": "Added"}]}
+        ]
+
+        with open(self.config_file_name, "w") as f:
+            json.dump(logs, f)
+
+        config_manager = ConfigManager()
+        config_manager.logger_path = self.config_file_name
+        logger = LoggerConnector(LoggerFileConnector(config_manager))
+
+        expected = [ArticleLogs('1', [Log("08-05-2020", "Added")]), ArticleLogs('99', [Log("20-05-2020", "Added")])]
+
+        # When
+        logger.add_log('99', Log("20-05-2020", "Added"))
 
         # Then
         self.assertListEqual(expected, logger.get_all_logs())

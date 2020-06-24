@@ -4,7 +4,7 @@ Projekt na zajęcia z Programowania Ekstremalnego 2020
 
 ### Przed uruchomieniem
 
-Do aplikacji potrzebny jest Python w wersji 3
+Do aplikacji potrzebny jest Python w wersji >= 3.6
 
 Do testów akceptacyjncyh potrzebny jest framework Lettuce:
 ```
@@ -37,6 +37,8 @@ python main.py
 
 aby korzystać z aplikacji wybieraj opcję wpisując numer i klikając enter
 ## Uruchomienie testów jednostkowych
+Komendy należy wywoływać z poziomu katalogu app.
+
 Uruchomienie wszystkich testów na raz:
 
 ```
@@ -46,15 +48,16 @@ python -m unittest
 Uruchomienie jednego testu w jednym czasie:
 
 ```
-python <nazwa pliku z testem>
+python -m unittest tests/<nazwa pliku z testem>
 ```
 
 np:
 ```
-python test_article.py
+python -m unittest tests/test_article.py
 ```
 
 ## Uruchomienie testów akceptacyjnych
+Komendy należy wywoływać z poziomu katalogu app.
 
 Jeśli nie jest zainstalowany lettuce:
 
@@ -62,8 +65,19 @@ Jeśli nie jest zainstalowany lettuce:
 pip install git+https://github.com/wixb50/lettuce.git
 ```
 
-W katalogu app należy uruchomić:
+Uruchomienie wszystkich testów na raz:
 
 ```
 lettuce
+```
+
+Uruchomienie jednego testu w jednym czasie:
+
+```
+lettuce features/<nazwa pliku z testem>
+```
+
+np:
+```
+lettuce features/add_article.feature
 ```

@@ -39,7 +39,7 @@ class LoggerConnector(metaclass=Singleton):
 
     def get_borrow_history(self, id):
         article_logs = self.get_logs_by_id(id)
-        return [x for x in article_logs.logs if x.text == 'Borrowed' or x.text == 'Returned']
+        return [x for x in article_logs.logs if 'Returned' in x.text or 'Borrowed' in x.text]
 
     def add_log(self, id, log):
         article_logs = self.get_all_logs()
@@ -51,6 +51,14 @@ class LoggerConnector(metaclass=Singleton):
             else:
                 return article_log
 
-        article_logs = list(map(add_log_input, article_logs))
+        if any(x.id == id for x in article_logs):
+            article_logs = list(map(add_log_input, article_logs))
+        else:
+            article_logs.append(ArticleLogs(id, [log]))
 
         self.file_connector.save_json_file(article_logs)
+
+    def get_available_id(self):
+        logs = self.get_all_logs()
+        ids = [int(x.id) for x in logs]
+        return str(sorted(ids)[-1] + 1)
