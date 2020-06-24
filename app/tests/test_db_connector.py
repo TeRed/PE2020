@@ -32,8 +32,8 @@ class MyTestCase(unittest.TestCase):
     def test_get_all_articles(self):
         # Given
         articles = [
-            {"id": "1", "name": ["mlotek", "hammer"], "total_quantity": 2, "quantity": 2, "is_available": True},
-            {"id": "2", "name": ["wiertarka", "driller"], "total_quantity": 2, "quantity": 2, "is_available": False}
+            {"id": "1", "name": ["mlotek", "hammer"], "total_quantity": 2, "quantity": 3, "is_available": True},
+            {"id": "2", "name": ["wiertarka", "driller"], "total_quantity": 4, "quantity": 5, "is_available": False}
         ]
 
         with open(self.config_file_name, "w") as f:
@@ -45,8 +45,8 @@ class MyTestCase(unittest.TestCase):
         db = DBConnector(db_file_connector)
 
         expected = [
-            Article('1', ["mlotek", "hammer"], 2, 2, True),
-            Article('2', ["wiertarka", "driller"], 2, 2, False)
+            Article('1', ["mlotek", "hammer"], 2, 3, True),
+            Article('2', ["wiertarka", "driller"], 4, 5, False)
         ]
 
         # When
@@ -78,8 +78,8 @@ class MyTestCase(unittest.TestCase):
     def test_get_articles_by_name(self):
         # Given
         articles = [
-            {"id": "1", "name": ["mlotek", "hammer"], "total_quantity": 2, "quantity": 2, "is_available": True},
-            {"id": "2", "name": ["wiertarka", "driller"], "total_quantity": 2, "quantity": 2, "is_available": False}
+            {"id": "1", "name": ["mlotek", "hammer"], "total_quantity": 20, "quantity": 5, "is_available": True},
+            {"id": "2", "name": ["wiertarka", "driller"], "total_quantity": 10, "quantity": 8, "is_available": False}
         ]
 
         with open(self.config_file_name, "w") as f:
@@ -90,7 +90,7 @@ class MyTestCase(unittest.TestCase):
         db = DBConnector(DbFileConnector(config_manager))
 
         search_string = 'rka'
-        expected = [Article('2', ["wiertarka", "driller"], 2, 2, False)]
+        expected = [Article('2', ["wiertarka", "driller"], 10, 8, False)]
 
         # When
         articles = db.get_articles_by_name(search_string)
@@ -125,8 +125,8 @@ class MyTestCase(unittest.TestCase):
         # Given
         articles = [
             {"id": "1", "name": ["mlotek", "hammer"], "total_quantity": 2, "quantity": 2, "is_available": True},
-            {"id": "2", "name": ["wiertarka", "driller"], "total_quantity": 2, "quantity": 2, "is_available": False},
-            {"id": "3", "name": ["wiertarka2", "driller2"], "total_quantity": 4, "quantity": 4, "is_available": False}
+            {"id": "2", "name": ["wiertarka", "driller"], "total_quantity": 2, "quantity": 3, "is_available": False},
+            {"id": "3", "name": ["wiertarka2", "driller2"], "total_quantity": 40, "quantity": 0, "is_available": False}
         ]
 
         with open(self.config_file_name, "w") as f:
@@ -138,8 +138,8 @@ class MyTestCase(unittest.TestCase):
 
         available = False
         expected = [
-            Article('2', ["wiertarka", "driller"], 2, 2, False),
-            Article('3', ["wiertarka2", "driller2"], 4, 4, False)
+            Article('2', ["wiertarka", "driller"], 2, 3, False),
+            Article('3', ["wiertarka2", "driller2"], 40, 0, False)
         ]
 
         # When
@@ -152,7 +152,7 @@ class MyTestCase(unittest.TestCase):
         # Given
         articles = [
             {"id": "1", "name": ["mlotek", "hammer"], "total_quantity": 2, "quantity": 2,"is_available": True},
-            {"id": "2", "name": ["wiertarka", "driller"], "total_quantity": 2, "quantity": 2, "is_available": False}
+            {"id": "5", "name": ["wiertarka", "driller"], "total_quantity": 2, "quantity": 2, "is_available": False}
         ]
 
         with open(self.config_file_name, "w") as f:
@@ -162,8 +162,8 @@ class MyTestCase(unittest.TestCase):
         config_manager.db_path = self.config_file_name
         db = DBConnector(DbFileConnector(config_manager))
 
-        search_id = '2'
-        expected = Article('2', ["wiertarka", "driller"], 2, 2, False)
+        search_id = '5'
+        expected = Article('5', ["wiertarka", "driller"], 2, 2, False)
 
         # When
         article = db.get_article_by_id(search_id)
@@ -248,9 +248,9 @@ class MyTestCase(unittest.TestCase):
         config_manager.db_path = self.config_file_name
         db = DBConnector(DbFileConnector(config_manager))
 
-        article = Article('1', ["mlotek", "hammer"], 2, 2, False)
-        article2 = Article('2', ["mlotek2", "hammer2"], 2, 2, False)
-        expected = [Article('1', ["mlotek", "hammer"], 2, 2, False), Article('2', ["mlotek2", "hammer2"], 2, 2, False)]
+        article = Article('1', ["mlotek", "hammer"], 1, 2, False)
+        article2 = Article('2', ["mlotek2", "hammer2"], 3, 6, False)
+        expected = [Article('1', ["mlotek", "hammer"], 1, 2, False), Article('2', ["mlotek2", "hammer2"], 3, 6, False)]
 
         # When
         db.add_article(article)
@@ -262,7 +262,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_remove_article_by_id(self):
         # Given
-        articles = [{"id": "1", "name": ["mlotek", "hammer"], "total_quantity": 2, "quantity": 2, "is_available": False}]
+        articles = [{"id": "1", "name": ["mlotek", "hammer"], "total_quantity": 2, "quantity": 1, "is_available": False}]
 
         with open(self.config_file_name, "w") as f:
             json.dump(articles, f)
@@ -282,7 +282,11 @@ class MyTestCase(unittest.TestCase):
 
     def test_remove_article_by_id_2(self):
         # Given
-        articles = [{"id": "1", "name": ["mlotek", "hammer"], "total_quantity": 2, "quantity": 2, "is_available": False}]
+        articles = [
+            {"id": "1", "name": ["mlotek", "hammer"], "total_quantity": 2, "quantity": 2, "is_available": True},
+            {"id": "2", "name": ["wiertarka", "driller"], "total_quantity": 2, "quantity": 3, "is_available": False},
+            {"id": "3", "name": ["wiertarka2", "driller2"], "total_quantity": 40, "quantity": 0, "is_available": False}
+        ]
 
         with open(self.config_file_name, "w") as f:
             json.dump(articles, f)
@@ -292,14 +296,13 @@ class MyTestCase(unittest.TestCase):
         db = DBConnector(DbFileConnector(config_manager))
 
         article_id = '2'
-
-        expected = [Article('1', ["mlotek", "hammer"], 2, 2, False)]
-
+        expected = [Article('1', ["mlotek", "hammer"], 2, 2, True),
+                    Article('3', ["wiertarka2", "driller2"], 40, 0, False)]
         # When
         db.remove_article_by_id(article_id)
+        actual = db.get_all_articles()
 
-        # Then
-        self.assertListEqual(expected, db.get_all_articles())
+        self.assertListEqual(expected, actual)
 
     def test_change_article_availability(self):
         # Given

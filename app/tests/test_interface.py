@@ -17,7 +17,7 @@ from logger_connector import LoggerConnector
 class MyTestCase(unittest.TestCase):
     database_file_name = 'test_interface_database.json'
     logger_file_name = 'test_interface_logger.json'
-    config_file_name = "test_interface_config.json"
+    config_file_name = "config.json"
 
     def setUp(self):
         open(self.database_file_name, "w").close()
@@ -39,8 +39,8 @@ class MyTestCase(unittest.TestCase):
         config_manager.logger_path = self.logger_file_name
 
         articles = [
-            {"id": "1", "name": ["mlotek", "hammer"], "total_quantity": 2, "quantity": 2, "is_available": True},
-            {"id": "2", "name": ["wiertarka", "driller"], "total_quantity": 2, "quantity": 2, "is_available": False}
+            {"id": "1", "name": ["mlotek", "hammer"], "total_quantity": 20, "quantity": 2, "is_available": True},
+            {"id": "2", "name": ["wiertarka", "driller"], "total_quantity": 30, "quantity": 5, "is_available": False}
         ]
 
         with open(self.database_file_name, "w") as f:
@@ -51,8 +51,8 @@ class MyTestCase(unittest.TestCase):
         expected = "+----+---------+------------------+----------------+----------+--------------+" + "\n" \
                    + "| ID |   NAME  | NAME_SECOND_LANG | TOTAL_QUANTITY | QUANTITY | AVAILABILITY |" + "\n" \
                    + "+----+---------+------------------+----------------+----------+--------------+" + "\n" \
-                   + "| 1  |  hammer |      mlotek      |       2        |    2     |     YES      |" + "\n" \
-                   + "| 2  | driller |    wiertarka     |       2        |    2     |      NO      |" + "\n" \
+                   + "| 1  |  hammer |      mlotek      |       20       |    2     |     YES      |" + "\n" \
+                   + "| 2  | driller |    wiertarka     |       30       |    5     |      NO      |" + "\n" \
                    + "+----+---------+------------------+----------------+----------+--------------+"
 
         # When
@@ -149,7 +149,7 @@ class MyTestCase(unittest.TestCase):
         config_manager.db_path = self.database_file_name
         config_manager.logger_path = self.logger_file_name
         
-        logs = [{'id': '1', 'logs': [{"data": "08-05-2020", "text": "Returned 1"}]}]
+        logs = [{'id': '1', 'logs': [{"data": "12-11-2020", "text": "Returned 1"}]}]
 
         with open(self.logger_file_name, "w") as f:
             json.dump(logs, f)
@@ -159,7 +159,7 @@ class MyTestCase(unittest.TestCase):
         expected = "+------------+------------+" + "\n" \
                    + "|    DATE    |    TEXT    |" + "\n" \
                    + "+------------+------------+" + "\n" \
-                   + "| 08-05-2020 | 1 RETURNED |" + "\n" \
+                   + "| 12-11-2020 | 1 RETURNED |" + "\n" \
                    + "+------------+------------+"
 
         # When
@@ -170,7 +170,7 @@ class MyTestCase(unittest.TestCase):
         # Then
         self.assertEqual(expected, result.getvalue())
 
-    def test_add_article_command(self):  # dodaje poprawnie, czy sprawdzac w bazie np?
+    def test_add_article_command(self):
         # Given
         config_manager = ConfigManager()
         app_info_logger = AppInfoLogger()
@@ -257,7 +257,7 @@ class MyTestCase(unittest.TestCase):
                    + "+----+---------+------------------+----------------+----------+--------------+"
 
         # When
-        with mock.patch('builtins.input', return_value="driller"):
+        with mock.patch('builtins.input', return_value="dri"):
             with patch('sys.stdout', new=StringIO()) as result:
                 INVOKER.execute('7')
 
@@ -353,6 +353,10 @@ class MyTestCase(unittest.TestCase):
 
     def test_change_config_command(self):
         # Given
+        config = {'db_path': 'db.json', 'language': 'en', 'logger_path': 'logger.json'}
+        with open(self.config_file_name, "w") as f:
+            json.dump(config, f)
+
         config_manager = ConfigManager()
         app_info_logger = AppInfoLogger()
         db = DBConnector(DbFileConnector(config_manager))
@@ -360,7 +364,7 @@ class MyTestCase(unittest.TestCase):
         config_manager.db_path = self.database_file_name
         config_manager.logger_path = self.logger_file_name
         
-        config = {'db_path': 'db.json', 'logger_path': 'logger.json'}
+        config = {'db_path': 'db.json', 'language': 'en', 'logger_path': 'logger.json'}
         with open(self.config_file_name, "w") as f:
             json.dump(config, f)
 
@@ -381,6 +385,8 @@ class MyTestCase(unittest.TestCase):
         # Then
         self.assertEqual(expected, result.getvalue())
 
+
+
     def test_save_config_command(self):
         # Given
         config_manager = ConfigManager()
@@ -389,7 +395,7 @@ class MyTestCase(unittest.TestCase):
         logger = LoggerConnector(LoggerFileConnector(config_manager))
         config_manager.db_path = self.database_file_name
         config_manager.logger_path = self.logger_file_name
-        
+
         config = {'db_path': 'db.json', 'language': 'pl', 'logger_path': 'logger.json'}
         with open(self.config_file_name, "w") as f:
             json.dump(config, f)
@@ -405,6 +411,8 @@ class MyTestCase(unittest.TestCase):
 
         # Then
         self.assertEqual(result.getvalue(), expected)
+
+
 
     def test_borrow_article_command(self):
         # Given
@@ -438,6 +446,37 @@ class MyTestCase(unittest.TestCase):
         expected = [Article('1', ["mlotek", "hammer"], 2, 1, True)]
         self.assertEqual(str(expected[0]), str(db.get_articles_by_name('mlotek')[0]))
 
+    def test_borrow_article_command2(self):
+        # Given
+        config_manager = ConfigManager()
+        app_info_logger = AppInfoLogger()
+        db = DBConnector(DbFileConnector(config_manager))
+        logger = LoggerConnector(LoggerFileConnector(config_manager))
+        config_manager.db_path = self.database_file_name
+        config_manager.logger_path = self.logger_file_name
+
+        articles = [
+            {"id": "1", "name": ["mlotek", "hammer"], "total_quantity": 4, "quantity": 1, "is_available": True},
+            {"id": "2", "name": ["wiertarka", "driller"], "total_quantity": 2, "quantity": 2, "is_available": False}
+        ]
+
+        with open(self.database_file_name, "w") as f:
+            json.dump(articles, f)
+
+        with open(self.logger_file_name, "w") as f:
+            json.dump([], f)
+
+        INVOKER = Invoker(db, logger, config_manager, app_info_logger)
+
+        # When
+        with mock.patch('builtins.input', side_effect=["1", "2", "\n"]):
+            with patch('sys.stdout', new=StringIO()):
+                INVOKER.execute('13')
+
+        # Then
+        expected = [Article('1', ["mlotek", "hammer"], 4, 1 , True)]
+        self.assertEqual(str(expected[0]), str(db.get_articles_by_name('mlotek')[0]))
+
     def test_return_article_command(self):
         # Given
         config_manager = ConfigManager()
@@ -459,10 +498,41 @@ class MyTestCase(unittest.TestCase):
 
         INVOKER = Invoker(db, logger, config_manager, app_info_logger)
 
-        expected = [Article('18', ["Paczka", "Package"], 250, 151, True)]
+        expected = [Article('18', ["Paczka", "Package"], 250, 250, True)]
 
         # When
-        with mock.patch('builtins.input', side_effect=["18", "1", "1"]):
+        with mock.patch('builtins.input', side_effect=["18", "100", "\n"]):
+            with patch('sys.stdout', new=StringIO()):
+                INVOKER.execute('14')
+
+        # Then
+        self.assertEqual(str(expected[0]), str(db.get_articles_by_name('Paczka')[0]))
+
+    def test_return_article_command_2(self):
+        # Given
+        config_manager = ConfigManager()
+        app_info_logger = AppInfoLogger()
+        db = DBConnector(DbFileConnector(config_manager))
+        logger = LoggerConnector(LoggerFileConnector(config_manager))
+        config_manager.db_path = self.database_file_name
+        config_manager.logger_path = self.logger_file_name
+
+        articles = [
+            {"id": "18", "is_available": True, "name": ["Paczka", "Package"], "quantity": 150, "total_quantity": 250}
+        ]
+
+        with open(self.database_file_name, "w") as f:
+            json.dump(articles, f)
+
+        with open(self.logger_file_name, "w") as f:
+            json.dump([], f)
+
+        INVOKER = Invoker(db, logger, config_manager, app_info_logger)
+
+        expected = [Article('18', ["Paczka", "Package"], 250, 150, True)]
+
+        # When
+        with mock.patch('builtins.input', side_effect=["18", "101", "\n"]):
             with patch('sys.stdout', new=StringIO()):
                 INVOKER.execute('14')
 

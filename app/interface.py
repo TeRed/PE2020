@@ -285,7 +285,7 @@ class ReturnArticleCommand(ICommand):
 
         if obj_article:
             quantity = int(input(i18n.t('HOW_MANY_TO_RETURN')))
-            if (quantity > 0 and quantity + obj_article.quantity < obj_article.total_quantity):
+            if (quantity > 0 and quantity + obj_article.quantity <= obj_article.total_quantity):
                 new_obj = self.base.add_article_quantity(obj_id, quantity, True)
                 if new_obj:
                     if obj_article.is_available == False:

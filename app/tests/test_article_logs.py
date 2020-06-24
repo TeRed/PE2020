@@ -28,6 +28,29 @@ class MyTestCase(unittest.TestCase):
             ''.join(actual.split())
         )
 
+    def test_article_serialization2(self):
+        # Given
+        obj = ArticleLogs('2', [Log("11-07-2041", "Deleted")])
+        expected = '''
+            {
+                "id": "2",
+                "logs": [
+                  {
+                    "data": "11-07-2041",
+                    "text": "Deleted"
+                  }
+                ]
+            }
+        '''
+
+        # When
+        actual = str(obj)
+
+        # Then
+        self.assertCountEqual(
+            ''.join(expected.split()),
+            ''.join(actual.split())
+        )
 
 if __name__ == '__main__':
     unittest.main()

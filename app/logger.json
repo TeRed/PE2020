@@ -185,5 +185,51 @@
                 "text": "Borrowed 100"
             }
         ]
+    },
+    {
+        "id": "19",
+        "logs": [
+            {
+                "data": "2020-06-24",
+                "text": "Added"
+            },
+            {
+                "data": "2020-06-24",
+                "text": "Borrowed 5"
+            },
+            {
+                "data": "2020-06-24",
+                "text": "Returned 4"
+            },
+            {
+                "data": "2020-06-24",
+                "text": "Borrowed 2"
+            },
+            {
+                "data": "2020-06-24",
+                "text": "Returned 1"
+            },
+            {
+                "data": "2020-06-24",
+                "text": "Returned 1"
+            }
+        ]
+    },
+    {
+        "id": "20",
+        "logs": [
+            {
+                "data": "2020-06-24",
+                "text": "Added"
+            },
+            {
+                "data": "2020-06-24",
+                "text": "Borrowed 5"
+            },
+            {
+                "data": "2020-06-24",
+                "text": "Made article unavailable"
+            }
+        ]
     }
 ]
