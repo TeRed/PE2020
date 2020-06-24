@@ -17,7 +17,7 @@ from logger_connector import LoggerConnector
 class MyTestCase(unittest.TestCase):
     database_file_name = 'test_interface_database.json'
     logger_file_name = 'test_interface_logger.json'
-    config_file_name = "config.json"
+    config_file_name = "test_interface_config.json"
 
     def setUp(self):
         open(self.database_file_name, "w").close()

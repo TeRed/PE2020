@@ -45,7 +45,7 @@ class MyTestCase(unittest.TestCase):
         setattr(config_manager, 'db_path', 'db2.json')
 
         # When
-        config_manager.save_configuration(self.config_file_name)
+        config_manager.save_configuration()
 
         # Then
         with open(self.config_file_name) as f:
